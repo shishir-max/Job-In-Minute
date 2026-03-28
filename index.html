@@ -355,32 +355,10 @@
         </div>
     </section>
 
-    <section id="jobs" style="background: #0f0f0f;">
-        <h2>Hot <span>Gigs</span></h2>
-        <div class="grid">
-            <div class="card">
-                <span style="color: var(--primary); font-weight: bold;">Full-Time</span>
-                <h3>Senior Video Editor</h3>
-                <p>Work with a 10M+ Subscriber Gaming Channel. High-paced storytelling required.</p>
-                <br>
-                <a href="#" class="btn-outline btn" style="padding: 5px 15px; font-size: 0.8rem;">Apply Now</a>
-            </div>
-            <div class="card">
-                <span style="color: var(--primary); font-weight: bold;">Contract</span>
-                <h3>Thumbnail Designer</h3>
-                <p>Create high-CTR thumbnails for a leading Tech Review channel.</p>
-                <br>
-                <a href="#" class="btn-outline btn" style="padding: 5px 15px; font-size: 0.8rem;">Apply Now</a>
-            </div>
-            <div class="card">
-                <span style="color: var(--primary); font-weight: bold;">Remote</span>
-                <h3>Script Writer</h3>
-                <p>Focus on Documentary style long-form content for educational niche.</p>
-                <br>
-                <a href="#" class="btn-outline btn" style="padding: 5px 15px; font-size: 0.8rem;">Apply Now</a>
-            </div>
-        </div>
-    </section>
+<section id="jobs" style="background: #0f0f0f;">
+    <h2>Available <span>Jobs</span></h2>
+    <div class="grid" id="jobList"></div>
+</section>
 
     <section id="creators">
         <h2>Featured <span>Clients</span></h2>
@@ -446,6 +424,36 @@
     </footer>
 
     <script>
+        const jobs = [
+    {title: "Frontend Developer", type: "Full-Time", desc: "HTML, CSS, JavaScript"},
+    {title: "Backend Developer", type: "Remote", desc: "Node.js, API Development"},
+    {title: "Graphic Designer", type: "Part-Time", desc: "Photoshop, Canva"},
+    {title: "Video Editor", type: "Contract", desc: "YouTube editing"}
+];
+
+function displayJobs(jobArray) {
+    const jobList = document.getElementById("jobList");
+    jobList.innerHTML = "";
+
+    jobArray.forEach(job => {
+        jobList.innerHTML += `
+            <div class="card">
+                <span style="color:red;">${job.type}</span>
+                <h3>${job.title}</h3>
+                <p>${job.desc}</p>
+                <br>
+                <button class="btn btn-outline" onclick="applyJob('${job.title}')">Apply</button>
+            </div>
+        `;
+    });
+}
+
+function applyJob(jobTitle) {
+    alert("You applied for: " + jobTitle);
+}
+
+// Load jobs
+displayJobs(jobs);
         // Hamburger Menu Logic
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
