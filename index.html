@@ -430,7 +430,15 @@
     {title: "Graphic Designer", type: "Part-Time", desc: "Photoshop, Canva"},
     {title: "Video Editor", type: "Contract", desc: "YouTube editing"}
 ];
+function searchJobs() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
 
+    const filteredJobs = jobs.filter(job =>
+        job.title.toLowerCase().includes(input)
+    );
+
+    displayJobs(filteredJobs);
+}
 function displayJobs(jobArray) {
     const jobList = document.getElementById("jobList");
     jobList.innerHTML = "";
