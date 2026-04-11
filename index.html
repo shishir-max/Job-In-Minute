@@ -424,6 +424,23 @@
     </footer>
 
     <script>
+        <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
+  authDomain: "job-in-minute.firebaseapp.com",
+  projectId: "job-in-minute",
+  storageBucket: "job-in-minute.firebasestorage.app",
+  messagingSenderId: "507249342731",
+  appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+const db = firebase.firestore();
+    </script>
         const jobs = [
     {title: "Frontend Developer", type: "Full-Time", desc: "HTML, CSS, JavaScript"},
     {title: "Backend Developer", type: "Remote", desc: "Node.js, API Development"},
