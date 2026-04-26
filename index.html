@@ -20,14 +20,19 @@
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
-<div id="authModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center;">
-    <div style="background:#161616; padding:30px; border-radius:10px; width:300px;">
+        <div style="background:#161616; padding:30px; border-radius:10px; width:300px; color:white;">
+<div id="authModal" style={
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
         <h3>Login / Register</h3>
 
         <input type="email" placeholder="Email" style="width:100%; margin:10px 0; padding:10px;">
@@ -325,8 +330,11 @@
             <li><a href="#creators">Creators</a></li>
             <li><a href="#testimonials">Reviews</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><a href="#" onclick="showLogin()">Login</a></li>
-            <li><a href="#" onclick="showRegister()">Register</a></li>
+            function showLogin() {
+    document.getElementById("authModal").style.display = "flex";
+}
+            <li><a href="javascript:void(0)" onclick="showLogin()">Login</a></li>
+            <li><a href="javascript:void(0)" onclick="showRegister()">Register</a></li>
         </ul>
         <div class="hamburger" id="hamburger">
             <i class="fas fa-bars"></i>
@@ -468,7 +476,16 @@ function closeAuth() {
     document.getElementById("authModal").style.display = "none";
 }
     </script>
-        const jobs = [
+        function searchJobs() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+
+    const filtered = jobs.filter(job =>
+        job.title.toLowerCase().includes(input)
+    );
+
+    displayJobs(filtered);
+}
+    const jobs = [
     {title: "Frontend Developer", type: "Full-Time", desc: "HTML, CSS, JavaScript"},
     {title: "Backend Developer", type: "Remote", desc: "Node.js, API Development"},
     {title: "Graphic Designer", type: "Part-Time", desc: "Photoshop, Canva"},
