@@ -459,6 +459,17 @@ function showRegister() {
 ];
 function searchJobs() {
     const input = document.getElementById("searchInput").value.toLowerCase();
+    function showLogin() {
+    document.getElementById("authModal").style.display = "flex";
+}
+
+function showRegister() {
+    document.getElementById("authModal").style.display = "flex";
+}
+
+function closeAuth() {
+    document.getElementById("authModal").style.display = "none";
+}
 
     const filteredJobs = jobs.filter(job =>
         job.title.toLowerCase().includes(input)
