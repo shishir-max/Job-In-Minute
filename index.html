@@ -26,7 +26,18 @@
             box-sizing: border-box;
             scroll-behavior: smooth;
         }
+<div id="authModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center;">
+    <div style="background:#161616; padding:30px; border-radius:10px; width:300px;">
+        <h3>Login / Register</h3>
 
+        <input type="email" placeholder="Email" style="width:100%; margin:10px 0; padding:10px;">
+        <input type="password" placeholder="Password" style="width:100%; margin:10px 0; padding:10px;">
+
+        <button class="btn btn-primary" style="width:100%;">Submit</button>
+        <br><br>
+        <button onclick="closeAuth()" class="btn btn-outline" style="width:100%;">Close</button>
+    </div>
+</div>
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
