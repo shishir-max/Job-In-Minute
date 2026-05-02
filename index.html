@@ -1,192 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Job In Minute</title>
-
-<style>
-body {
-    margin:0;
-    font-family: Arial;
-    background:#0a0a0a;
-    color:white;
-}
-
-/* NAVBAR */
-nav {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px 40px;
-    background:#111;
-}
-
-nav img {
-    height:50px;
-}
-
-nav ul {
-    display:flex;
-    gap:20px;
-    list-style:none;
-}
-
-nav a {
-    color:white;
-    text-decoration:none;
-    cursor:pointer;
-}
-
-/* HERO */
-.hero {
-    text-align:center;
-    padding:80px 20px;
-}
-
-.hero h1 {
-    font-size:50px;
-}
-
-.hero span {
-    color:red;
-}
-
-/* SEARCH */
-.search-box {
-    margin-top:30px;
-}
-
-.search-box input {
-    padding:15px;
-    width:300px;
-}
-
-.search-box button {
-    padding:15px;
-    background:red;
-    color:white;
-    border:none;
-}
-
-/* JOBS */
-.jobs {
-    padding:50px;
-}
-
-.grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-}
-
-.card {
-    background:#161616;
-    padding:20px;
-    border-radius:10px;
-}
-
-button {
-    padding:10px;
-    margin-top:10px;
-    background:red;
-    border:none;
-    color:white;
-    cursor:pointer;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- NAVBAR -->
 <nav>
-    <!-- 👉 ADD YOUR LOGO HERE -->
-    <img src="https://via.placeholder.com/150x50?text=Job+In+Minute" id="logo">
-
+    <img src="logo.jpg">
     <ul>
-        <li><a onclick="showLogin()">Login</a></li>
-        <li><a onclick="showRegister()">Register</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="jobs.html">Jobs</a></li>
+        <li><a href="candidate.html">Candidates</a></li>
+        <li><a href="employer.html">Employers</a></li>
+        <li><a href="login.html">Login</a></li>
     </ul>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
-    <h1>Get Hired In A <span>Minute</span></h1>
+    <h1>Find Jobs In <span>Minutes</span></h1>
 
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search jobs">
-        <button onclick="searchJobs()">Search</button>
+        <input type="text" placeholder="Search jobs">
+        <button>Search</button>
     </div>
 </div>
-
-<!-- JOBS -->
-<div class="jobs">
-    <h2>Available Jobs</h2>
-    <div class="grid" id="jobList"></div>
-</div>
-
-<!-- LOGIN POPUP -->
-<div id="authModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center;">
-    <div style="background:#161616; padding:20px; width:300px;">
-        <h3>Login / Register</h3>
-
-        <input type="email" id="email" placeholder="Email"><br><br>
-        <input type="password" id="password" placeholder="Password"><br><br>
-
-        <button onclick="handleAuth()">Submit</button>
-        <button onclick="closeAuth()">Close</button>
-    </div>
-</div>
-
-<script>
-// JOB DATA
-const jobs = [
-    {title:"Frontend Developer", type:"Full-Time"},
-    {title:"Backend Developer", type:"Remote"},
-    {title:"Designer", type:"Part-Time"},
-];
-
-// DISPLAY JOBS
-function displayJobs(data){
-    const list = document.getElementById("jobList");
-    list.innerHTML="";
-
-    data.forEach(job=>{
-        list.innerHTML += `
-        <div class="card">
-            <h3>${job.title}</h3>
-            <p>${job.type}</p>
-            <button onclick="applyJob('${job.title}')">Apply</button>
-        </div>`;
-    });
-}
-
-displayJobs(jobs);
-
-// SEARCH
-function searchJobs(){
-    const val = document.getElementById("searchInput").value.toLowerCase();
-    const filtered = jobs.filter(j => j.title.toLowerCase().includes(val));
-    displayJobs(filtered);
-}
-
-// LOGIN UI
-function showLogin(){
-    document.getElementById("authModal").style.display="flex";
-}
-function showRegister(){
-    document.getElementById("authModal").style.display="flex";
-}
-function closeAuth(){
-    document.getElementById("authModal").style.display="none";
-}
-
-// APPLY
-function applyJob(title){
-    alert("Applied for " + title);
-}
-</script>
 
 </body>
 </html>
