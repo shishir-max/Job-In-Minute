@@ -1,19 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Login - Job In Minute</title>
+
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-<h2 style="text-align:center;">Login / Register</h2>
+<div class="auth-container">
 
-<div style="max-width:300px;margin:auto;">
-<input type="email" placeholder="Email"><br><br>
-<input type="password" placeholder="Password"><br><br>
-<button>Login</button>
-<button>Register</button>
+    <h1>Login</h1>
+
+    <input type="email" id="loginEmail" placeholder="Email">
+
+    <input type="password" id="loginPassword" placeholder="Password">
+
+    <button onclick="loginUser()">Login</button>
+
+    <p>
+      New user?
+      <a href="register.html">Register</a>
+    </p>
+
 </div>
+
+<script type="module">
+
+import {
+ auth,
+ signInWithEmailAndPassword
+}
+from './firebase.js';
+
+window.loginUser = function(){
+
+ const email =
+ document.getElementById("loginEmail").value;
+
+ const password =
+ document.getElementById("loginPassword").value;
+
+ signInWithEmailAndPassword(auth,email,password)
+
+ .then((userCredential)=>{
+
+   alert("Login Successful");
+
+   window.location.href = "candidate.html";
+
+ })
+
+ .catch((error)=>{
+
+   alert(error.message);
+
+ });
+
+}
+
+</script>
 
 </body>
 </html>
