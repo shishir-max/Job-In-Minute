@@ -1,3 +1,12 @@
+<link rel="stylesheet" href="css/style.css">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Job In Minute</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
 body {
     margin:0;
     font-family: 'Segoe UI', sans-serif;
@@ -6,6 +15,20 @@ body {
 }
 
 /* NAVBAR */
+<nav>
+    <div class="logo">
+        JOB IN <span>MINUTE</span>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="jobs.html">Jobs</a></li>
+        <li><a href="candidate.html">Candidates</a></li>
+        <li><a href="employer.html">Employers</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="login.html">Login</a></li>
+    </ul>
+</nav>
 nav {
     display:flex;
     justify-content:space-between;
@@ -30,6 +53,29 @@ nav a {
     color:#333;
     font-weight:600;
 }
+<section class="hero">
+
+    <div class="hero-text">
+
+        <h1>Find Your Dream Job Faster</h1>
+
+        <p>
+            India's modern hiring platform for candidates and employers.
+        </p>
+
+        <div class="search-box">
+
+            <input type="text" placeholder="Job title">
+
+            <input type="text" placeholder="Location">
+
+            <button>Search Jobs</button>
+
+        </div>
+
+    </div>
+
+</section>
 
 /* HERO */
 .hero {
@@ -72,4 +118,76 @@ button {
     color:white;
     border:none;
     padding:10px;
+}
+.logo{
+    font-size:32px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:red;
+}
+
+.nav-links{
+    display:flex;
+    gap:25px;
+    list-style:none;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#222;
+    font-weight:600;
+}
+
+.hero{
+    height:90vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+
+    background:
+    linear-gradient(rgba(255,255,255,0.85),
+    rgba(255,255,255,0.85)),
+    url('https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1400');
+
+    background-size:cover;
+    background-position:center;
+}
+
+.hero-text h1{
+    font-size:60px;
+    margin-bottom:20px;
+}
+
+.hero-text p{
+    font-size:22px;
+    margin-bottom:30px;
+    color:#555;
+}
+
+.search-box{
+    display:flex;
+    gap:15px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.search-box input{
+    padding:15px;
+    width:250px;
+    border:none;
+    border-radius:8px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.search-box button{
+    padding:15px 30px;
+    background:red;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
 }
