@@ -11,14 +11,13 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // YOUR FIREBASE CONFIG
 const firebaseConfig = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "PASTE_AUTH_DOMAIN",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE_STORAGE_BUCKET",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
+  authDomain: "job-in-minute.firebaseapp.com",
+  projectId: "job-in-minute",
+  storageBucket: "job-in-minute.firebasestorage.app",
+  messagingSenderId: "507249342731",
+  appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
 };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
