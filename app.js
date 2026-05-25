@@ -1,15 +1,15 @@
-// Firebase SDK Version 10 Web Application Interface Initialization Modules
+// Firebase SDK Version 10 Web App Initialization Modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Safe Runtime Extraction of System Environment Configuration Variables
+// Firebase Config Configuration Block
 const firebaseConfig = {
-    apiKey: window._env_?.FIREBASE_API_KEY || "", 
-    authDomain: window._env_?.FIREBASE_AUTH_DOMAIN || "",
-    projectId: window._env_?.FIREBASE_PROJECT_ID || "",
-    storageBucket: window._env_?.FIREBASE_STORAGE_BUCKET || "",
-    messagingSenderId: window._env_?.FIREBASE_MESSAGING_SENDER_ID || "",
-    appId: window._env_?.FIREBASE_APP_ID || ""
+    apiKey: "", 
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: ""
 };
 
 // Initialize Active Services Execution Pipe
@@ -26,7 +26,7 @@ const loginForm = document.getElementById('loginForm');
 const signupForm = document.getElementById('signupForm');
 const authMessage = document.getElementById('authMessage');
 
-/* UI Core Modal Overlay Toggles Engine Configuration */
+/* UI Modal Window Click Controls */
 loginNavBtn.addEventListener('click', () => {
     authModal.classList.add('open');
     authMessage.textContent = "";
@@ -50,7 +50,7 @@ tabSignup.addEventListener('click', () => {
     loginForm.classList.add('hidden');
 });
 
-/* FireBase Action Submissions Execution Logic Pipeline */
+/* Interactive Submission Pipelines */
 signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('signupEmail').value;
@@ -74,7 +74,7 @@ loginForm.addEventListener('submit', async (e) => {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     authMessage.style.color = "#635BFF";
-    authMessage.textContent = "Verifying credentials authentication token...";
+    authMessage.textContent = "Verifying credentials...";
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
