@@ -1,31 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Job In Minute</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job-In-Minute | Find Jobs in Minutes</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
-
 <body>
 
-<nav>
-    <img src="logo.jpg">
-    <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="jobs.html">Jobs</a></li>
-        <li><a href="candidate.html">Candidates</a></li>
-        <li><a href="employer.html">Employers</a></li>
-        <li><a href="login.html">Login</a></li>
-    </ul>
-</nav>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="./index.html">Job<span>InMinute</span></a>
+            </div>
+            <nav class="nav-links">
+                <a href="#home" class="active">Home</a>
+                <a href="#jobs">Browse Jobs</a>
+                <a href="#candidates">For Candidates</a>
+                <a href="#employers">For Employers</a>
+            </nav>
+            <div class="header-actions">
+                <button class="btn-login-toggle" id="loginNavBtn">Login / Sign Up</button>
+            </div>
+        </div>
+    </header>
 
-<div class="hero">
-    <h1>Find Jobs In <span>Minutes</span></h1>
+    <section class="hero-section" id="home">
+        <div class="hero-content">
+            <h1>Find Jobs In <span class="highlight">Minutes</span></h1>
+            <p>Connecting elite professionals with top-tier hiring managers across global technical markets seamlessly.</p>
+            
+            <div class="search-container">
+                <input type="text" placeholder="Search jobs, tech stacks, or roles..." id="jobSearchInput">
+                <button id="searchBtn">Search</button>
+            </div>
+        </div>
+    </section>
 
-    <div class="search-box">
-        <input type="text" placeholder="Search jobs">
-        <button>Search</button>
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal-card">
+            <button class="close-modal-btn" id="closeModalBtn">&times;</button>
+            
+            <div class="auth-tabs">
+                <button class="tab-btn active" id="tabLogin">Login</button>
+                <button class="tab-btn" id="tabSignup">Register</button>
+            </div>
+
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" required placeholder="name@company.com">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary">Sign In</button>
+            </form>
+
+            <form id="signupForm" class="auth-form hidden">
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" required placeholder="name@company.com">
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" required placeholder="Create strong password">
+                </div>
+                <div class="form-group">
+                    <label for="userRole">Account Profile Type</label>
+                    <select id="userRole" required>
+                        <option value="candidate">Job Seeker (Candidate)</option>
+                        <option value="employer">Hiring Manager (Employer)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Create Account</button>
+            </form>
+            
+            <div id="authMessage" class="auth-status-message"></div>
+        </div>
     </div>
-</div>
 
+    <script type="module" src="./app.js"></script>
 </body>
 </html>
