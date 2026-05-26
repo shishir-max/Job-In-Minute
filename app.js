@@ -85,22 +85,51 @@ if (loginForm) {
 if (signupForm) {
     signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('signupEmail').value;
-        const password = document.getElementById('signupPassword').value;
+        /* Add this single selector near the top with your other variables */
+const mainDashboard = document.getElementById('mainDashboard');
+const userDisplayEmail = document.getElementById('userDisplayEmail');
+const logoutBtn = document.getElementById('logoutBtn');
+
+/* Update the loginForm submission pipeline */
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
         
         authMessage.style.color = "#635BFF";
-        authMessage.textContent = "Building profile workspace...";
+        authMessage.textContent = "Verifying account details...";
 
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
             authMessage.style.color = "#00D4B2";
-            authMessage.textContent = "Account generated successfully!";
-            alert("Registration Successful! Your account has been created.");
+            authMessage.textContent = "Access Granted! Welcome back.";
+            
+            // UI Visual Transformation Engine Code:
+            alert("Login Successful! Welcome back.");
             authModal.classList.remove('open');
+            
+            // Show dashboard and hide hero banner elements
+            if (mainDashboard) {
+                mainDashboard.classList.remove('hidden');
+                userDisplayEmail.textContent = email;
+                document.getElementById('home').style.display = 'none'; // Optional: clear hero space
+                loginNavBtn.style.display = 'none'; // Hide login button once active
+            }
         } catch (error) {
             authMessage.style.color = "#EF4444";
-            authMessage.textContent = `Registration failed: ${error.message}`;
-            alert(`Registration Error: ${error.message}`);
+            authMessage.textContent = `Login failed: ${error.message}`;
+            alert(`Login Error: ${error.message}`);
         }
+    });
+}
+
+/* Add the Logout Behavior Handler */
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        mainDashboard.classList.add('hidden');
+        document.getElementById('home').style.display = 'flex';
+        loginNavBtn.style.display = 'block';
+        alert("You have logged out safely.");
     });
 }
