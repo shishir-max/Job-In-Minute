@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Your Firebase Config Block (Make sure to paste your real keys inside these quotes if you have them!)
+// Your Firebase Config Block
 const firebaseConfig = {
   apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
   authDomain: "job-in-minute.firebaseapp.com",
@@ -58,7 +58,7 @@ if (tabLogin && tabSignup) {
     });
 }
 
-/* Data Processing Execution Handlers */
+/* Data Processing Execution Handlers with UI Alerts */
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -72,10 +72,12 @@ if (loginForm) {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             authMessage.style.color = "#00D4B2";
             authMessage.textContent = "Access Granted! Welcome back.";
-            setTimeout(() => authModal.classList.remove('open'), 1500);
+            alert("Login Successful! Welcome back.");
+            authModal.classList.remove('open');
         } catch (error) {
             authMessage.style.color = "#EF4444";
             authMessage.textContent = `Login failed: ${error.message}`;
+            alert(`Login Error: ${error.message}`);
         }
     });
 }
@@ -93,10 +95,12 @@ if (signupForm) {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             authMessage.style.color = "#00D4B2";
             authMessage.textContent = "Account generated successfully!";
-            setTimeout(() => authModal.classList.remove('open'), 1500);
+            alert("Registration Successful! Your account has been created.");
+            authModal.classList.remove('open');
         } catch (error) {
             authMessage.style.color = "#EF4444";
             authMessage.textContent = `Registration failed: ${error.message}`;
+            alert(`Registration Error: ${error.message}`);
         }
     });
 }
