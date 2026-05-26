@@ -4,12 +4,12 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } f
 
 // Your Firebase Config Block (Make sure to paste your real keys inside these quotes if you have them!)
 const firebaseConfig = {
-    apiKey: "", 
-    authDomain: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: ""
+  apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
+  authDomain: "job-in-minute.firebaseapp.com",
+  projectId: "job-in-minute",
+  storageBucket: "job-in-minute.firebasestorage.app",
+  messagingSenderId: "507249342731",
+  appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
 };
 
 // Initialize Core Application Pipeline
