@@ -37,16 +37,11 @@
         </div>
     </section>
 
-    <div class="auth-modal-overlay" id="authModal">
-        <div class="auth-modal-card">
-            <button class="close-modal-btn" id="closeModalBtn">&times;</button>
-            </div>
-
     <main class="dashboard-wrapper hidden" id="mainDashboard">
         <section class="dashboard-header-bar">
             <div class="welcome-block">
                 <h2>Welcome back, <span id="userDisplayEmail">User</span>!</h2>
-                <p>Here are the latest technical roles matched to your professional stack today.</p>
+                <p>Here are your active technical role matches for today:</p>
             </div>
             <button class="btn-logout" id="logoutBtn">Sign Out</button>
         </section>
@@ -59,7 +54,7 @@
                     <span class="job-badge remote">Remote</span>
                     <h4 class="job-role">US IT Technical Recruiter</h4>
                     <p class="company-name">Implant Medical Care Staffing</p>
-                    <p class="job-desc">Managing end-to-end talent acquisition pipelines for US State clients. Requires deep expertise in tax terms (W2, C2C) and credential background verification (BGV).</p>
+                    <p class="job-desc">Managing end-to-end talent acquisition pipelines for US State clients. Requires expertise in tax terms (W2, C2C) and credential background verification (BGV).</p>
                     <div class="job-tags">
                         <span>US IT Recruitment</span>
                         <span>C2C</span>
@@ -76,20 +71,7 @@
                     <div class="job-tags">
                         <span>Java</span>
                         <span>Spring Boot</span>
-                        <span>Cloud Architecture</span>
-                    </div>
-                    <button class="btn-apply" onclick="alert('Application submitted successfully to hiring panel!')">Apply Now</button>
-                </div>
-
-                <div class="job-card">
-                    <span class="job-badge contract">Contract</span>
-                    <h4 class="job-role">Odoo ERP Specialist</h4>
-                    <p class="company-name">Indore Digital Solutions Hub</p>
-                    <p class="job-desc">Architecting multi-account web ecosystems on enterprise software frameworks. Configuring multi-company routing configurations and refining custom service modular landing layouts.</p>
-                    <div class="job-tags">
-                        <span>Odoo Framework</span>
-                        <span>Python</span>
-                        <span>Multi-Company DNS</span>
+                        <span>Cloud</span>
                     </div>
                     <button class="btn-apply" onclick="alert('Application submitted successfully to hiring panel!')">Apply Now</button>
                 </div>
@@ -97,9 +79,10 @@
         </div>
     </main>
 
-    <script type="module" src="./app.js"></script>
-</body>
-</html>
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal-card">
+            <button class="close-modal-btn" id="closeModalBtn">&times;</button>
+            
             <div class="auth-tabs">
                 <button class="tab-btn active" id="tabLogin">Login</button>
                 <button class="tab-btn" id="tabSignup">Register</button>
