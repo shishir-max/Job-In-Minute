@@ -3,126 +3,434 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job-In-Minute | Find Jobs in Minutes</title>
-    <link rel="stylesheet" href="./style.css">
+    <title>JobInMinute - Fast Track Hiring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+    </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <header class="main-header">
-        <div class="header-container">
-            <div class="logo">
-                <a href="./index.html">Job<span>InMinute</span></a>
-            </div>
-            <nav class="nav-links">
-                <a href="#home" class="active">Home</a>
-                <a href="jobs.html">Browse Jobs</a>
-                <a href="#candidates">For Candidates</a>
-                <a href="#employers">For Employers</a>
-            </nav>
-            <div class="header-actions">
-                <button class="btn-login-toggle" id="loginNavBtn">Login / Sign Up</button>
+    <!-- GLOBAL NAVBAR -->
+    <nav class="bg-blue-600 text-white shadow-md font-medium sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
+            <a href="#" onclick="navigateTo('home-view')" class="text-2xl font-black tracking-tight flex items-center">
+                JobInMinute<span class="text-yellow-400">.com</span>
+            </a>
+            <div class="flex items-center space-x-6">
+                <a href="#" onclick="navigateTo('home-view')" class="hover:text-blue-100 transition">Home</a>
+                <a href="#" onclick="navigateTo('about-view')" class="hover:text-blue-100 transition">About</a>
+                
+                <!-- Guest View Navigation Buttons -->
+                <div id="guest-nav-actions" class="inline-flex items-center">
+                    <button onclick="navigateTo('auth-view')" class="bg-white text-blue-600 px-4 py-2 rounded-md font-bold hover:bg-blue-50 transition shadow-sm text-sm">Sign In / Register</button>
+                </div>
+
+                <!-- Authenticated User Display Control -->
+                <div id="user-nav-actions" class="hidden items-center space-x-4 border-l border-blue-400 pl-4">
+                    <span id="nav-user-email" class="text-sm max-w-[180px] truncate text-blue-50"></span>
+                    <button onclick="triggerSignOut()" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded font-bold transition">Logout</button>
+                </div>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <section class="hero-section" id="home">
-        <div class="hero-content">
-            <h1>Find Jobs In <span class="highlight">Minutes</span></h1>
-            <p>Connecting elite professionals with top-tier hiring managers across global technical markets seamlessly.</p>
-            
-            <div class="search-container">
-                <input type="text" placeholder="Search jobs, tech stacks, or roles..." id="jobSearchInput">
-                <button id="searchBtn">Search</button>
-            </div>
-        </div>
-    </section>
+    <!-- MAIN INTERACTIVE HUB -->
+    <main class="flex-grow">
 
-    <main class="dashboard-wrapper hidden" id="mainDashboard">
-        <section class="dashboard-header-bar">
-            <div class="welcome-block">
-                <h2>Welcome back, <span id="userDisplayEmail">User</span>!</h2>
-                <p>Here are your active technical role matches for today:</p>
+        <!-- SECTION 1: PUBLIC HOME / LANDING -->
+        <section id="home-view" class="view-section active">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-24 text-center px-4">
+                <h1 class="text-5xl font-extrabold mb-4 tracking-tight">Hire or Get Hired in Minutes</h1>
+                <p class="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">The streamlined ecosystem connecting top technical talent directly with active corporate hiring metrics.</p>
+                <button onclick="navigateTo('auth-view')" class="bg-yellow-400 text-slate-900 font-black px-8 py-3.5 rounded-md shadow-lg hover:bg-yellow-300 transition text-md uppercase tracking-wider">Explore Dashboard</button>
             </div>
-            <button class="btn-logout" id="logoutBtn">Sign Out</button>
+            <div class="max-w-4xl mx-auto py-16 px-4">
+                <h3 class="text-3xl font-bold text-slate-900 text-center mb-8">Current Opportunities Available</h3>
+                <div id="public-jobs-container" class="space-y-4">
+                    <p class="text-slate-400 text-center animate-pulse">Establishing secure data stream connection...</p>
+                </div>
+            </div>
         </section>
 
-        <div class="job-board-container" id="jobs">
-            <h3 class="section-title">Available Technical Roles</h3>
+        <!-- SECTION 2: ABOUT LANDING -->
+        <section id="about-view" class="view-section max-w-4xl mx-auto py-16 px-4">
+            <h2 class="text-4xl font-extrabold text-blue-600 mb-6">About Our Infrastructure</h2>
+            <p class="text-lg text-slate-600 leading-relaxed mb-6">JobInMinute provides single-account agility to enterprise portals. Our architecture removes structural recruitment friction, facilitating direct connection nodes between employee applications and employer candidate boards.</p>
+            <p class="text-lg text-slate-600 leading-relaxed">Leveraging highly secure isolated cloud databases, we guarantee that critical tracking forms and candidate identity files stay protected and contextually accessible instantly.</p>
+        </section>
+
+        <!-- SECTION 3: UNIFIED AUTHENTICATION PANEL -->
+        <section id="auth-view" class="view-section max-w-md mx-auto my-16 bg-white p-8 rounded-xl shadow-lg border border-slate-100">
+            <h2 id="auth-panel-title" class="text-2xl font-bold text-center text-slate-800 mb-6">Account Verification</h2>
             
-            <div class="job-grid">
-                <div class="job-card">
-                    <span class="job-badge remote">Remote</span>
-                    <h4 class="job-role">US IT Technical Recruiter</h4>
-                    <p class="company-name">Implant Medical Care Staffing</p>
-                    <p class="job-desc">Managing end-to-end talent acquisition pipelines for US State clients. Requires expertise in tax terms (W2, C2C) and credential background verification (BGV).</p>
-                    <div class="job-tags">
-                        <span>US IT Recruitment</span>
-                        <span>C2C</span>
-                        <span>BGV</span>
-                    </div>
-                    <button class="btn-apply" onclick="alert('Application submitted successfully to hiring panel!')">Apply Now</button>
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-xs uppercase font-bold tracking-wider text-slate-500 mb-1">Email Address</label>
+                    <input type="email" id="input-auth-email" class="w-full border border-slate-200 p-2.5 rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition">
                 </div>
-
-                <div class="job-card">
-                    <span class="job-badge full-time">Full-Time</span>
-                    <h4 class="job-role">Full-Stack Java Developer</h4>
-                    <p class="company-name">Kinetics Source Technologies</p>
-                    <p class="job-desc">Design and deploy highly scalable cloud-based systems infrastructure. Build secure, interactive web platforms integrating robust automated relational data services.</p>
-                    <div class="job-tags">
-                        <span>Java</span>
-                        <span>Spring Boot</span>
-                        <span>Cloud</span>
-                    </div>
-                    <button class="btn-apply" onclick="alert('Application submitted successfully to hiring panel!')">Apply Now</button>
+                <div>
+                    <label class="block text-xs uppercase font-bold tracking-wider text-slate-500 mb-1">Password</label>
+                    <input type="password" id="input-auth-pass" class="w-full border border-slate-200 p-2.5 rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition">
                 </div>
-            </div>
-        </div>
-    </main>
-
-    <div class="auth-modal-overlay" id="authModal">
-        <div class="auth-modal-card">
-            <button class="close-modal-btn" id="closeModalBtn">&times;</button>
-            
-            <div class="auth-tabs">
-                <button class="tab-btn active" id="tabLogin">Login</button>
-                <button class="tab-btn" id="tabSignup">Register</button>
-            </div>
-
-            <form id="loginForm" class="auth-form">
-                <div class="form-group">
-                    <label for="loginEmail">Email Address</label>
-                    <input type="email" id="loginEmail" required placeholder="name@company.com">
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" required placeholder="••••••••">
-                </div>
-                <button type="submit" class="btn-primary">Sign In</button>
-            </form>
-
-            <form id="signupForm" class="auth-form hidden">
-                <div class="form-group">
-                    <label for="signupEmail">Email Address</label>
-                    <input type="email" id="signupEmail" required placeholder="name@company.com">
-                </div>
-                <div class="form-group">
-                    <label for="signupPassword">Password</label>
-                    <input type="password" id="signupPassword" required placeholder="Create strong password">
-                </div>
-                <div class="form-group">
-                    <label for="userRole">Account Profile Type</label>
-                    <select id="userRole" required>
-                        <option value="candidate">Job Seeker (Candidate)</option>
-                        <option value="employer">Hiring Manager (Employer)</option>
+                <div id="registration-role-box" class="hidden">
+                    <label class="block text-xs uppercase font-bold tracking-wider text-slate-500 mb-1">Select Profile Type</label>
+                    <select id="input-auth-role" class="w-full border border-slate-200 p-2.5 rounded-md focus:ring-2 focus:ring-blue-500 outline-none bg-white transition">
+                        <option value="employee">Employee (Looking for Job)</option>
+                        <option value="employer">Employer (Posting Openings)</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-primary">Create Account</button>
-            </form>
-            
-            <div id="authMessage" class="auth-status-message"></div>
-        </div>
-    </div>
+            </div>
 
-    <script type="module" src="./app.js"></script>
+            <button id="auth-action-btn" onclick="executeAuthentication()" class="w-full bg-blue-600 text-white py-3 rounded-md font-bold hover:bg-blue-700 shadow transition mb-4">Sign In</button>
+            <p class="text-center text-sm text-slate-500">
+                <span id="auth-switch-prompt">New to the platform?</span>
+                <a href="#" onclick="toggleAuthWorkflow()" id="auth-switch-link" class="text-blue-600 font-bold underline ml-1">Create an account</a>
+            </p>
+        </section>
+
+        <!-- SECTION 4: CANDIDATE (EMPLOYEE) WORKSPACE -->
+        <section id="employee-view" class="view-section max-w-6xl mx-auto py-12 px-4">
+            <div class="border-b border-slate-200 pb-4 mb-8 flex justify-between items-center">
+                <div>
+                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">Candidate Profile Dashboard</h2>
+                    <p class="text-sm text-slate-500">Browse current openings and deploy your resume application records.</p>
+                </div>
+                <span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-extrabold uppercase tracking-widest">Candidate Node</span>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Application Injection Form -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 h-fit">
+                    <h4 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">File Application Package</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Target Job Reference Identifier</label>
+                            <input type="text" id="target-job-token" class="w-full border bg-slate-50 p-2 rounded text-sm text-slate-500 outline-none" placeholder="Select an opening to copy ID" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Upload CV Document Asset (PDF Only)</label>
+                            <input type="file" id="target-resume-file" accept=".pdf" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition cursor-pointer">
+                        </div>
+                        <button onclick="dispatchApplication()" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-md hover:bg-emerald-700 transition shadow">Submit File to Employer</button>
+                    </div>
+                </div>
+                <!-- Interactive Database Job Pipeline Feed -->
+                <div class="lg:col-span-2 space-y-4">
+                    <h4 class="text-xl font-bold text-slate-900">Active Job Directory</h4>
+                    <div id="employee-jobs-pipeline" class="space-y-4"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: EMPLOYER MANAGEMENT DASHBOARD -->
+        <section id="employer-view" class="view-section max-w-6xl mx-auto py-12 px-4">
+            <div class="border-b border-slate-200 pb-4 mb-8 flex justify-between items-center">
+                <div>
+                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">Hiring Authority Panel</h2>
+                    <p class="text-sm text-slate-500">Construct positions, structure hiring parameters, and manage candidate assets.</p>
+                </div>
+                <span class="bg-indigo-100 text-indigo-800 text-xs px-3 py-1 rounded-full font-extrabold uppercase tracking-widest">Employer Node</span>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Job Factory Form -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 h-fit">
+                    <h4 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Publish New Opening</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Corporate Position Title</label>
+                            <input type="text" id="post-job-title" class="w-full border border-slate-200 p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Company/Brand Entity</label>
+                            <input type="text" id="post-job-company" class="w-full border border-slate-200 p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Requirements & Scope</label>
+                            <textarea id="post-job-desc" rows="4" class="w-full border border-slate-200 p-2 rounded outline-none focus:ring-1 focus:ring-blue-500 text-sm"></textarea>
+                        </div>
+                        <button onclick="publishJobPost()" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-md hover:bg-blue-700 transition shadow">Publish Globally</button>
+                    </div>
+                </div>
+                <!-- Inbound Applicant Processing Grid -->
+                <div class="lg:col-span-2 space-y-4">
+                    <h4 class="text-xl font-bold text-slate-900">Inbound Applications Stream</h4>
+                    <div id="employer-inbound-applications" class="space-y-4">
+                        <p class="text-slate-400">Waiting for incoming applications queue syncing...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: LEGAL PAGES -->
+        <section id="terms-view" class="view-section max-w-4xl mx-auto py-16 px-4">
+            <h2 class="text-2xl font-bold mb-4 text-slate-900">Terms of Service Agreement</h2>
+            <p class="text-slate-600 leading-relaxed">By engaging with jobinminute.com, users accept complete platform processing protocols. Data sharing between authenticated profile roles complies explicitly with self-submitted corporate document exchange regulations.</p>
+        </section>
+
+        <section id="privacy-view" class="view-section max-w-4xl mx-auto py-16 px-4">
+            <h2 class="text-2xl font-bold mb-4 text-slate-900">Privacy Policy Matrix</h2>
+            <p class="text-slate-600 leading-relaxed">Platform operations process structural candidate assets via encryption isolation pipelines. File nodes, resume links, and tracking tokens are strictly visible to verified, authenticated corporate profiles.</p>
+        </section>
+
+    </main>
+
+    <!-- FOOTER TRACKING OBJECT -->
+    <footer class="bg-slate-900 text-slate-400 py-8 text-xs border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>&copy; 2026 JobInMinute. Real-Time Distributed Pipeline Node.</div>
+            <div class="space-x-6">
+                <a href="#" onclick="navigateTo('terms-view')" class="hover:text-white transition">Terms of Services</a>
+                <a href="#" onclick="navigateTo('privacy-view')" class="hover:text-white transition">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE APP LOGIC PROCESSOR ENGINE -->
+    <script type="module">
+        import { auth, db, storage } from "./firebase.js";
+        import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+        let currentAuthWorkflowState = "login";
+        let localUserCache = null;
+
+        // ROUTER CONTROL EXPOSURE
+        window.navigateTo = function(targetViewId) {
+            document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+            const destination = document.getElementById(targetViewId);
+            if(destination) destination.classList.add('active');
+            window.scrollTo(0,0);
+        };
+
+        // AUTH ACTION UI TOGGLE 
+        window.toggleAuthWorkflow = function() {
+            const labelTitle = document.getElementById('auth-panel-title');
+            const selectBox = document.getElementById('registration-role-box');
+            const actionBtn = document.getElementById('auth-action-btn');
+            const swapPrompt = document.getElementById('auth-switch-prompt');
+            const swapLink = document.getElementById('auth-switch-link');
+
+            if (currentAuthWorkflowState === "login") {
+                currentAuthWorkflowState = "register";
+                labelTitle.innerText = "Setup Identity Registry";
+                selectBox.classList.remove('hidden');
+                actionBtn.innerText = "Create Identity Node";
+                swapPrompt.innerText = "Already validated on platform?";
+                swapLink.innerText = "Execute login instead";
+            } else {
+                currentAuthWorkflowState = "login";
+                labelTitle.innerText = "Account Verification";
+                selectBox.classList.add('hidden');
+                actionBtn.innerText = "Sign In";
+                swapPrompt.innerText = "New to the platform?";
+                swapLink.innerText = "Create an account";
+            }
+        };
+
+        // RUN AUTHENTICATION FLOW PIPELINE
+        window.executeAuthentication = async function() {
+            const targetEmail = document.getElementById('input-auth-email').value.trim();
+            const targetPass = document.getElementById('input-auth-pass').value;
+            const targetRole = document.getElementById('input-auth-role').value;
+
+            if(!targetEmail || !targetPass) return alert("All credentials components must be completed.");
+
+            try {
+                if(currentAuthWorkflowState === "register") {
+                    const trackingCredentials = await createUserWithEmailAndPassword(auth, targetEmail, targetPass);
+                    await setDoc(doc(db, "users", trackingCredentials.user.uid), {
+                        email: targetEmail,
+                        role: targetRole,
+                        timestamp: new Date()
+                    });
+                    alert("Profile setup finalized securely.");
+                } else {
+                    await signInWithEmailAndPassword(auth, targetEmail, targetPass);
+                }
+            } catch (err) {
+                alert("Identity verification fault: " + err.message);
+            }
+        };
+
+        // AUTH TRACKING REAL-TIME AGENT
+        onAuthStateChanged(auth, async (activeUserToken) => {
+            const viewGuestNav = document.getElementById('guest-nav-actions');
+            const viewUserNav = document.getElementById('user-nav-actions');
+            const displayEmail = document.getElementById('nav-user-email');
+
+            if(activeUserToken) {
+                localUserCache = activeUserToken;
+                viewGuestNav.classList.add('hidden');
+                viewUserNav.classList.remove('hidden');
+                viewUserNav.classList.add('flex');
+                displayEmail.innerText = activeUserToken.email;
+
+                // Sync context user identity record matrix data
+                const userSnapshot = await getDoc(doc(db, "users", activeUserToken.uid));
+                if(userSnapshot.exists()) {
+                    const userRoleData = userSnapshot.data().role;
+                    if(userRoleData === "employer") {
+                        navigateTo('employer-view');
+                        syncEmployerApplicationsPool();
+                    } else {
+                        navigateTo('employee-view');
+                        renderJobsFeedIndex(true);
+                    }
+                }
+            } else {
+                localUserCache = null;
+                viewGuestNav.classList.remove('hidden');
+                viewUserNav.classList.add('hidden');
+                viewUserNav.classList.remove('flex');
+                navigateTo('home-view');
+                renderJobsFeedIndex(false);
+            }
+        });
+
+        // DISPATCH EXIT PROTOCOL
+        window.triggerSignOut = function() {
+            signOut(auth);
+        };
+
+        // EMPLOYER PIPELINE: Post Jobs
+        window.publishJobPost = async function() {
+            const title = document.getElementById('post-job-title').value.trim();
+            const corporate = document.getElementById('post-job-company').value.trim();
+            const scope = document.getElementById('post-job-desc').value.trim();
+
+            if(!title || !corporate || !scope) return alert("Ensure all corporate opening criteria parameters are detailed.");
+
+            try {
+                await addDoc(collection(db, "jobs"), {
+                    title,
+                    company: corporate,
+                    description: scope,
+                    postedBy: localUserCache.uid,
+                    timestamp: new Date()
+                });
+                alert("Position initialized and cataloged in the core directory index.");
+                document.getElementById('post-job-title').value = '';
+                document.getElementById('post-job-company').value = '';
+                document.getElementById('post-job-desc').value = '';
+            } catch(err) {
+                alert("Publishing database pipeline crash: " + err.message);
+            }
+        };
+
+        // CORE SYNCHRONIZER: Render directory postings
+        async function renderJobsFeedIndex(hasAuthContext) {
+            const publicContainer = document.getElementById('public-jobs-container');
+            const workingContainer = document.getElementById('employee-jobs-pipeline');
+
+            try {
+                const targetQuery = query(collection(db, "jobs"), orderBy("timestamp", "desc"));
+                const trackingSnapshot = await getDocs(targetQuery);
+                
+                let publicScaffolding = '';
+                let workspaceScaffolding = '';
+
+                trackingSnapshot.forEach((recordDoc) => {
+                    const details = recordDoc.data();
+                    const identifier = recordDoc.id;
+
+                    let baseCard = `
+                        <div class="bg-white p-5 rounded-lg border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <h5 class="text-lg font-bold text-slate-900">${details.title}</h5>
+                                <p class="text-sm font-semibold text-blue-600 mb-1">${details.company}</p>
+                                <p class="text-xs text-slate-500 max-w-xl">${details.description}</p>
+                            </div>
+                    `;
+
+                    publicScaffolding += baseCard + `</div>`;
+                    workspaceScaffolding += baseCard + `
+                        <button onclick="bindTargetToken('${identifier}')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded transition whitespace-nowrap">Select Opening</button>
+                    </div>`;
+                });
+
+                if(publicContainer) publicContainer.innerHTML = publicScaffolding || '<p class="text-slate-400 text-center">No active roles cataloged.</p>';
+                if(workingContainer) workingContainer.innerHTML = workspaceScaffolding || '<p class="text-slate-400 text-center">No job postings found inside registry database.</p>';
+            } catch (err) {
+                console.error("Index load crash: ", err);
+            }
+        }
+
+        // BIND ID SELECTION FOR APPLICANT CONTEXT
+        window.bindTargetToken = function(jobId) {
+            document.getElementById('target-job-token').value = jobId;
+            alert("Opening parameters cloned. Please upload your digital resume asset.");
+        };
+
+        // EMPLOYEE PIPELINE: Upload Resume & Apply
+        window.dispatchApplication = async function() {
+            const selectedJobToken = document.getElementById('target-job-token').value;
+            const structuralFileInput = document.getElementById('target-resume-file');
+            const singleFileObj = structuralFileInput.files[0];
+
+            if(!selectedJobToken) return alert("Select an active opening from the directory list first.");
+            if(!singleFileObj) return alert("Please map an explicit PDF document format asset for delivery.");
+
+            try {
+                const locationAllocationPointer = ref(storage, `resumes/${localUserCache.uid}_${Date.now()}_${singleFileObj.name}`);
+                const processSnapshot = await uploadBytes(locationAllocationPointer, singleFileObj);
+                const cloudAssetUrl = await getDownloadURL(processSnapshot.ref);
+
+                await addDoc(collection(db, "applications"), {
+                    jobId: selectedJobToken,
+                    candidateId: localUserCache.uid,
+                    candidateEmail: localUserCache.email,
+                    resumeUrl: cloudAssetUrl,
+                    appliedAt: new Date()
+                });
+
+                alert("Application package linked and transferred cleanly to corporate storage vaults.");
+                document.getElementById('target-job-token').value = '';
+                structuralFileInput.value = '';
+            } catch(err) {
+                alert("Upload failure on transmission line: " + err.message);
+            }
+        };
+
+        // EMPLOYER PIPELINE: Fetch & Map Incoming Profiles
+        async function syncEmployerApplicationsPool() {
+            const visualContainerNode = document.getElementById('employer-inbound-applications');
+            try {
+                const globalQuery = query(collection(db, "applications"), orderBy("appliedAt", "desc"));
+                const querySnapshotResult = await getDocs(globalQuery);
+                
+                let combinedFeedHtml = '';
+
+                for (const appDocRecord of querySnapshotResult.docs) {
+                    const packageData = appDocRecord.data();
+                    
+                    const roleQueryReferenceDoc = doc(db, "jobs", packageData.jobId);
+                    const specificJobInfoSnapshot = await getDoc(roleQueryReferenceDoc);
+
+                    if(specificJobInfoSnapshot.exists() && specificJobInfoSnapshot.data().postedBy === localUserCache.uid) {
+                        const targetRoleData = specificJobInfoSnapshot.data();
+                        combinedFeedHtml += `
+                            <div class="bg-white p-5 rounded-lg border border-l-4 border-indigo-500 shadow-sm flex items-center justify-between gap-4">
+                                <div>
+                                    <h6 class="font-bold text-slate-900 text-md">Role Tracking: <span class="text-indigo-600">${targetRoleData.title}</span></h6>
+                                    <p class="text-xs font-medium text-slate-500 mt-0.5">Applicant Verification ID: ${packageData.candidateEmail}</p>
+                                    <p class="text-[10px] text-slate-400 mt-1">Processed: ${packageData.appliedAt.toDate().toLocaleString()}</p>
+                                </div>
+                                <a href="${packageData.resumeUrl}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded shadow-sm tracking-wide transition">
+                                    Download Resume
+                                </a>
+                            </div>
+                        `;
+                    }
+                }
+                visualContainerNode.innerHTML = combinedFeedHtml || '<p class="text-slate-400 text-center text-sm py-4">No candidate profiles have queried this tracking system node yet.</p>';
+            } catch(err) {
+                console.error("Dashboard link sync execution exception: ", err);
+            }
+        }
+    </script>
 </body>
 </html>
