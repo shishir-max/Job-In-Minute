@@ -201,6 +201,7 @@
     <!-- Firebase System Module Integration Scripts -->
 <!-- Firebase System Module Integration Scripts -->
 <!-- Firebase System Module Integration Scripts -->
+<!-- Firebase System Module Integration Scripts -->
     <script type="module">
         import { auth, db } from "./firebase.js";
         import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -210,7 +211,7 @@
         let localUserCache = null;
         let selectedJobIdFilter = null; 
 
-        // Bind core navigation parameters safely to global scope
+        // Core single-page view router logic
         window.navigateTo = function(targetViewId) {
             document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
             const destination = document.getElementById(targetViewId);
@@ -280,7 +281,7 @@
                 viewGuestNav.classList.add('hidden');
                 viewUserNav.classList.remove('hidden');
                 viewUserNav.classList.add('flex');
-                displayEmail.innerText = activeUserToken.email;
+                if(displayEmail) displayEmail.innerText = activeUserToken.email;
 
                 const userSnapshot = await getDoc(doc(db, "users", activeUserToken.uid));
                 if(userSnapshot.exists()) {
@@ -294,7 +295,9 @@
                         renderJobsFeedIndex();
                     }
                 } else {
-                    navigateTo('home-view');
+                    // SAFE FALLBACK: If user document doesn't exist yet, treat as employee workspace visitor
+                    navigateTo('employee-view');
+                    renderJobsFeedIndex();
                 }
             } else {
                 localUserCache = null;
@@ -334,57 +337,60 @@
             }
         };
 
-async function renderJobsFeedIndex() {
-    const publicContainer = document.getElementById('public-jobs-container');
-    const workingContainer = document.getElementById('employee-jobs-pipeline');
+        async function renderJobsFeedIndex() {
+            const publicContainer = document.getElementById('public-jobs-container');
+            const workingContainer = document.getElementById('employee-jobs-pipeline');
 
-    try {
-        const targetQuery = query(collection(db, "jobs"), orderBy("timestamp", "desc"));
-        const trackingSnapshot = await getDocs(targetQuery);
-        
-        let publicScaffolding = '';
-        let workspaceScaffolding = '';
+            try {
+                const targetQuery = query(collection(db, "jobs"), orderBy("timestamp", "desc"));
+                const trackingSnapshot = await getDocs(targetQuery);
+                
+                let publicScaffolding = '';
+                let workspaceScaffolding = '';
 
-        trackingSnapshot.forEach((recordDoc) => {
-            const details = recordDoc.data();
-            const identifier = recordDoc.id;
+                trackingSnapshot.forEach((recordDoc) => {
+                    const details = recordDoc.data();
+                    const identifier = recordDoc.id;
 
-            // Base card structure
-            let baseCard = `
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-slate-300">
-                    <div>
-                        <h5 class="text-base font-bold text-slate-900">${details.title}</h5>
-                        <p class="text-xs font-semibold text-blue-600 mb-2">${details.company}</p>
-                        <p class="text-xs text-slate-500 max-w-2xl leading-relaxed">${details.description}</p>
-                    </div>
-            `;
+                    let baseCard = `
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-slate-300">
+                            <div>
+                                <h5 class="text-base font-bold text-slate-900">${details.title}</h5>
+                                <p class="text-xs font-semibold text-blue-600 mb-2">${details.company}</p>
+                                <p class="text-xs text-slate-500 max-w-2xl leading-relaxed">${details.description}</p>
+                            </div>
+                    `;
 
-            // FIX: If an employee is logged in, append the selection action directly onto the homepage cards too!
-            if (localUserCache) {
-                publicScaffolding += baseCard + `
-                    <button onclick="bindTargetToken('${identifier}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">Select Opening</button>
-                </div>`;
-            } else {
-                publicScaffolding += baseCard + `</div>`;
+                    if (localUserCache) {
+                        publicScaffolding += baseCard + `
+                            <button onclick="bindTargetToken('${identifier}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">Select Opening</button>
+                        </div>`;
+                    } else {
+                        publicScaffolding += baseCard + `</div>`;
+                    }
+                    
+                    if (workingContainer) {
+                        workspaceScaffolding += baseCard + `
+                            <button onclick="bindTargetToken('${identifier}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">Select Opening</button>
+                        </div>`;
+                    }
+                });
+
+                if(publicContainer) publicContainer.innerHTML = publicScaffolding || '<p class="text-slate-400 text-xs italic">No active roles cataloged.</p>';
+                if(workingContainer) workingContainer.innerHTML = workspaceScaffolding || '<p class="text-slate-400 text-xs italic">No job postings found inside registry database.</p>';
+            } catch (err) {
+                console.error("Index load crash: ", err);
             }
-            
-            if (workingContainer) {
-                workspaceScaffolding += baseCard + `
-                    <button onclick="bindTargetToken('${identifier}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">Select Opening</button>
-                </div>`;
-            }
-        });
+        }
 
-        if(publicContainer) publicContainer.innerHTML = publicScaffolding || '<p class="text-slate-400 text-xs italic">No active roles cataloged.</p>';
-        if(workingContainer) workingContainer.innerHTML = workspaceScaffolding || '<p class="text-slate-400 text-xs italic">No job postings found inside registry database.</p>';
-    } catch (err) {
-        console.error("Index load crash: ", err);
-    }
-}
-
+        // IMPROVED: Automatically swaps view layer to employee workspace upon card selection
         window.bindTargetToken = function(jobId) {
-            document.getElementById('target-job-token').value = jobId;
-            alert("Opening selected. Please add your resume details inside the panel.");
+            const tokenInput = document.getElementById('target-job-token');
+            if (tokenInput) {
+                tokenInput.value = jobId;
+            }
+            alert("Opening selected! Directing you to your workspace workspace application form.");
+            navigateTo('employee-view');
         };
 
         window.dispatchApplication = async function() {
@@ -406,12 +412,12 @@ async function renderJobsFeedIndex() {
                 alert("Application package linked and transferred cleanly.");
                 document.getElementById('target-job-token').value = '';
                 document.getElementById('target-resume-text').value = '';
+                navigateTo('home-view');
             } catch(err) {
                 alert("Upload failure on transmission line: " + err.message);
             }
         };
 
-        // Explicit Global Assignment to bypass module restrictions
         window.filterApplicationsByJob = function(jobId) {
             selectedJobIdFilter = jobId;
             syncEmployerDashboard();
@@ -428,7 +434,6 @@ async function renderJobsFeedIndex() {
                 let ownJobsHtml = '';
                 let activeJobIds = [];
 
-                // Render out clear option node
                 const allSelectedClass = !selectedJobIdFilter ? 'bg-blue-50 border-blue-300 text-blue-700 font-bold' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100';
                 ownJobsHtml += `
                     <div onclick="filterApplicationsByJob(null)" class="p-2.5 rounded-lg border text-center cursor-pointer transition ${allSelectedClass} text-[11px] uppercase tracking-wider mb-2 font-semibold">
