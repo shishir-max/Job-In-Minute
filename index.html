@@ -12,7 +12,6 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- GLOBAL NAVBAR -->
     <nav class="bg-blue-600 text-white shadow-md font-medium sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
             <a href="#" onclick="navigateTo('home-view')" class="text-2xl font-black tracking-tight flex items-center">
@@ -22,12 +21,10 @@
                 <a href="#" onclick="navigateTo('home-view')" class="hover:text-blue-100 transition">Home</a>
                 <a href="#" onclick="navigateTo('about-view')" class="hover:text-blue-100 transition">About</a>
                 
-                <!-- Guest View Navigation Buttons -->
                 <div id="guest-nav-actions" class="inline-flex items-center">
                     <button onclick="navigateTo('auth-view')" class="bg-white text-blue-600 px-4 py-2 rounded-md font-bold hover:bg-blue-50 transition shadow-sm text-sm">Sign In / Register</button>
                 </div>
 
-                <!-- Authenticated User Display Control -->
                 <div id="user-nav-actions" class="hidden items-center space-x-4 border-l border-blue-400 pl-4">
                     <span id="nav-user-email" class="text-sm max-w-[180px] truncate text-blue-50"></span>
                     <button onclick="triggerSignOut()" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded font-bold transition">Logout</button>
@@ -36,10 +33,8 @@
         </div>
     </nav>
 
-    <!-- MAIN INTERACTIVE HUB -->
     <main class="flex-grow">
 
-        <!-- SECTION 1: PUBLIC HOME / LANDING -->
         <section id="home-view" class="view-section active">
             <div class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-24 text-center px-4">
                 <h1 class="text-5xl font-extrabold mb-4 tracking-tight">Hire or Get Hired in Minutes</h1>
@@ -54,14 +49,11 @@
             </div>
         </section>
 
-        <!-- SECTION 2: ABOUT LANDING -->
         <section id="about-view" class="view-section max-w-4xl mx-auto py-16 px-4">
             <h2 class="text-4xl font-extrabold text-blue-600 mb-6">About Our Infrastructure</h2>
             <p class="text-lg text-slate-600 leading-relaxed mb-6">JobInMinute provides single-account agility to enterprise portals. Our architecture removes structural recruitment friction, facilitating direct connection nodes between employee applications and employer candidate boards.</p>
-            <p class="text-lg text-slate-600 leading-relaxed">Leveraging highly secure isolated cloud databases, we guarantee that critical tracking forms and candidate identity files stay protected and contextually accessible instantly.</p>
         </section>
 
-        <!-- SECTION 3: UNIFIED AUTHENTICATION PANEL -->
         <section id="auth-view" class="view-section max-w-md mx-auto my-16 bg-white p-8 rounded-xl shadow-lg border border-slate-100">
             <h2 id="auth-panel-title" class="text-2xl font-bold text-center text-slate-800 mb-6">Account Verification</h2>
             
@@ -90,33 +82,30 @@
             </p>
         </section>
 
-        <!-- SECTION 4: CANDIDATE (EMPLOYEE) WORKSPACE -->
         <section id="employee-view" class="view-section max-w-6xl mx-auto py-12 px-4">
             <div class="border-b border-slate-200 pb-4 mb-8 flex justify-between items-center">
                 <div>
                     <h2 class="text-3xl font-black text-slate-900 tracking-tight">Candidate Profile Dashboard</h2>
-                    <p class="text-sm text-slate-500">Browse current openings and deploy your resume application records.</p>
+                    <p class="text-sm text-slate-500">Browse current openings and deploy your resume profile data.</p>
                 </div>
                 <span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-extrabold uppercase tracking-widest">Candidate Node</span>
             </div>
 
             <div class="grid lg:grid-cols-3 gap-8">
-                <!-- Application Injection Form -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 h-fit">
                     <h4 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">File Application Package</h4>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Target Job Reference Identifier</label>
-                            <input type="text" id="target-job-token" class="w-full border bg-slate-50 p-2 rounded text-sm text-slate-500 outline-none" placeholder="Select an opening to copy ID" readonly>
+                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Target Job Reference</label>
+                            <input type="text" id="target-job-token" class="w-full border bg-slate-50 p-2 rounded text-sm text-slate-500 outline-none" placeholder="Select an opening below" readonly>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Upload CV Document Asset (PDF Only)</label>
-                            <input type="file" id="target-resume-file" accept=".pdf" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition cursor-pointer">
+                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Resume / Cover Letter Details</label>
+                            <textarea id="target-resume-text" rows="6" class="w-full border border-slate-200 p-2 rounded outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Paste your core resume bio or paste a public Google Drive / LinkedIn link here..."></textarea>
                         </div>
-                        <button onclick="dispatchApplication()" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-md hover:bg-emerald-700 transition shadow">Submit File to Employer</button>
+                        <button onclick="dispatchApplication()" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-md hover:bg-emerald-700 transition shadow">Submit Data to Employer</button>
                     </div>
                 </div>
-                <!-- Interactive Database Job Pipeline Feed -->
                 <div class="lg:col-span-2 space-y-4">
                     <h4 class="text-xl font-bold text-slate-900">Active Job Directory</h4>
                     <div id="employee-jobs-pipeline" class="space-y-4"></div>
@@ -124,7 +113,6 @@
             </div>
         </section>
 
-        <!-- SECTION 5: EMPLOYER MANAGEMENT DASHBOARD -->
         <section id="employer-view" class="view-section max-w-6xl mx-auto py-12 px-4">
             <div class="border-b border-slate-200 pb-4 mb-8 flex justify-between items-center">
                 <div>
@@ -135,7 +123,6 @@
             </div>
 
             <div class="grid lg:grid-cols-3 gap-8">
-                <!-- Job Factory Form -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 h-fit">
                     <h4 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Publish New Opening</h4>
                     <div class="space-y-4">
@@ -154,7 +141,6 @@
                         <button onclick="publishJobPost()" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-md hover:bg-blue-700 transition shadow">Publish Globally</button>
                     </div>
                 </div>
-                <!-- Inbound Applicant Processing Grid -->
                 <div class="lg:col-span-2 space-y-4">
                     <h4 class="text-xl font-bold text-slate-900">Inbound Applications Stream</h4>
                     <div id="employer-inbound-applications" class="space-y-4">
@@ -164,20 +150,18 @@
             </div>
         </section>
 
-        <!-- SECTION 6: LEGAL PAGES -->
         <section id="terms-view" class="view-section max-w-4xl mx-auto py-16 px-4">
             <h2 class="text-2xl font-bold mb-4 text-slate-900">Terms of Service Agreement</h2>
-            <p class="text-slate-600 leading-relaxed">By engaging with jobinminute.com, users accept complete platform processing protocols. Data sharing between authenticated profile roles complies explicitly with self-submitted corporate document exchange regulations.</p>
+            <p class="text-slate-600 leading-relaxed">By engaging with jobinminute.com, users accept complete platform processing protocols.</p>
         </section>
 
         <section id="privacy-view" class="view-section max-w-4xl mx-auto py-16 px-4">
             <h2 class="text-2xl font-bold mb-4 text-slate-900">Privacy Policy Matrix</h2>
-            <p class="text-slate-600 leading-relaxed">Platform operations process structural candidate assets via encryption isolation pipelines. File nodes, resume links, and tracking tokens are strictly visible to verified, authenticated corporate profiles.</p>
+            <p class="text-slate-600 leading-relaxed">Platform operations process structural candidate assets via encryption isolation pipelines.</p>
         </section>
 
     </main>
 
-    <!-- FOOTER TRACKING OBJECT -->
     <footer class="bg-slate-900 text-slate-400 py-8 text-xs border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>&copy; 2026 JobInMinute. Real-Time Distributed Pipeline Node.</div>
@@ -188,17 +172,14 @@
         </div>
     </footer>
 
-    <!-- INTERACTIVE APP LOGIC PROCESSOR ENGINE -->
     <script type="module">
-        import { auth, db, storage } from "./firebase.js";
+        import { auth, db } from "./firebase.js";
         import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         let currentAuthWorkflowState = "login";
         let localUserCache = null;
 
-        // ROUTER CONTROL EXPOSURE
         window.navigateTo = function(targetViewId) {
             document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
             const destination = document.getElementById(targetViewId);
@@ -206,7 +187,6 @@
             window.scrollTo(0,0);
         };
 
-        // AUTH ACTION UI TOGGLE 
         window.toggleAuthWorkflow = function() {
             const labelTitle = document.getElementById('auth-panel-title');
             const selectBox = document.getElementById('registration-role-box');
@@ -231,7 +211,6 @@
             }
         };
 
-        // RUN AUTHENTICATION FLOW PIPELINE
         window.executeAuthentication = async function() {
             const targetEmail = document.getElementById('input-auth-email').value.trim();
             const targetPass = document.getElementById('input-auth-pass').value;
@@ -256,7 +235,6 @@
             }
         };
 
-        // AUTH TRACKING REAL-TIME AGENT
         onAuthStateChanged(auth, async (activeUserToken) => {
             const viewGuestNav = document.getElementById('guest-nav-actions');
             const viewUserNav = document.getElementById('user-nav-actions');
@@ -269,7 +247,6 @@
                 viewUserNav.classList.add('flex');
                 displayEmail.innerText = activeUserToken.email;
 
-                // Sync context user identity record matrix data
                 const userSnapshot = await getDoc(doc(db, "users", activeUserToken.uid));
                 if(userSnapshot.exists()) {
                     const userRoleData = userSnapshot.data().role;
@@ -291,12 +268,10 @@
             }
         });
 
-        // DISPATCH EXIT PROTOCOL
         window.triggerSignOut = function() {
             signOut(auth);
         };
 
-        // EMPLOYER PIPELINE: Post Jobs
         window.publishJobPost = async function() {
             const title = document.getElementById('post-job-title').value.trim();
             const corporate = document.getElementById('post-job-company').value.trim();
@@ -321,7 +296,6 @@
             }
         };
 
-        // CORE SYNCHRONIZER: Render directory postings
         async function renderJobsFeedIndex(hasAuthContext) {
             const publicContainer = document.getElementById('public-jobs-container');
             const workingContainer = document.getElementById('employee-jobs-pipeline');
@@ -359,43 +333,35 @@
             }
         }
 
-        // BIND ID SELECTION FOR APPLICANT CONTEXT
         window.bindTargetToken = function(jobId) {
             document.getElementById('target-job-token').value = jobId;
-            alert("Opening parameters cloned. Please upload your digital resume asset.");
+            alert("Opening selected. Please add your resume details above.");
         };
 
-        // EMPLOYEE PIPELINE: Upload Resume & Apply
         window.dispatchApplication = async function() {
             const selectedJobToken = document.getElementById('target-job-token').value;
-            const structuralFileInput = document.getElementById('target-resume-file');
-            const singleFileObj = structuralFileInput.files[0];
+            const resumeTextContent = document.getElementById('target-resume-text').value.trim();
 
             if(!selectedJobToken) return alert("Select an active opening from the directory list first.");
-            if(!singleFileObj) return alert("Please map an explicit PDF document format asset for delivery.");
+            if(!resumeTextContent) return alert("Please fill in your resume contents or provide a digital link.");
 
             try {
-                const locationAllocationPointer = ref(storage, `resumes/${localUserCache.uid}_${Date.now()}_${singleFileObj.name}`);
-                const processSnapshot = await uploadBytes(locationAllocationPointer, singleFileObj);
-                const cloudAssetUrl = await getDownloadURL(processSnapshot.ref);
-
                 await addDoc(collection(db, "applications"), {
                     jobId: selectedJobToken,
                     candidateId: localUserCache.uid,
                     candidateEmail: localUserCache.email,
-                    resumeUrl: cloudAssetUrl,
+                    resumeInfo: resumeTextContent,
                     appliedAt: new Date()
                 });
 
-                alert("Application package linked and transferred cleanly to corporate storage vaults.");
+                alert("Application package linked and transferred cleanly to employer view.");
                 document.getElementById('target-job-token').value = '';
-                structuralFileInput.value = '';
+                document.getElementById('target-resume-text').value = '';
             } catch(err) {
                 alert("Upload failure on transmission line: " + err.message);
             }
         };
 
-        // EMPLOYER PIPELINE: Fetch & Map Incoming Profiles
         async function syncEmployerApplicationsPool() {
             const visualContainerNode = document.getElementById('employer-inbound-applications');
             try {
@@ -413,15 +379,17 @@
                     if(specificJobInfoSnapshot.exists() && specificJobInfoSnapshot.data().postedBy === localUserCache.uid) {
                         const targetRoleData = specificJobInfoSnapshot.data();
                         combinedFeedHtml += `
-                            <div class="bg-white p-5 rounded-lg border border-l-4 border-indigo-500 shadow-sm flex items-center justify-between gap-4">
-                                <div>
-                                    <h6 class="font-bold text-slate-900 text-md">Role Tracking: <span class="text-indigo-600">${targetRoleData.title}</span></h6>
-                                    <p class="text-xs font-medium text-slate-500 mt-0.5">Applicant Verification ID: ${packageData.candidateEmail}</p>
-                                    <p class="text-[10px] text-slate-400 mt-1">Processed: ${packageData.appliedAt.toDate().toLocaleString()}</p>
+                            <div class="bg-white p-5 rounded-lg border border-l-4 border-indigo-500 shadow-sm flex flex-col gap-3">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h6 class="font-bold text-slate-900 text-md">Role: <span class="text-indigo-600">${targetRoleData.title}</span></h6>
+                                        <p class="text-xs font-medium text-slate-500 mt-0.5">Applicant: ${packageData.candidateEmail}</p>
+                                    </div>
+                                    <p class="text-[10px] text-slate-400">Processed: ${packageData.appliedAt.toDate().toLocaleString()}</p>
                                 </div>
-                                <a href="${packageData.resumeUrl}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded shadow-sm tracking-wide transition">
-                                    Download Resume
-                                </a>
+                                <div class="bg-slate-50 p-3 rounded border text-sm text-slate-700 whitespace-pre-wrap font-sans">
+                                    ${packageData.resumeInfo}
+                                </div>
                             </div>
                         `;
                     }
