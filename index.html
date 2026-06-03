@@ -200,15 +200,17 @@
 
     <!-- Firebase System Module Integration Scripts -->
 <!-- Firebase System Module Integration Scripts -->
-<script type="module">
+<!-- Firebase System Module Integration Scripts -->
+    <script type="module">
         import { auth, db } from "./firebase.js";
         import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         let currentAuthWorkflowState = "login";
         let localUserCache = null;
-        let selectedJobIdFilter = null; // Global tracking for active job selection filter
+        let selectedJobIdFilter = null; 
 
+        // Bind core navigation parameters safely to global scope
         window.navigateTo = function(targetViewId) {
             document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
             const destination = document.getElementById(targetViewId);
@@ -401,7 +403,7 @@
             }
         };
 
-        // Window interaction listener to apply filter configuration on click
+        // Explicit Global Assignment to bypass module restrictions
         window.filterApplicationsByJob = function(jobId) {
             selectedJobIdFilter = jobId;
             syncEmployerDashboard();
@@ -418,10 +420,10 @@
                 let ownJobsHtml = '';
                 let activeJobIds = [];
 
-                // Global clear filter card option setup with cursor handler 
+                // Render out clear option node
                 const allSelectedClass = !selectedJobIdFilter ? 'bg-blue-50 border-blue-300 text-blue-700 font-bold' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100';
                 ownJobsHtml += `
-                    <div onclick="window.filterApplicationsByJob(null)" class="p-2.5 rounded-lg border text-center cursor-pointer transition ${allSelectedClass} text-[11px] uppercase tracking-wider mb-2 font-semibold">
+                    <div onclick="filterApplicationsByJob(null)" class="p-2.5 rounded-lg border text-center cursor-pointer transition ${allSelectedClass} text-[11px] uppercase tracking-wider mb-2 font-semibold">
                         Show All Applications
                     </div>
                 `;
@@ -438,7 +440,7 @@
                             : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300';
 
                         ownJobsHtml += `
-                            <div onclick="window.filterApplicationsByJob('${jobId}')" class="p-3 rounded-lg border cursor-pointer transition flex flex-col gap-0.5 ${cardStyleClasses}">
+                            <div onclick="filterApplicationsByJob('${jobId}')" class="p-3 rounded-lg border cursor-pointer transition flex flex-col gap-0.5 ${cardStyleClasses}">
                                 <div class="font-bold text-xs truncate">${data.title}</div>
                                 <div class="${isSelected ? 'text-blue-200' : 'text-slate-400'} text-[10px] font-mono">${data.company}</div>
                             </div>
