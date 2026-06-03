@@ -200,16 +200,14 @@
 
     <!-- Firebase System Module Integration Scripts -->
 <!-- Firebase System Module Integration Scripts -->
-    <script type="module">
+<script type="module">
         import { auth, db } from "./firebase.js";
         import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         let currentAuthWorkflowState = "login";
         let localUserCache = null;
-        
-        // Tracking active filter node for employer workflow dashboard
-        let selectedJobIdFilter = null;
+        let selectedJobIdFilter = null; // Global tracking for active job selection filter
 
         window.navigateTo = function(targetViewId) {
             document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
@@ -286,7 +284,7 @@
                 if(userSnapshot.exists()) {
                     const userRoleData = userSnapshot.data().role;
                     if(userRoleData === "employer") {
-                        selectedJobIdFilter = null; // Clear old filters on fresh authentication cycle
+                        selectedJobIdFilter = null;
                         navigateTo('employer-view');
                         syncEmployerDashboard();
                     } else {
@@ -403,7 +401,7 @@
             }
         };
 
-        // Window handler to set selection filters on click
+        // Window interaction listener to apply filter configuration on click
         window.filterApplicationsByJob = function(jobId) {
             selectedJobIdFilter = jobId;
             syncEmployerDashboard();
@@ -420,10 +418,10 @@
                 let ownJobsHtml = '';
                 let activeJobIds = [];
 
-                // Add a "Show All" option at the top of the sidebar list
+                // Global clear filter card option setup with cursor handler 
                 const allSelectedClass = !selectedJobIdFilter ? 'bg-blue-50 border-blue-300 text-blue-700 font-bold' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100';
                 ownJobsHtml += `
-                    <div onclick="window.filterApplicationsByJob(null)" class="p-2.5 rounded-lg border text-center cursor-pointer transition ${allSelectedClass} text-[11px] uppercase tracking-wider mb-2">
+                    <div onclick="window.filterApplicationsByJob(null)" class="p-2.5 rounded-lg border text-center cursor-pointer transition ${allSelectedClass} text-[11px] uppercase tracking-wider mb-2 font-semibold">
                         Show All Applications
                     </div>
                 `;
@@ -434,7 +432,6 @@
                         const jobId = docRecord.id;
                         activeJobIds.push(jobId);
                         
-                        // Highlight the item if it matches the active filter selection
                         const isSelected = selectedJobIdFilter === jobId;
                         const cardStyleClasses = isSelected 
                             ? 'bg-blue-600 border-blue-700 text-white font-semibold shadow-sm' 
@@ -459,7 +456,6 @@
                 for (const appDocRecord of appsSnapshot.docs) {
                     const packageData = appDocRecord.data();
                     
-                    // If a specific filter is selected, drop records that don't match it
                     if (selectedJobIdFilter && packageData.jobId !== selectedJobIdFilter) {
                         continue;
                     }
@@ -489,7 +485,6 @@
                     }
                 }
 
-                // Friendly empty message variant based on active selection state
                 if (matchCounter === 0) {
                     const dynamicNoticeText = selectedJobIdFilter 
                         ? 'No candidate packages linked to this specific position layout yet.' 
