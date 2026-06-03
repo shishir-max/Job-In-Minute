@@ -10,24 +10,26 @@
         .view-section.active { display: block; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
 
-    <nav class="bg-blue-600 text-white shadow-md font-medium sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
-            <a href="#" onclick="navigateTo('home-view')" class="text-2xl font-black tracking-tight flex items-center">
-                JobInMinute<span class="text-yellow-400">.com</span>
+    <!-- Navigation Header -->
+    <nav class="bg-slate-950 text-white shadow-lg sticky top-0 z-50 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" onclick="navigateTo('home-view')" class="text-xl font-black tracking-tight flex items-center gap-1.5">
+                <span class="bg-blue-600 text-white px-2 py-0.5 rounded-md text-base font-extrabold">J</span>
+                JobInMinute<span class="text-blue-500 font-bold">.com</span>
             </a>
-            <div class="flex items-center space-x-6">
-                <a href="#" onclick="navigateTo('home-view')" class="hover:text-blue-100 transition">Home</a>
-                <a href="#" onclick="navigateTo('about-view')" class="hover:text-blue-100 transition">About</a>
+            <div class="flex items-center space-x-8 text-sm font-medium">
+                <a href="#" onclick="navigateTo('home-view')" class="text-slate-300 hover:text-white transition">Home</a>
+                <a href="#" onclick="navigateTo('about-view')" class="text-slate-300 hover:text-white transition">About</a>
                 
                 <div id="guest-nav-actions" class="inline-flex items-center">
-                    <button onclick="navigateTo('auth-view')" class="bg-white text-blue-600 px-4 py-2 rounded-md font-bold hover:bg-blue-50 transition shadow-sm text-sm">Sign In / Register</button>
+                    <button onclick="navigateTo('auth-view')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-500 transition shadow-md text-xs tracking-wide">Sign In / Register</button>
                 </div>
 
-                <div id="user-nav-actions" class="hidden items-center space-x-4 border-l border-blue-400 pl-4">
-                    <span id="nav-user-email" class="text-sm max-w-[180px] truncate text-blue-50"></span>
-                    <button onclick="triggerSignOut()" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded font-bold transition">Logout</button>
+                <div id="user-nav-actions" class="hidden items-center space-x-4 border-l border-slate-800 pl-6">
+                    <span id="nav-user-email" class="text-xs tracking-wide text-slate-400 bg-slate-900 px-3 py-1.5 rounded-md border border-slate-800 font-mono"></span>
+                    <button onclick="triggerSignOut()" class="bg-rose-600 hover:bg-rose-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition shadow-sm">Logout</button>
                 </div>
             </div>
         </div>
@@ -35,143 +37,168 @@
 
     <main class="flex-grow">
 
+        <!-- Public Home View -->
         <section id="home-view" class="view-section active">
-            <div class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-24 text-center px-4">
-                <h1 class="text-5xl font-extrabold mb-4 tracking-tight">Hire or Get Hired in Minutes</h1>
-                <p class="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">The streamlined ecosystem connecting top technical talent directly with active corporate hiring metrics.</p>
-                <button onclick="navigateTo('auth-view')" class="bg-yellow-400 text-slate-900 font-black px-8 py-3.5 rounded-md shadow-lg hover:bg-yellow-300 transition text-md uppercase tracking-wider">Explore Dashboard</button>
+            <div class="bg-slate-950 text-white py-28 text-center px-6 border-b border-slate-800 relative overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-blue-950/40 via-transparent to-transparent pointer-events-none"></div>
+                <h1 class="text-5xl font-black mb-6 tracking-tight max-w-3xl mx-auto leading-tight">Hire or Get Hired in Minutes</h1>
+                <p class="text-base text-slate-400 mb-10 max-w-xl mx-auto leading-relaxed">The streamlined talent marketplace connecting elite tech professionals directly with active enterprise team operations.</p>
+                <button onclick="navigateTo('auth-view')" class="bg-blue-600 text-white font-bold px-7 py-3 rounded-lg shadow-xl hover:bg-blue-500 transition text-sm tracking-wide uppercase">Explore Workspace Dashboard</button>
             </div>
-            <div class="max-w-4xl mx-auto py-16 px-4">
-                <h3 class="text-3xl font-bold text-slate-900 text-center mb-8">Current Opportunities Available</h3>
+            <div class="max-w-5xl mx-auto py-16 px-6">
+                <h3 class="text-2xl font-bold text-slate-900 mb-8 tracking-tight flex items-center gap-2">
+                    <span class="w-2 h-6 bg-blue-600 rounded-sm"></span> Current Live Openings
+                </h3>
                 <div id="public-jobs-container" class="space-y-4">
-                    <p class="text-slate-400 text-center animate-pulse">Establishing secure data stream connection...</p>
+                    <p class="text-slate-400 text-sm animate-pulse">Establishing secure platform data matrix...</p>
                 </div>
             </div>
         </section>
 
-        <section id="about-view" class="view-section max-w-4xl mx-auto py-16 px-4">
-            <h2 class="text-4xl font-extrabold text-blue-600 mb-6">About Our Infrastructure</h2>
-            <p class="text-lg text-slate-600 leading-relaxed mb-6">JobInMinute provides single-account agility to enterprise portals. Our architecture removes structural recruitment friction, facilitating direct connection nodes between employee applications and employer candidate boards.</p>
+        <!-- About Infrastructure View -->
+        <section id="about-view" class="view-section max-w-4xl mx-auto py-20 px-6">
+            <h2 class="text-3xl font-extrabold text-slate-900 mb-6 tracking-tight">Platform Infrastructure</h2>
+            <p class="text-slate-600 leading-relaxed mb-6">JobInMinute optimizes matching architecture for modern technology stacks. Our environment cuts through legacy pipeline layout configurations, introducing clean application loops between development teams and hiring authorities.</p>
         </section>
 
-        <section id="auth-view" class="view-section max-w-md mx-auto my-16 bg-white p-8 rounded-xl shadow-lg border border-slate-100">
-            <h2 id="auth-panel-title" class="text-2xl font-bold text-center text-slate-800 mb-6">Account Verification</h2>
+        <!-- Auth View -->
+        <section id="auth-view" class="view-section max-w-md mx-auto my-20 bg-white p-8 rounded-xl shadow-xl border border-slate-200/60">
+            <h2 id="auth-panel-title" class="text-2xl font-bold text-center text-slate-900 mb-6 tracking-tight">Account Verification</h2>
             
             <div class="space-y-4 mb-6">
                 <div>
-                    <label class="block text-xs uppercase font-bold tracking-wider text-slate-500 mb-1">Email Address</label>
-                    <input type="email" id="input-auth-email" class="w-full border border-slate-200 p-2.5 rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition">
+                    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Email Address</label>
+                    <input type="email" id="input-auth-email" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-slate-50 focus:bg-white transition">
                 </div>
                 <div>
-                    <label class="block text-xs uppercase font-bold tracking-wider text-slate-500 mb-1">Password</label>
-                    <input type="password" id="input-auth-pass" class="w-full border border-slate-200 p-2.5 rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition">
+                    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Password</label>
+                    <input type="password" id="input-auth-pass" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-slate-50 focus:bg-white transition">
                 </div>
                 <div id="registration-role-box" class="hidden">
-                    <label class="block text-xs uppercase font-bold tracking-wider text-slate-500 mb-1">Select Profile Type</label>
-                    <select id="input-auth-role" class="w-full border border-slate-200 p-2.5 rounded-md focus:ring-2 focus:ring-blue-500 outline-none bg-white transition">
+                    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Select Profile Type</label>
+                    <select id="input-auth-role" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-slate-50 focus:bg-white transition">
                         <option value="employee">Employee (Looking for Job)</option>
                         <option value="employer">Employer (Posting Openings)</option>
                     </select>
                 </div>
             </div>
 
-            <button id="auth-action-btn" onclick="executeAuthentication()" class="w-full bg-blue-600 text-white py-3 rounded-md font-bold hover:bg-blue-700 shadow transition mb-4">Sign In</button>
-            <p class="text-center text-sm text-slate-500">
+            <button id="auth-action-btn" onclick="executeAuthentication()" class="w-full bg-slate-950 text-white py-3 rounded-lg font-semibold text-sm hover:bg-slate-900 shadow-md transition mb-4">Sign In</button>
+            <p class="text-center text-xs text-slate-500">
                 <span id="auth-switch-prompt">New to the platform?</span>
-                <a href="#" onclick="toggleAuthWorkflow()" id="auth-switch-link" class="text-blue-600 font-bold underline ml-1">Create an account</a>
+                <a href="#" onclick="toggleAuthWorkflow()" id="auth-switch-link" class="text-blue-600 font-bold hover:underline ml-1">Create an account</a>
             </p>
         </section>
 
-        <section id="employee-view" class="view-section max-w-6xl mx-auto py-12 px-4">
-            <div class="border-b border-slate-200 pb-4 mb-8 flex justify-between items-center">
+        <!-- Candidate Dashboard View -->
+        <section id="employee-view" class="view-section max-w-7xl mx-auto py-12 px-6">
+            <div class="border-b border-slate-200 pb-5 mb-8 flex justify-between items-center">
                 <div>
-                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">Candidate Profile Dashboard</h2>
-                    <p class="text-sm text-slate-500">Browse current openings and deploy your resume profile data.</p>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Candidate Profile Dashboard</h2>
+                    <p class="text-xs text-slate-500 mt-1">Deploy profile variables and coordinate with active hiring entries.</p>
                 </div>
-                <span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-extrabold uppercase tracking-widest">Candidate Node</span>
+                <span class="bg-emerald-50 text-emerald-700 text-[10px] px-3 py-1.5 rounded-md border border-emerald-200 font-bold uppercase tracking-wider">Candidate Account Node</span>
             </div>
 
             <div class="grid lg:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 h-fit">
-                    <h4 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">File Application Package</h4>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200/70 h-fit">
+                    <h4 class="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider border-b border-slate-100 pb-3">File Application</h4>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Target Job Reference</label>
-                            <input type="text" id="target-job-token" class="w-full border bg-slate-50 p-2 rounded text-sm text-slate-500 outline-none" placeholder="Select an opening below" readonly>
+                            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Target Job Reference</label>
+                            <input type="text" id="target-job-token" class="w-full border bg-slate-50 p-2.5 rounded-lg text-xs font-mono text-slate-500 outline-none" placeholder="Select an opening below" readonly>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Resume / Cover Letter Details</label>
-                            <textarea id="target-resume-text" rows="6" class="w-full border border-slate-200 p-2 rounded outline-none focus:ring-1 focus:ring-blue-500 text-sm" placeholder="Paste your core resume bio or paste a public Google Drive / LinkedIn link here..."></textarea>
+                            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Resume & Profile Details</label>
+                            <textarea id="target-resume-text" rows="6" class="w-full border border-slate-200 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Paste your core resume text details or a public cloud profile reference link here..."></textarea>
                         </div>
-                        <button onclick="dispatchApplication()" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-md hover:bg-emerald-700 transition shadow">Submit Data to Employer</button>
+                        <button onclick="dispatchApplication()" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-lg text-sm hover:bg-emerald-500 transition shadow-sm">Submit Data Package</button>
                     </div>
                 </div>
                 <div class="lg:col-span-2 space-y-4">
-                    <h4 class="text-xl font-bold text-slate-900">Active Job Directory</h4>
+                    <h4 class="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2 mb-2">Available Job Directory</h4>
                     <div id="employee-jobs-pipeline" class="space-y-4"></div>
                 </div>
             </div>
         </section>
 
-        <section id="employer-view" class="view-section max-w-6xl mx-auto py-12 px-4">
-            <div class="border-b border-slate-200 pb-4 mb-8 flex justify-between items-center">
+        <!-- Employer/Hiring Dashboard View (UPGRADED) -->
+        <section id="employer-view" class="view-section max-w-7xl mx-auto py-12 px-6">
+            <div class="border-b border-slate-200 pb-5 mb-8 flex justify-between items-center">
                 <div>
-                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">Hiring Authority Panel</h2>
-                    <p class="text-sm text-slate-500">Construct positions, structure hiring parameters, and manage candidate assets.</p>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Hiring Authority Panel</h2>
+                    <p class="text-xs text-slate-500 mt-1">Construct positions, structure parameters, and handle incoming applicant streams.</p>
                 </div>
-                <span class="bg-indigo-100 text-indigo-800 text-xs px-3 py-1 rounded-full font-extrabold uppercase tracking-widest">Employer Node</span>
+                <span class="bg-blue-50 text-blue-700 text-[10px] px-3 py-1.5 rounded-md border border-blue-200 font-bold uppercase tracking-wider">Employer Account Node</span>
             </div>
 
             <div class="grid lg:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 h-fit">
-                    <h4 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Publish New Opening</h4>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Corporate Position Title</label>
-                            <input type="text" id="post-job-title" class="w-full border border-slate-200 p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                <!-- Left Sidebar: Form Panel -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200/70 h-fit space-y-6">
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider border-b border-slate-100 pb-3">Publish Position</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Corporate Position Title</label>
+                                <input type="text" id="post-job-title" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Company / Brand Entity</label>
+                                <input type="text" id="post-job-company" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Requirements & Scope</label>
+                                <textarea id="post-job-desc" rows="4" class="w-full border border-slate-200 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm"></textarea>
+                            </div>
+                            <button onclick="publishJobPost()" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg text-sm hover:bg-blue-500 transition shadow-sm">Publish Globally</button>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Company/Brand Entity</label>
-                            <input type="text" id="post-job-company" class="w-full border border-slate-200 p-2 rounded outline-none focus:ring-1 focus:ring-blue-500">
+                    </div>
+
+                    <!-- New: Employer's own active jobs panel -->
+                    <div class="pt-2 border-t border-slate-100">
+                        <h4 class="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wider">Your Active Openings</h4>
+                        <div id="employer-own-jobs-list" class="space-y-2 max-h-[220px] overflow-y-auto pr-1 text-xs text-slate-500">
+                            <p class="italic">No listings deployed by this account.</p>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Requirements & Scope</label>
-                            <textarea id="post-job-desc" rows="4" class="w-full border border-slate-200 p-2 rounded outline-none focus:ring-1 focus:ring-blue-500 text-sm"></textarea>
-                        </div>
-                        <button onclick="publishJobPost()" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-md hover:bg-blue-700 transition shadow">Publish Globally</button>
                     </div>
                 </div>
+
+                <!-- Right Content Panel: Application Stream -->
                 <div class="lg:col-span-2 space-y-4">
-                    <h4 class="text-xl font-bold text-slate-900">Inbound Applications Stream</h4>
+                    <h4 class="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">Inbound Applications Stream</h4>
                     <div id="employer-inbound-applications" class="space-y-4">
-                        <p class="text-slate-400">Waiting for incoming applications queue syncing...</p>
+                        <p class="text-slate-400 text-sm">Syncing system database queues...</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="terms-view" class="view-section max-w-4xl mx-auto py-16 px-4">
-            <h2 class="text-2xl font-bold mb-4 text-slate-900">Terms of Service Agreement</h2>
-            <p class="text-slate-600 leading-relaxed">By engaging with jobinminute.com, users accept complete platform processing protocols.</p>
+        <!-- Terms View -->
+        <section id="terms-view" class="view-section max-w-4xl mx-auto py-16 px-6">
+            <h2 class="text-2xl font-bold mb-4 text-slate-900 tracking-tight">Terms of Service Agreement</h2>
+            <p class="text-slate-600 text-sm leading-relaxed">By engaging with jobinminute.com, users accept standard platform secure processing protocols.</p>
         </section>
 
-        <section id="privacy-view" class="view-section max-w-4xl mx-auto py-16 px-4">
-            <h2 class="text-2xl font-bold mb-4 text-slate-900">Privacy Policy Matrix</h2>
-            <p class="text-slate-600 leading-relaxed">Platform operations process structural candidate assets via encryption isolation pipelines.</p>
+        <!-- Privacy View -->
+        <section id="privacy-view" class="view-section max-w-4xl mx-auto py-16 px-6">
+            <h2 class="text-2xl font-bold mb-4 text-slate-900 tracking-tight">Privacy Policy Matrix</h2>
+            <p class="text-slate-600 text-sm leading-relaxed">Platform operations process structural data assets via encrypted network isolation pipelines.</p>
         </section>
 
     </main>
 
-    <footer class="bg-slate-900 text-slate-400 py-8 text-xs border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div>&copy; 2026 JobInMinute. Real-Time Distributed Pipeline Node.</div>
-            <div class="space-x-6">
-                <a href="#" onclick="navigateTo('terms-view')" class="hover:text-white transition">Terms of Services</a>
-                <a href="#" onclick="navigateTo('privacy-view')" class="hover:text-white transition">Privacy Policy</a>
+    <!-- Global Footer -->
+    <footer class="bg-slate-950 text-slate-500 py-10 text-xs border-t border-slate-900">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>&copy; 2026 JobInMinute. Corporate Distributed Workspace Architecture.</div>
+            <div class="space-x-6 font-medium">
+                <a href="#" onclick="navigateTo('terms-view')" class="hover:text-slate-300 transition">Terms of Service</a>
+                <a href="#" onclick="navigateTo('privacy-view')" class="hover:text-slate-300 transition">Privacy Policy</a>
             </div>
         </div>
     </footer>
 
+    <!-- Firebase System Module Integration Scripts -->
     <script type="module">
         import { auth, db } from "./firebase.js";
         import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -216,7 +243,7 @@
             const targetPass = document.getElementById('input-auth-pass').value;
             const targetRole = document.getElementById('input-auth-role').value;
 
-            if(!targetEmail || !targetPass) return alert("All credentials components must be completed.");
+            if(!targetEmail || !targetPass) return alert("All credential components must be completed.");
 
             try {
                 if(currentAuthWorkflowState === "register") {
@@ -252,11 +279,13 @@
                     const userRoleData = userSnapshot.data().role;
                     if(userRoleData === "employer") {
                         navigateTo('employer-view');
-                        syncEmployerApplicationsPool();
+                        syncEmployerDashboard();
                     } else {
                         navigateTo('employee-view');
                         renderJobsFeedIndex(true);
                     }
+                } else {
+                    navigateTo('home-view');
                 }
             } else {
                 localUserCache = null;
@@ -291,6 +320,7 @@
                 document.getElementById('post-job-title').value = '';
                 document.getElementById('post-job-company').value = '';
                 document.getElementById('post-job-desc').value = '';
+                syncEmployerDashboard(); // Reload layout fields instantly
             } catch(err) {
                 alert("Publishing database pipeline crash: " + err.message);
             }
@@ -312,22 +342,22 @@
                     const identifier = recordDoc.id;
 
                     let baseCard = `
-                        <div class="bg-white p-5 rounded-lg border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-slate-300">
                             <div>
-                                <h5 class="text-lg font-bold text-slate-900">${details.title}</h5>
-                                <p class="text-sm font-semibold text-blue-600 mb-1">${details.company}</p>
-                                <p class="text-xs text-slate-500 max-w-xl">${details.description}</p>
+                                <h5 class="text-base font-bold text-slate-900">${details.title}</h5>
+                                <p class="text-xs font-semibold text-blue-600 mb-2">${details.company}</p>
+                                <p class="text-xs text-slate-500 max-w-2xl leading-relaxed">${details.description}</p>
                             </div>
                     `;
 
                     publicScaffolding += baseCard + `</div>`;
                     workspaceScaffolding += baseCard + `
-                        <button onclick="bindTargetToken('${identifier}')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded transition whitespace-nowrap">Select Opening</button>
+                        <button onclick="bindTargetToken('${identifier}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">Select Opening</button>
                     </div>`;
                 });
 
-                if(publicContainer) publicContainer.innerHTML = publicScaffolding || '<p class="text-slate-400 text-center">No active roles cataloged.</p>';
-                if(workingContainer) workingContainer.innerHTML = workspaceScaffolding || '<p class="text-slate-400 text-center">No job postings found inside registry database.</p>';
+                if(publicContainer) publicContainer.innerHTML = publicScaffolding || '<p class="text-slate-400 text-xs italic">No active roles cataloged.</p>';
+                if(workingContainer) workingContainer.innerHTML = workspaceScaffolding || '<p class="text-slate-400 text-xs italic">No job postings found inside registry database.</p>';
             } catch (err) {
                 console.error("Index load crash: ", err);
             }
@@ -335,7 +365,7 @@
 
         window.bindTargetToken = function(jobId) {
             document.getElementById('target-job-token').value = jobId;
-            alert("Opening selected. Please add your resume details above.");
+            alert("Opening selected. Please add your resume details inside the panel.");
         };
 
         window.dispatchApplication = async function() {
@@ -354,7 +384,7 @@
                     appliedAt: new Date()
                 });
 
-                alert("Application package linked and transferred cleanly to employer view.");
+                alert("Application package linked and transferred cleanly.");
                 document.getElementById('target-job-token').value = '';
                 document.getElementById('target-resume-text').value = '';
             } catch(err) {
@@ -362,39 +392,65 @@
             }
         };
 
-        async function syncEmployerApplicationsPool() {
+        async function syncEmployerDashboard() {
             const visualContainerNode = document.getElementById('employer-inbound-applications');
+            const ownJobsContainerNode = document.getElementById('employer-own-jobs-list');
+            
             try {
-                const globalQuery = query(collection(db, "applications"), orderBy("appliedAt", "desc"));
-                const querySnapshotResult = await getDocs(globalQuery);
+                // 1. Fetch and render all jobs posted by THIS specific employer
+                const jobsQuery = query(collection(db, "jobs"), orderBy("timestamp", "desc"));
+                const jobsSnapshot = await getDocs(jobsQuery);
                 
-                let combinedFeedHtml = '';
+                let ownJobsHtml = '';
+                let activeJobIds = [];
 
-                for (const appDocRecord of querySnapshotResult.docs) {
-                    const packageData = appDocRecord.data();
-                    
-                    const roleQueryReferenceDoc = doc(db, "jobs", packageData.jobId);
-                    const specificJobInfoSnapshot = await getDoc(roleQueryReferenceDoc);
-
-                    if(specificJobInfoSnapshot.exists() && specificJobInfoSnapshot.data().postedBy === localUserCache.uid) {
-                        const targetRoleData = specificJobInfoSnapshot.data();
-                        combinedFeedHtml += `
-                            <div class="bg-white p-5 rounded-lg border border-l-4 border-indigo-500 shadow-sm flex flex-col gap-3">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h6 class="font-bold text-slate-900 text-md">Role: <span class="text-indigo-600">${targetRoleData.title}</span></h6>
-                                        <p class="text-xs font-medium text-slate-500 mt-0.5">Applicant: ${packageData.candidateEmail}</p>
-                                    </div>
-                                    <p class="text-[10px] text-slate-400">Processed: ${packageData.appliedAt.toDate().toLocaleString()}</p>
-                                </div>
-                                <div class="bg-slate-50 p-3 rounded border text-sm text-slate-700 whitespace-pre-wrap font-sans">
-                                    ${packageData.resumeInfo}
-                                </div>
+                jobsSnapshot.forEach((docRecord) => {
+                    const data = docRecord.data();
+                    if(data.postedBy === localUserCache.uid) {
+                        activeJobIds.push(docRecord.id);
+                        ownJobsHtml += `
+                            <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 font-medium">
+                                <div class="text-slate-900 font-semibold">${data.title}</div>
+                                <div class="text-[10px] text-slate-400">${data.company}</div>
                             </div>
                         `;
                     }
+                });
+                ownJobsContainerNode.innerHTML = ownJobsHtml || '<p class="text-slate-400 text-xs italic">No active listings deployed.</p>';
+
+                // 2. Fetch and render applications matching this employer's jobs
+                const appsQuery = query(collection(db, "applications"), orderBy("appliedAt", "desc"));
+                const appsSnapshot = await getDocs(appsQuery);
+                
+                let combinedFeedHtml = '';
+
+                for (const appDocRecord of appsSnapshot.docs) {
+                    const packageData = appDocRecord.data();
+                    
+                    if(activeJobIds.includes(packageData.jobId)) {
+                        const roleQueryReferenceDoc = doc(db, "jobs", packageData.jobId);
+                        const specificJobInfoSnapshot = await getDoc(roleQueryReferenceDoc);
+
+                        if(specificJobInfoSnapshot.exists()) {
+                            const targetRoleData = specificJobInfoSnapshot.data();
+                            combinedFeedHtml += `
+                                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3">
+                                    <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                                        <div>
+                                            <h6 class="font-bold text-slate-900 text-sm">Role Cluster: <span class="text-blue-600">${targetRoleData.title}</span></h6>
+                                            <p class="text-xs text-slate-400 font-mono mt-0.5">ID: ${packageData.candidateEmail}</p>
+                                        </div>
+                                        <p class="text-[10px] text-slate-400 bg-slate-100 px-2 py-1 rounded font-medium">${packageData.appliedAt.toDate().toLocaleString()}</p>
+                                    </div>
+                                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-150 text-xs text-slate-600 whitespace-pre-wrap font-mono leading-relaxed">
+                                        ${packageData.resumeInfo}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
                 }
-                visualContainerNode.innerHTML = combinedFeedHtml || '<p class="text-slate-400 text-center text-sm py-4">No candidate profiles have queried this tracking system node yet.</p>';
+                visualContainerNode.innerHTML = combinedFeedHtml || '<p class="text-slate-400 text-center text-xs py-8 italic border-2 border-dashed border-slate-200 rounded-xl bg-white">No incoming candidate packages linked to your node system layout yet.</p>';
             } catch(err) {
                 console.error("Dashboard link sync execution exception: ", err);
             }
