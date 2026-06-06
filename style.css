@@ -64,7 +64,12 @@ body
 }
 
 /* Header UI Layout styling */
-.main-header {
+.main-header 
+<!-- Search your header block and verify it calls navigateTo('employee-view') -->
+<button onclick="navigateTo('employee-view')" class="...">
+    EXPLORE WORKSPACE DASHBOARD
+</button>
+{
     background-color: var(--primary-blue);
     position: fixed;
     top: 0;
