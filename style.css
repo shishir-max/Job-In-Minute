@@ -1,3 +1,14 @@
+<style>
+    /* By default, hide all Single Page Application view panels */
+    .view-section {
+        display: none !important;
+    }
+    
+    /* When JavaScript adds the .active class, show that specific panel */
+    .view-section.active {
+        display: block !important;
+    }
+</style>
 :root {
     --primary-blue: #0A2540;
     --accent-blue: #00D4B2;
