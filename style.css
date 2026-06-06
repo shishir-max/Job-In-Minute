@@ -27,7 +27,37 @@
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-body {
+body 
+<!-- The Employee Dashboard Section -->
+<div id="employee-view" class="view-section max-w-4xl mx-auto p-6 mt-6">
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <h3 class="text-lg font-bold text-slate-900 mb-2">Employee Workspace Dashboard</h3>
+        <p class="text-xs text-slate-500 mb-6">Complete your application pipeline by adding your resume details to the active opening token.</p>
+        
+        <!-- Job Token Storage (Keeps track of which job you clicked) -->
+        <div class="mb-4">
+            <label class="text-xs font-bold text-slate-700 block mb-1">SELECTED JOB ID TOKEN</label>
+            <input type="text" id="target-job-token" readonly class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono text-slate-600 focus:outline-none" placeholder="No opening selected yet">
+        </div>
+
+        <!-- Resume Input Box -->
+        <div class="mb-5">
+            <label class="text-xs font-bold text-slate-700 block mb-1">PASTE RESUME DETAILS / SKILLS</label>
+            <textarea id="target-resume-text" rows="8" class="w-full p-3 border border-slate-200 rounded-lg text-xs font-mono focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder:text-slate-400" placeholder="Paste your core professional technical skills, work experience, or digital portfolio details here..."></textarea>
+        </div>
+
+        <!-- Submission Controls -->
+        <div class="flex gap-3 justify-end">
+            <button onclick="navigateTo('home-view')" class="px-4 py-2 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition">
+                Cancel
+            </button>
+            <button onclick="dispatchApplication()" class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg shadow-sm transition">
+                Submit Application Data
+            </button>
+        </div>
+    </div>
+</div>
+{
     background-color: var(--background-gray);
     color: var(--text-dark);
     line-height: 1.6;
