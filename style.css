@@ -3,7 +3,18 @@
     .view-section {
         display: none !important;
     }
+    // Make sure this exact function is exposed in your script block
+window.bindTargetToken = function(jobId) {
+    const tokenInput = document.getElementById('target-job-token');
     
+    if (tokenInput) {
+        tokenInput.value = jobId; // Injects the true database reference code
+        alert("Opening reference locked successfully! Please add your resume profile details.");
+    } else {
+        console.error("Critical Failure: HTML element with ID 'target-job-token' was not found on the page layout.");
+        alert("Configuration Error: The job selection target input is missing from the layout template.");
+    }
+};
     /* When JavaScript adds the .active class, show that specific panel */
     .view-section.active {
         display: block !important;
