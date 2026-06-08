@@ -50,3 +50,46 @@ export async function submitApplication(jobId, employerId, candidateDetails) {
         alert("Failed to submit application: " + error.message);
     }
 }
+
+// FUNCTION FOR EMPLOYERS TO WATCH INBOUND APPLICATIONS IN REAL-TIME
+export function listenToInboundApplications(containerId) {
+    const auth = getAuth();
+    
+    // Wait for auth to resolve to find the logged-in Employer's UID
+    auth.onAuthStateChanged((user) => {
+        if (!user) return;
+
+        const container = document.getElementById(containerId);
+        
+        // Query applications matching ONLY this employer's ID
+        const q = query(
+            collection(db, "applications"),
+            where("employerId", "==", user.uid)
+        );
+
+        // Listen live
+        onSnapshot(q, (querySnapshot) => {
+            if (querySnapshot.empty) {
+                container.innerHTML = `<div style="color: #a0aec0; text-align: center; padding: 20px;">No candidate packages linked to this specific position layout yet.</div>`;
+                return;
+            }
+
+            let htmlArray = [];
+            querySnapshot.forEach((doc) => {
+                const app = doc.data();
+                htmlArray.push(`
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                        <h4 style="margin: 0 0 5px 0; color: #2d3748;">${app.candidateName}</h4>
+                        <p style="margin: 0 0 5px 0; font-size: 14px; color: #4a5568;"><strong>Email:</strong> ${app.candidateEmail}</p>
+                        <p style="margin: 0 0 5px 0; font-size: 14px; color: #4a5568;"><strong>Job Reference ID:</strong> ${app.jobId}</p>
+                        <div style="background: #f7fafc; padding: 10px; border-radius: 4px; font-size: 13px; color: #718096; margin-top: 8px;">
+                            <strong>Profile Summary / Resume:</strong><br>${app.resumeDetails}
+                        </div>
+                    </div>
+                `);
+            });
+
+            container.innerHTML = htmlArray.join("");
+        });
+    });
+}
