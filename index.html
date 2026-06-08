@@ -385,14 +385,15 @@ if (workingContainer) {
         }
 
         // IMPROVED: Automatically swaps view layer to employee workspace upon card selection
-        window.bindTargetToken = function(jobId) {
-            const tokenInput = document.getElementById('target-job-token');
-            if (tokenInput) {
-                tokenInput.value = jobId;
-            }
-            alert("Opening selected! Directing you to your workspace workspace application form.");
-            navigateTo('employee-view');
-        };
+       window.bindTargetToken = function(jobId, jobTitle) {
+    const tokenInput = document.getElementById('target-job-token');
+    if (tokenInput) {
+        activeSelectedJobId = jobId;   // Stores the hidden database ID key safely in memory
+        tokenInput.value = jobTitle;    // Places the beautiful job title text in the field container
+    }
+    alert(`Opening "${jobTitle}" selected! Directing you to your workspace application form.`);
+    navigateTo('employee-view');
+};
 
         window.dispatchApplication = async function() {
             const selectedJobToken = document.getElementById('target-job-token').value;
