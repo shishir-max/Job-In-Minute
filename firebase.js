@@ -21,3 +21,32 @@ export { app };
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+// FUNCTION FOR EMPLOYEES TO SUBMIT AN APPLICATION
+export async function submitApplication(jobId, employerId, candidateDetails) {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+        alert("You must be logged in to apply.");
+        return;
+    }
+
+    try {
+        // Creates a bridge document in a global 'applications' collection
+        await addDoc(collection(db, "applications"), {
+            jobId: jobId,
+            employerId: employerId, // Links it directly to the creator of the job
+            applicantId: user.uid,  // Employee's Firebase Auth UID
+            candidateName: candidateDetails.name,
+            candidateEmail: user.email,
+            resumeDetails: candidateDetails.resumeText, 
+            appliedAt: serverTimestamp()
+        });
+
+        alert("Application submitted successfully!");
+    } catch (error) {
+        console.error("Error submitting application: ", error);
+        alert("Failed to submit application: " + error.message);
+    }
+}
