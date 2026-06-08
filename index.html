@@ -209,7 +209,8 @@
 
         let currentAuthWorkflowState = "login";
         let localUserCache = null;
-        let selectedJobIdFilter = null; 
+        let selectedJobIdFilter = null;
+        let activeSelectedJobId = null;
 
         // Core single-page view router logic
         window.navigateTo = function(targetViewId) {
