@@ -396,29 +396,29 @@ if (workingContainer) {
 };
 
         window.dispatchApplication = async function() {
-            const selectedJobToken = document.getElementById('target-job-token').value;
-            const resumeTextContent = document.getElementById('target-resume-text').value.trim();
+    const resumeTextContent = document.getElementById('target-resume-text').value.trim();
 
-            if(!selectedJobToken) return alert("Select an active opening from the directory list first.");
-            if(!resumeTextContent) return alert("Please fill in your resume contents or provide a digital link.");
+    if(!activeSelectedJobId) return alert("Select an active opening from the directory list first.");
+    if(!resumeTextContent) return alert("Please fill in your resume contents or provide a digital link.");
 
-            try {
-                await addDoc(collection(db, "applications"), {
-                    jobId: selectedJobToken,
-                    candidateId: localUserCache.uid,
-                    candidateEmail: localUserCache.email,
-                    resumeInfo: resumeTextContent,
-                    appliedAt: new Date()
-                });
+    try {
+        await addDoc(collection(db, "applications"), {
+            jobId: activeSelectedJobId, // <-- CHANGED THIS LINE to send the real ID token to Firestore
+            candidateId: localUserCache.uid,
+            candidateEmail: localUserCache.email,
+            resumeInfo: resumeTextContent,
+            appliedAt: new Date()
+        });
 
-                alert("Application package linked and transferred cleanly.");
-                document.getElementById('target-job-token').value = '';
-                document.getElementById('target-resume-text').value = '';
-                navigateTo('home-view');
-            } catch(err) {
-                alert("Upload failure on transmission line: " + err.message);
-            }
-        };
+        alert("Application package linked and transferred cleanly.");
+        document.getElementById('target-job-token').value = '';
+        document.getElementById('target-resume-text').value = '';
+        activeSelectedJobId = null; // Clear the token tracker state
+        navigateTo('home-view');
+    } catch(err) {
+        alert("Upload failure on transmission line: " + err.message);
+    }
+};
 
         window.filterApplicationsByJob = function(jobId) {
             selectedJobIdFilter = jobId;
