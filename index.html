@@ -362,18 +362,18 @@
                     `;
 
                     if (localUserCache) {
-                        publicScaffolding += baseCard + `
-                            <button onclick="bindTargetToken('${identifier}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">Select Opening</button>
-                        </div>`;
-                    } else {
-                        publicScaffolding += baseCard + `</div>`;
-                    }
-                    
-                    if (workingContainer) {
-                        workspaceScaffolding += baseCard + `
-                            <button onclick="bindTargetToken('${identifier}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">Select Opening</button>
-                        </div>`;
-                    }
+    publicScaffolding += baseCard + `
+        <button onclick="bindTargetToken('${identifier}', '${details.title}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">Select Opening</button>
+    </div>`;
+} else {
+    publicScaffolding += baseCard + `</div>`;
+}
+
+if (workingContainer) {
+    workspaceScaffolding += baseCard + `
+        <button onclick="bindTargetToken('${identifier}', '${details.title}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">Select Opening</button>
+    </div>`;
+}
                 });
 
                 if(publicContainer) publicContainer.innerHTML = publicScaffolding || '<p class="text-slate-400 text-xs italic">No active roles cataloged.</p>';
