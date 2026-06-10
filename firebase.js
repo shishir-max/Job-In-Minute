@@ -81,7 +81,8 @@ const q = query(
             }
 
             let htmlArray = [];
-            querySnapshot.forEach((doc) => {
+            querySnapshot.forEach((doc) => {// Use resumeInfo to fetch the data from the database securely
+<p style="margin: 0; font-size: 14px; color: #4a5568; white-space: pre-wrap;">${app.resumeInfo || "No text details provided."}</p>
                 const app = doc.data();
                 
                 // Format the timestamp nicely if it exists
