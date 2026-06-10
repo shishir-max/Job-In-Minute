@@ -64,11 +64,11 @@ export function listenToMyApplications(containerId) {
 
         const container = document.getElementById(containerId);
         
-        // Query applications matching ONLY this logged-in applicant's UID
-        const q = query(
-            collection(db, "applications"),
-            where("applicantId", "==", user.uid)
-        );
+       // Change "applicantId" to "candidateId" to read the document link correctly
+const q = query(
+    collection(db, "applications"),
+    where("candidateId", "==", user.uid) // Matches your exact submit schema key
+);
 
         // Listen for live updates
         onSnapshot(q, (querySnapshot) => {
