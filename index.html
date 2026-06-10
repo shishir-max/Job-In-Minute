@@ -220,6 +220,10 @@
 <!-- Firebase System Module Integration Scripts -->
 <!-- Firebase System Module Integration Scripts -->
     <script type="module">
+        import { listenToMyApplications } from "./firebase.js";
+
+// Call this function when you switch the user view over to the employee profile panel
+listenToMyApplications("my-applications-stream");
         import { auth, db } from "./firebase.js";
         import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
