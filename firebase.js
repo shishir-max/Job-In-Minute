@@ -1,4 +1,4 @@
-// firebase.js - Core SDK initialization
+// firebase.js - Core SDK Initialization & Platform Streams
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -16,96 +16,72 @@ const firebaseConfig = {
 // Initialize Firebase App Instance
 const app = initializeApp(firebaseConfig);
 
-// Export instances to be imported by our app logic
 export { app };
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// FUNCTION FOR EMPLOYEES TO SUBMIT AN APPLICATION
-export async function submitApplication(jobId, employerId, candidateDetails) {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (!user) {
-        alert("You must be logged in to apply.");
-        return;
-    }
-
-    try {
-        // Creates a bridge document in a global 'applications' collection
-        await addDoc(collection(db, "applications"), {
-            jobId: jobId,
-            employerId: employerId, // Links it directly to the creator of the job
-            applicantId: user.uid,  // Employee's Firebase Auth UID
-            candidateName: candidateDetails.name,
-            candidateEmail: user.email,
-            resumeDetails: candidateDetails.resumeText, 
-            appliedAt: serverTimestamp()
-        });
-
-        alert("Application submitted successfully!");
-    } catch (error) {
-        console.error("Error submitting application: ", error);
-        alert("Failed to submit application: " + error.message);
-    }
-}
-
-// FUNCTION FOR EMPLOYEES TO SEE THEIR OWN APPLIED JOBS AND RESUMES
+/**
+ * FUNCTION FOR EMPLOYEES TO SEE THEIR OWN APPLIED JOBS AND RESUMES
+ * Establishes real-time listener filtering by candidateId matching authentication tokens.
+ */
 export function listenToMyApplications(containerId) {
-    const auth = getAuth();
+    const authInstance = getAuth();
     
-    // Wait for the user's authentication state to resolve
-    auth.onAuthStateChanged((user) => {
+    authInstance.onAuthStateChanged((user) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
         if (!user) {
-            document.getElementById(containerId).innerHTML = `<p style="color: #718096;">Please log in to view your application history.</p>`;
+            container.innerHTML = `
+                <div style="text-align: center; padding: 20px; color: #64748b;">
+                    <p>Please log in to view your application history matrix.</p>
+                </div>`;
             return;
         }
 
-        const container = document.getElementById(containerId);
-        
-       // Change "applicantId" to "candidateId" to read the document link correctly
-const q = query(
-    collection(db, "applications"),
-    where("candidateId", "==", user.uid) // Matches your exact submit schema key
-);
+        // Standardized query linking explicitly with candidateId
+        const q = query(
+            collection(db, "applications"),
+            where("candidateId", "==", user.uid)
+        );
 
-        // Listen for live updates
+        // Listen for live database dashboard updates
         onSnapshot(q, (querySnapshot) => {
             if (querySnapshot.empty) {
                 container.innerHTML = `
-                    <div style="text-align: center; padding: 30px; color: #718096;">
+                    <div style="text-align: center; padding: 30px; color: #64748b;">
                         <p>You haven't applied to any positions yet.</p>
                     </div>`;
                 return;
             }
 
             let htmlArray = [];
-            querySnapshot.forEach((doc) => {// Use resumeInfo to fetch the data from the database securely
-<p style="margin: 0; font-size: 14px; color: #4a5568; white-space: pre-wrap;">${app.resumeInfo || "No text details provided."}</p>
-                const app = doc.data();
-                
-                // Format the timestamp nicely if it exists
-                const applyDate = app.appliedAt ? new Date(app.appliedAt.seconds * 1000).toLocaleDateString() : "Pending...";
+            querySnapshot.forEach((docSnap) => {
+                const appData = docSnap.data();
+                const applyDate = appData.appliedAt ? new Date(appData.appliedAt.seconds * 1000).toLocaleDateString() : "Pending...";
 
                 htmlArray.push(`
                     <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
                         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                            <h4 style="margin: 0; color: #2d3748; font-size: 18px;">Application Status</h4>
-                            <span style="background: #ebf8ff; color: #2b6cb0; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 12px;">Applied on ${applyDate}</span>
+                            <h4 style="margin: 0; color: #1e293b; font-size: 16px; font-weight: 700;">Application Status Tracker</h4>
+                            <span style="background: #ebf8ff; color: #2b6cb0; font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 12px;">Applied on ${applyDate}</span>
                         </div>
-                        <p style="margin: 0 0 8px 0; font-size: 14px; color: #4a5568;"><strong>Job Reference Code:</strong> <code style="background: #edf2f7; padding: 2px 4px; border-radius: 4px;">${app.jobId}</code></p>
-                        <p style="margin: 0 0 5px 0; font-size: 14px; color: #4a5568;"><strong>Submitted Email:</strong> ${app.candidateEmail}</p>
+                        <p style="margin: 0 0 8px 0; font-size: 13px; color: #4a5568;"><strong>Job Token Ref:</strong> <code style="background: #edf2f7; padding: 2px 6px; border-radius: 4px; font-family: monospace;">${appData.jobId}</code></p>
+                        <p style="margin: 0 0 5px 0; font-size: 13px; color: #4a5568;"><strong>Submitted Email:</strong> ${appData.candidateEmail || "N/A"}</p>
                         
-                        <div style="margin-top: 12px; background: #f7fafc; border-left: 4px solid #4299e1; padding: 12px; border-radius: 0 4px 4px 0;">
-                            <strong style="font-size: 13px; color: #4a5568; display: block; margin-bottom: 4px;">Your Uploaded Resume / Profile Details:</strong>
-                            <p style="margin: 0; font-size: 14px; color: #4a5568; white-space: pre-wrap;">${app.resumeDetails || app.resumeInfo || "No text details provided."}</p>
+                        <div style="margin-top: 12px; background: #f8fafc; border-left: 4px solid #3b82f6; padding: 12px; border-radius: 0 4px 4px 0;">
+                            <strong style="font-size: 12px; color: #475569; display: block; margin-bottom: 4px; uppercase tracking-wider">Your Uploaded Resume / Profile Details:</strong>
+                            <p style="margin: 0; font-size: 13px; color: #334155; white-space: pre-wrap; font-family: monospace; line-height: 1.5;">${appData.resumeInfo || "No structural text details provided."}</p>
                         </div>
                     </div>
                 `);
             });
 
             container.innerHTML = htmlArray.join("");
+        }, (error) => {
+            console.error("Error streaming personalized applications: ", error);
+            container.innerHTML = `<p style="color: #ef4444; font-size: 12px;">Failed to secure data transmission stream.</p>`;
         });
     });
 }
