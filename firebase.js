@@ -51,39 +51,54 @@ export async function submitApplication(jobId, employerId, candidateDetails) {
     }
 }
 
-// FUNCTION FOR EMPLOYERS TO WATCH INBOUND APPLICATIONS IN REAL-TIME
-export function listenToInboundApplications(containerId) {
+// FUNCTION FOR EMPLOYEES TO SEE THEIR OWN APPLIED JOBS AND RESUMES
+export function listenToMyApplications(containerId) {
     const auth = getAuth();
     
-    // Wait for auth to resolve to find the logged-in Employer's UID
+    // Wait for the user's authentication state to resolve
     auth.onAuthStateChanged((user) => {
-        if (!user) return;
+        if (!user) {
+            document.getElementById(containerId).innerHTML = `<p style="color: #718096;">Please log in to view your application history.</p>`;
+            return;
+        }
 
         const container = document.getElementById(containerId);
         
-        // Query applications matching ONLY this employer's ID
+        // Query applications matching ONLY this logged-in applicant's UID
         const q = query(
             collection(db, "applications"),
-            where("employerId", "==", user.uid)
+            where("applicantId", "==", user.uid)
         );
 
-        // Listen live
+        // Listen for live updates
         onSnapshot(q, (querySnapshot) => {
             if (querySnapshot.empty) {
-                container.innerHTML = `<div style="color: #a0aec0; text-align: center; padding: 20px;">No candidate packages linked to this specific position layout yet.</div>`;
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: #718096;">
+                        <p>You haven't applied to any positions yet.</p>
+                    </div>`;
                 return;
             }
 
             let htmlArray = [];
             querySnapshot.forEach((doc) => {
                 const app = doc.data();
+                
+                // Format the timestamp nicely if it exists
+                const applyDate = app.appliedAt ? new Date(app.appliedAt.seconds * 1000).toLocaleDateString() : "Pending...";
+
                 htmlArray.push(`
-                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                        <h4 style="margin: 0 0 5px 0; color: #2d3748;">${app.candidateName}</h4>
-                        <p style="margin: 0 0 5px 0; font-size: 14px; color: #4a5568;"><strong>Email:</strong> ${app.candidateEmail}</p>
-                        <p style="margin: 0 0 5px 0; font-size: 14px; color: #4a5568;"><strong>Job Reference ID:</strong> ${app.jobId}</p>
-                        <div style="background: #f7fafc; padding: 10px; border-radius: 4px; font-size: 13px; color: #718096; margin-top: 8px;">
-                            <strong>Profile Summary / Resume:</strong><br>${app.resumeDetails}
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                            <h4 style="margin: 0; color: #2d3748; font-size: 18px;">Application Status</h4>
+                            <span style="background: #ebf8ff; color: #2b6cb0; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 12px;">Applied on ${applyDate}</span>
+                        </div>
+                        <p style="margin: 0 0 8px 0; font-size: 14px; color: #4a5568;"><strong>Job Reference Code:</strong> <code style="background: #edf2f7; padding: 2px 4px; border-radius: 4px;">${app.jobId}</code></p>
+                        <p style="margin: 0 0 5px 0; font-size: 14px; color: #4a5568;"><strong>Submitted Email:</strong> ${app.candidateEmail}</p>
+                        
+                        <div style="margin-top: 12px; background: #f7fafc; border-left: 4px solid #4299e1; padding: 12px; border-radius: 0 4px 4px 0;">
+                            <strong style="font-size: 13px; color: #4a5568; display: block; margin-bottom: 4px;">Your Uploaded Resume / Profile Details:</strong>
+                            <p style="margin: 0; font-size: 14px; color: #4a5568; white-space: pre-wrap;">${app.resumeDetails || app.resumeInfo || "No text details provided."}</p>
                         </div>
                     </div>
                 `);
