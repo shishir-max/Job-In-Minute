@@ -3,16 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobInMinute - Fast Track Hiring</title>
+    <title>JobInMinute - Fast Track Hiring Architecture</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .view-section { display: none; }
-        .view-section.active { display: block; }
+        :root {
+            --primary-blue: #0A2540;
+            --accent-blue: #00D4B2;
+            --light-blue: #635BFF;
+            --background-gray: #F8F9FA;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --white: #FFFFFF;
+        }
+        /* SPA View Switcher Matrix */
+        .view-section { display: none !important; }
+        .view-section.active { display: block !important; }
+        
+        /* Custom Overflow Styling for Component Panels */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
 
-    <!-- Navigation Header -->
     <nav class="bg-slate-950 text-white shadow-lg sticky top-0 z-50 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" onclick="navigateTo('home-view')" class="text-xl font-black tracking-tight flex items-center gap-1.5">
@@ -37,23 +51,15 @@
 
     <main class="flex-grow">
 
-        <!-- Public Home View -->
         <section id="home-view" class="view-section active">
-            <div class="bg-slate-950 text-white py-28 text-center px-6 border-b border-slate-800 relative overflow-hidden">
+            <div class="bg-slate-950 text-white py-24 text-center px-6 border-b border-slate-800 relative overflow-hidden">
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-blue-950/40 via-transparent to-transparent pointer-events-none"></div>
                 <h1 class="text-5xl font-black mb-6 tracking-tight max-w-3xl mx-auto leading-tight">Hire or Get Hired in Minutes</h1>
                 <p class="text-base text-slate-400 mb-10 max-w-xl mx-auto leading-relaxed">The streamlined talent marketplace connecting elite tech professionals directly with active enterprise team operations.</p>
                 <button onclick="navigateTo('auth-view')" class="bg-blue-600 text-white font-bold px-7 py-3 rounded-lg shadow-xl hover:bg-blue-500 transition text-sm tracking-wide uppercase">Explore Workspace Dashboard</button>
             </div>
+            
             <div class="max-w-5xl mx-auto py-16 px-6">
-                <h3></h3>
-<div class="stream-box">
-    
-</div>
-                <h3></h3>
-<div id="inbound-applications-wrapper">
-    </div>
-                
                 <h3 class="text-2xl font-bold text-slate-900 mb-8 tracking-tight flex items-center gap-2">
                     <span class="w-2 h-6 bg-blue-600 rounded-sm"></span> Current Live Openings
                 </h3>
@@ -63,13 +69,11 @@
             </div>
         </section>
 
-        <!-- About Infrastructure View -->
         <section id="about-view" class="view-section max-w-4xl mx-auto py-20 px-6">
             <h2 class="text-3xl font-extrabold text-slate-900 mb-6 tracking-tight">Platform Infrastructure</h2>
             <p class="text-slate-600 leading-relaxed mb-6">JobInMinute optimizes matching architecture for modern technology stacks. Our environment cuts through legacy pipeline layout configurations, introducing clean application loops between development teams and hiring authorities.</p>
         </section>
 
-        <!-- Auth View -->
         <section id="auth-view" class="view-section max-w-md mx-auto my-20 bg-white p-8 rounded-xl shadow-xl border border-slate-200/60">
             <h2 id="auth-panel-title" class="text-2xl font-bold text-center text-slate-900 mb-6 tracking-tight">Account Verification</h2>
             
@@ -98,16 +102,6 @@
             </p>
         </section>
 
-        <!-- Candidate Dashboard View -->
-        <!-- Inside your Employee Dashboard / Profile Section -->
-<div class="employee-dashboard-layout" style="margin-top: 30px;">
-    <h3 style="font-size: 20px; font-weight: 700; color: #1a202c; margin-bottom: 15px;">Your Application History</h3>
-    
-    <!-- JavaScript will dynamically inject your applied jobs here -->
-    <div id="my-applications-stream">
-        <p style="color: #a0aec0;">Loading your application timeline...</p>
-    </div>
-</div>
         <section id="employee-view" class="view-section max-w-7xl mx-auto py-12 px-6">
             <div class="border-b border-slate-200 pb-5 mb-8 flex justify-between items-center">
                 <div>
@@ -123,23 +117,32 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Target Job Reference</label>
-                            <input type="text" id="target-job-token" class="w-full border bg-slate-50 p-2.5 rounded-lg text-xs font-mono text-slate-500 outline-none" placeholder="Select an opening below" readonly>
+                            <input type="text" id="target-job-token" class="w-full border bg-slate-50 p-2.5 rounded-lg text-xs font-mono text-slate-500 outline-none" placeholder="Select an opening from list" readonly>
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Resume & Profile Details</label>
-                            <textarea id="target-resume-text" rows="6" class="w-full border border-slate-200 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Paste your core resume text details or a public cloud profile reference link here..."></textarea>
+                            <textarea id="target-resume-text" rows="6" class="w-full border border-slate-200 p-2.5 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Paste your core resume text details or digital background parameters here..."></textarea>
                         </div>
                         <button onclick="dispatchApplication()" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-lg text-sm hover:bg-emerald-500 transition shadow-sm">Submit Data Package</button>
                     </div>
                 </div>
-                <div class="lg:col-span-2 space-y-4">
-                    <h4 class="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2 mb-2">Available Job Directory</h4>
-                    <div id="employee-jobs-pipeline" class="space-y-4"></div>
+
+                <div class="lg:col-span-2 space-y-6">
+                    <div>
+                        <h4 class="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2 mb-4">Available Job Directory</h4>
+                        <div id="employee-jobs-pipeline" class="space-y-4"></div>
+                    </div>
+
+                    <div class="pt-6 border-t border-slate-200">
+                        <h3 class="text-base font-bold text-slate-900 mb-4 tracking-tight">Your Live Application History</h3>
+                        <div id="my-applications-stream" class="space-y-3">
+                            <p class="text-slate-400 text-sm">Loading your personal application timeline matrix...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Employer/Hiring Dashboard View (UPGRADED) -->
         <section id="employer-view" class="view-section max-w-7xl mx-auto py-12 px-6">
             <div class="border-b border-slate-200 pb-5 mb-8 flex justify-between items-center">
                 <div>
@@ -150,7 +153,6 @@
             </div>
 
             <div class="grid lg:grid-cols-3 gap-8">
-                <!-- Left Sidebar: Form Panel -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200/70 h-fit space-y-6">
                     <div>
                         <h4 class="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider border-b border-slate-100 pb-3">Publish Position</h4>
@@ -171,16 +173,14 @@
                         </div>
                     </div>
 
-                    <!-- New: Employer's own active jobs panel -->
-                    <div class="pt-2 border-t border-slate-100">
+                    <div class="pt-4 border-t border-slate-100">
                         <h4 class="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wider">Your Active Openings</h4>
-                        <div id="employer-own-jobs-list" class="space-y-2 max-h-[220px] overflow-y-auto pr-1 text-xs text-slate-500">
-                            <p class="italic">No listings deployed by this account.</p>
+                        <div id="employer-own-jobs-list" class="space-y-2 max-h-[220px] overflow-y-auto pr-1 text-xs text-slate-500 custom-scrollbar">
+                            <p class="italic text-slate-400">No listings deployed by this account node.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Content Panel: Application Stream -->
                 <div class="lg:col-span-2 space-y-4">
                     <h4 class="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">Inbound Applications Stream</h4>
                     <div id="employer-inbound-applications" class="space-y-4">
@@ -190,13 +190,11 @@
             </div>
         </section>
 
-        <!-- Terms View -->
         <section id="terms-view" class="view-section max-w-4xl mx-auto py-16 px-6">
             <h2 class="text-2xl font-bold mb-4 text-slate-900 tracking-tight">Terms of Service Agreement</h2>
             <p class="text-slate-600 text-sm leading-relaxed">By engaging with jobinminute.com, users accept standard platform secure processing protocols.</p>
         </section>
 
-        <!-- Privacy View -->
         <section id="privacy-view" class="view-section max-w-4xl mx-auto py-16 px-6">
             <h2 class="text-2xl font-bold mb-4 text-slate-900 tracking-tight">Privacy Policy Matrix</h2>
             <p class="text-slate-600 text-sm leading-relaxed">Platform operations process structural data assets via encrypted network isolation pipelines.</p>
@@ -204,8 +202,7 @@
 
     </main>
 
-    <!-- Global Footer -->
-    <footer class="bg-slate-950 text-slate-500 py-10 text-xs border-t border-slate-900">
+    <footer class="bg-slate-950 text-slate-500 py-10 text-xs border-t border-slate-900 mt-auto">
         <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>&copy; 2026 JobInMinute. Corporate Distributed Workspace Architecture.</div>
             <div class="space-x-6 font-medium">
@@ -215,16 +212,8 @@
         </div>
     </footer>
 
-    <!-- Firebase System Module Integration Scripts -->
-<!-- Firebase System Module Integration Scripts -->
-<!-- Firebase System Module Integration Scripts -->
-<!-- Firebase System Module Integration Scripts -->
     <script type="module">
-        import { listenToMyApplications } from "./firebase.js";
-
-// Call this function when you switch the user view over to the employee profile panel
-listenToMyApplications("my-applications-stream");
-        import { auth, db } from "./firebase.js";
+        import { auth, db, listenToMyApplications } from "./firebase.js";
         import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -240,7 +229,7 @@ listenToMyApplications("my-applications-stream");
             if(destination) destination.classList.add('active');
             window.scrollTo(0,0);
 
-            if(targetViewId === 'home-view') {
+            if(targetViewId === 'home-view' || targetViewId === 'employee-view') {
                 renderJobsFeedIndex();
             }
         };
@@ -293,6 +282,7 @@ listenToMyApplications("my-applications-stream");
             }
         };
 
+        // Real-Time Session Orchestration State Listener
         onAuthStateChanged(auth, async (activeUserToken) => {
             const viewGuestNav = document.getElementById('guest-nav-actions');
             const viewUserNav = document.getElementById('user-nav-actions');
@@ -300,9 +290,11 @@ listenToMyApplications("my-applications-stream");
 
             if(activeUserToken) {
                 localUserCache = activeUserToken;
-                viewGuestNav.classList.add('hidden');
-                viewUserNav.classList.remove('hidden');
-                viewUserNav.classList.add('flex');
+                if(viewGuestNav) viewGuestNav.classList.add('hidden');
+                if(viewUserNav) {
+                    viewUserNav.classList.remove('hidden');
+                    viewUserNav.classList.add('flex');
+                }
                 if(displayEmail) displayEmail.innerText = activeUserToken.email;
 
                 const userSnapshot = await getDoc(doc(db, "users", activeUserToken.uid));
@@ -314,18 +306,19 @@ listenToMyApplications("my-applications-stream");
                         syncEmployerDashboard();
                     } else {
                         navigateTo('employee-view');
-                        renderJobsFeedIndex();
+                        listenToMyApplications("my-applications-stream");
                     }
                 } else {
-                    // SAFE FALLBACK: If user document doesn't exist yet, treat as employee workspace visitor
                     navigateTo('employee-view');
-                    renderJobsFeedIndex();
+                    listenToMyApplications("my-applications-stream");
                 }
             } else {
                 localUserCache = null;
-                viewGuestNav.classList.remove('hidden');
-                viewUserNav.classList.add('hidden');
-                viewUserNav.classList.remove('flex');
+                if(viewGuestNav) viewGuestNav.classList.remove('hidden');
+                if(viewUserNav) {
+                    viewUserNav.classList.add('hidden');
+                    viewUserNav.classList.remove('flex');
+                }
                 navigateTo('home-view');
             }
         });
@@ -376,70 +369,80 @@ listenToMyApplications("my-applications-stream");
 
                     let baseCard = `
                         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-slate-300">
-                            <div>
+                            <div class="max-w-2xl">
                                 <h5 class="text-base font-bold text-slate-900">${details.title}</h5>
                                 <p class="text-xs font-semibold text-blue-600 mb-2">${details.company}</p>
-                                <p class="text-xs text-slate-500 max-w-2xl leading-relaxed">${details.description}</p>
+                                <p class="text-xs text-slate-500 leading-relaxed">${details.description}</p>
                             </div>
                     `;
 
                     if (localUserCache) {
-    publicScaffolding += baseCard + `
-        <button onclick="bindTargetToken('${identifier}', '${details.title}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">Select Opening</button>
-    </div>`;
-} else {
-    publicScaffolding += baseCard + `</div>`;
-}
+                        publicScaffolding += baseCard + `
+                            <button onclick="bindTargetToken('${identifier}', '${details.title}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap h-fit">Select Opening</button>
+                        </div>`;
+                    } else {
+                        publicScaffolding += baseCard + `</div>`;
+                    }
 
-if (workingContainer) {
-    workspaceScaffolding += baseCard + `
-        <button onclick="bindTargetToken('${identifier}', '${details.title}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap">Select Opening</button>
-    </div>`;
-}
+                    workspaceScaffolding += baseCard + `
+                        <button onclick="bindTargetToken('${identifier}', '${details.title}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm whitespace-nowrap h-fit">Select Opening</button>
+                    </div>`;
                 });
 
-                if(publicContainer) publicContainer.innerHTML = publicScaffolding || '<p class="text-slate-400 text-xs italic">No active roles cataloged.</p>';
+                if(publicContainer) publicContainer.innerHTML = publicScaffolding || '<p class="text-slate-400 text-xs italic">No active roles cataloged inside feed.</p>';
                 if(workingContainer) workingContainer.innerHTML = workspaceScaffolding || '<p class="text-slate-400 text-xs italic">No job postings found inside registry database.</p>';
             } catch (err) {
-                console.error("Index load crash: ", err);
+                console.error("Index directory structural payload load crash: ", err);
             }
         }
 
-        // IMPROVED: Automatically swaps view layer to employee workspace upon card selection
-       window.bindTargetToken = function(jobId, jobTitle) {
-    const tokenInput = document.getElementById('target-job-token');
-    if (tokenInput) {
-        activeSelectedJobId = jobId;   // Stores the hidden database ID key safely in memory
-        tokenInput.value = jobTitle;    // Places the beautiful job title text in the field container
-    }
-    alert(`Opening "${jobTitle}" selected! Directing you to your workspace application form.`);
-    navigateTo('employee-view');
-};
+        window.bindTargetToken = function(jobId, jobTitle) {
+            const tokenInput = document.getElementById('target-job-token');
+            if (tokenInput) {
+                activeSelectedJobId = jobId;   
+                tokenInput.value = jobTitle;    
+                alert(`Opening Reference Code [${jobId}] locked successfully! Directing parameters to workspace console.`);
+                navigateTo('employee-view');
+            } else {
+                console.error("Critical Input Node Error: Field selector was not initialized.");
+            }
+        };
 
         window.dispatchApplication = async function() {
-    const resumeTextContent = document.getElementById('target-resume-text').value.trim();
+            const resumeTextContent = document.getElementById('target-resume-text').value.trim();
 
-    if(!activeSelectedJobId) return alert("Select an active opening from the directory list first.");
-    if(!resumeTextContent) return alert("Please fill in your resume contents or provide a digital link.");
+            if(!activeSelectedJobId) return alert("Select an active opening from the directory list first.");
+            if(!resumeTextContent) return alert("Please fill in your resume contents or provide a digital verification link.");
 
-    try {
-        await addDoc(collection(db, "applications"), {
-            jobId: activeSelectedJobId, // <-- CHANGED THIS LINE to send the real ID token to Firestore
-            candidateId: localUserCache.uid,
-            candidateEmail: localUserCache.email,
-            resumeInfo: resumeTextContent,
-            appliedAt: new Date()
-        });
+            try {
+                // Fetch the job document to identify the original employer creator ID linking them directly
+                const jobDocRef = doc(db, "jobs", activeSelectedJobId);
+                const jobDocSnap = await getDoc(jobDocRef);
+                let targetedEmployerId = "SYSTEM_ORPHAN";
+                
+                if(jobDocSnap.exists()) {
+                    targetedEmployerId = jobDocSnap.data().postedBy;
+                }
 
-        alert("Application package linked and transferred cleanly.");
-        document.getElementById('target-job-token').value = '';
-        document.getElementById('target-resume-text').value = '';
-        activeSelectedJobId = null; // Clear the token tracker state
-        navigateTo('home-view');
-    } catch(err) {
-        alert("Upload failure on transmission line: " + err.message);
-    }
-};
+                // Standardized collection write parameters matching candidate listener configuration keys
+                await addDoc(collection(db, "applications"), {
+                    jobId: activeSelectedJobId, 
+                    employerId: targetedEmployerId,
+                    candidateId: localUserCache.uid,
+                    candidateEmail: localUserCache.email,
+                    resumeInfo: resumeTextContent,
+                    appliedAt: new Date()
+                });
+
+                alert("Application packages integrated and synchronized through data pipelines cleanly.");
+                document.getElementById('target-job-token').value = '';
+                document.getElementById('target-resume-text').value = '';
+                activeSelectedJobId = null; 
+                navigateTo('employee-view');
+            } catch(err) {
+                alert("Upload infrastructure transmission failure: " + err.message);
+            }
+        };
 
         window.filterApplicationsByJob = function(jobId) {
             selectedJobIdFilter = jobId;
@@ -450,6 +453,8 @@ if (workingContainer) {
             const visualContainerNode = document.getElementById('employer-inbound-applications');
             const ownJobsContainerNode = document.getElementById('employer-own-jobs-list');
             
+            if(!visualContainerNode || !ownJobsContainerNode) return;
+
             try {
                 const jobsQuery = query(collection(db, "jobs"), orderBy("timestamp", "desc"));
                 const jobsSnapshot = await getDocs(jobsQuery);
@@ -459,8 +464,8 @@ if (workingContainer) {
 
                 const allSelectedClass = !selectedJobIdFilter ? 'bg-blue-50 border-blue-300 text-blue-700 font-bold' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100';
                 ownJobsHtml += `
-                    <div onclick="filterApplicationsByJob(null)" class="p-2.5 rounded-lg border text-center cursor-pointer transition ${allSelectedClass} text-[11px] uppercase tracking-wider mb-2 font-semibold">
-                        Show All Applications
+                    <div onclick="filterApplicationsByJob(null)" class="p-2.5 rounded-lg border text-center cursor-pointer transition ${allSelectedClass} text-[10px] uppercase tracking-wider mb-2 font-bold shadow-sm">
+                        Show All Core Streams
                     </div>
                 `;
 
@@ -472,8 +477,8 @@ if (workingContainer) {
                         
                         const isSelected = selectedJobIdFilter === jobId;
                         const cardStyleClasses = isSelected 
-                            ? 'bg-blue-600 border-blue-700 text-white font-semibold shadow-sm' 
-                            : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300';
+                            ? 'bg-blue-600 border-blue-700 text-white font-semibold shadow-md' 
+                            : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700';
 
                         ownJobsHtml += `
                             <div onclick="filterApplicationsByJob('${jobId}')" class="p-3 rounded-lg border cursor-pointer transition flex flex-col gap-0.5 ${cardStyleClasses}">
@@ -483,7 +488,7 @@ if (workingContainer) {
                         `;
                     }
                 });
-                ownJobsContainerNode.innerHTML = ownJobsHtml || '<p class="text-slate-400 text-xs italic">No active listings deployed.</p>';
+                ownJobsContainerNode.innerHTML = ownJobsHtml || '<p class="text-slate-400 text-xs italic p-2">No active corporate nodes deployed.</p>';
 
                 const appsQuery = query(collection(db, "applications"), orderBy("appliedAt", "desc"));
                 const appsSnapshot = await getDocs(appsQuery);
@@ -505,17 +510,19 @@ if (workingContainer) {
 
                         if(specificJobInfoSnapshot.exists()) {
                             const targetRoleData = specificJobInfoSnapshot.data();
+                            const appTimestamp = packageData.appliedAt ? (packageData.appliedAt.toDate ? packageData.appliedAt.toDate().toLocaleString() : new Date(packageData.appliedAt).toLocaleString()) : "Just now";
+                            
                             combinedFeedHtml += `
                                 <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3">
                                     <div class="flex items-center justify-between border-b border-slate-100 pb-2">
                                         <div>
-                                            <h6 class="font-bold text-slate-900 text-sm">Role Cluster: <span class="text-blue-600">${targetRoleData.title}</span></h6>
-                                            <p class="text-xs text-slate-400 font-mono mt-0.5">ID: ${packageData.candidateEmail}</p>
+                                            <h6 class="font-bold text-slate-900 text-sm">Target Role: <span class="text-blue-600">${targetRoleData.title}</span></h6>
+                                            <p class="text-xs text-slate-400 font-mono mt-0.5">Applicant Node ID: ${packageData.candidateEmail}</p>
                                         </div>
-                                        <p class="text-[10px] text-slate-400 bg-slate-100 px-2 py-1 rounded font-medium">${packageData.appliedAt.toDate().toLocaleString()}</p>
+                                        <p class="text-[10px] text-slate-400 bg-slate-100 px-2 py-1 rounded font-mono">${appTimestamp}</p>
                                     </div>
-                                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-150 text-xs text-slate-600 whitespace-pre-wrap font-mono leading-relaxed">
-                                        ${packageData.resumeInfo}
+                                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 text-xs text-slate-600 whitespace-pre-wrap font-mono leading-relaxed">
+                                        ${packageData.resumeInfo || "No details extracted."}
                                     </div>
                                 </div>
                             `;
@@ -525,8 +532,8 @@ if (workingContainer) {
 
                 if (matchCounter === 0) {
                     const dynamicNoticeText = selectedJobIdFilter 
-                        ? 'No candidate packages linked to this specific position layout yet.' 
-                        : 'No incoming candidate packages linked to your node system layout yet.';
+                        ? 'No candidate profiles linked to this specific position layout yet.' 
+                        : 'No incoming data packets routed into your corporate matrix pipelines yet.';
                     combinedFeedHtml = `<p class="text-slate-400 text-center text-xs py-12 border-2 border-dashed border-slate-200 rounded-xl bg-white">${dynamicNoticeText}</p>`;
                 }
 
