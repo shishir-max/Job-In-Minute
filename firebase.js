@@ -198,9 +198,11 @@ document.getElementById('auth-registration-form')?.addEventListener('submit', as
 });
 
 // --- 3. PASS-FREE SIGN IN HANDSHAKE GATE ON LOGIN SUBMIT ---
+// --- 4. PASS-FREE SIGN IN HANDSHAKE GATE ON LOGIN SUBMIT ---
 document.getElementById('login-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
+    const role = document.getElementById('login-role').value; // <-- Captures the chosen role
 
     const actionCodeSettings = {
         url: window.location.href,
@@ -210,6 +212,7 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
     try {
         await sendSignInLinkToEmail(auth, email, actionCodeSettings);
         localStorage.setItem('emailForSignIn', email);
+        localStorage.setItem('loginRole', role); // <-- Temporarily saves it to route them correctly on landing
         alert("Security Login Link Generated! Check your email ID inbox to instantly access your dashboard.");
     } catch (error) {
         alert("Gateway Authorization Failure: " + error.message);
