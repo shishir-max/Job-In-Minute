@@ -129,6 +129,7 @@ export function listenToMyApplications(containerId) {
 // =========================================================================
 
 // --- 1. DYNAMIC INPUT VIEW FIELD SWITCHER ---
+// --- 1. SEPARATED REGISTRATION PANEL TOGGLE ---
 const regRoleSelector = document.getElementById('input-auth-role');
 regRoleSelector?.addEventListener('change', (e) => {
     const role = e.target.value;
@@ -138,40 +139,66 @@ regRoleSelector?.addEventListener('change', (e) => {
     if (role === 'employer') {
         empFields.classList.add('hidden');
         employerFields.classList.remove('hidden');
-        document.getElementById('empSector').required = false;
+        // Set Employer Mandates
         document.getElementById('orgName').required = true;
+        document.getElementById('orgPhone').required = true;
+        document.getElementById('orgEmail').required = true;
+        document.getElementById('orgCorporateName').required = true;
         document.getElementById('orgAddress').required = true;
         document.getElementById('orgWebsite').required = true;
+        // Turn off Employee Mandates
+        document.getElementById('emp-name').required = false;
+        document.getElementById('emp-phone').required = false;
+        document.getElementById('emp-email').required = false;
+        document.getElementById('empSector').required = false;
     } else {
         empFields.classList.remove('hidden');
         employerFields.classList.add('hidden');
+        // Set Employee Mandates
+        document.getElementById('emp-name').required = true;
+        document.getElementById('emp-phone').required = true;
+        document.getElementById('emp-email').required = true;
         document.getElementById('empSector').required = true;
+        // Turn off Employer Mandates
         document.getElementById('orgName').required = false;
+        document.getElementById('orgPhone').required = false;
+        document.getElementById('orgEmail').required = false;
+        document.getElementById('orgCorporateName').required = false;
         document.getElementById('orgAddress').required = false;
         document.getElementById('orgWebsite').required = false;
     }
 });
 
-// --- 2. SIGN UP PROCESSING LOGIC (SENDS COMPLIMENTARY SECURITY ACCESS CODE LINK) ---
+// Initialize form requirement attributes on initial page mount load
+if (regRoleSelector && regRoleSelector.value === 'employee') {
+    document.getElementById('emp-name').required = true;
+    document.getElementById('emp-phone').required = true;
+    document.getElementById('emp-email').required = true;
+    document.getElementById('empSector').required = true;
+}
+
+// --- 2. SEPARATED REGISTRATION DATA ENGINE ---
 document.getElementById('auth-registration-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = document.getElementById('input-auth-email').value;
     const role = regRoleSelector ? regRoleSelector.value : 'employee';
+    const email = (role === 'employee') ? document.getElementById('emp-email').value : document.getElementById('org-email').value;
 
-    // Temporary packaging model to wait out the email loop handshake
     const registrationDetails = {
-        name: document.getElementById('reg-name').value,
-        phone: document.getElementById('reg-phone').value,
-        email: email,
         role: role,
         timestamp: new Date().getTime()
     };
 
     if (role === 'employee') {
+        registrationDetails.name = document.getElementById('emp-name').value;
+        registrationDetails.phone = document.getElementById('emp-phone').value;
+        registrationDetails.email = email;
         registrationDetails.sector = document.getElementById('empSector').value;
         registrationDetails.address = document.getElementById('empAddress').value || "";
     } else {
-        registrationDetails.organisationName = document.getElementById('orgName').value;
+        registrationDetails.contactPersonName = document.getElementById('orgName').value;
+        registrationDetails.phone = document.getElementById('orgPhone').value;
+        registrationDetails.businessEmail = email;
+        registrationDetails.organisationName = document.getElementById('orgCorporateName').value;
         registrationDetails.organisationAddress = document.getElementById('orgAddress').value;
         registrationDetails.website = document.getElementById('orgWebsite').value;
         registrationDetails.sector = document.getElementById('orgSector').value || "";
@@ -180,29 +207,27 @@ document.getElementById('auth-registration-form')?.addEventListener('submit', as
         registrationDetails.businessIdentity = document.getElementById('orgIdentity').value || "";
     }
 
-    // Cache parameters locally so they can be read upon landing link validation
     localStorage.setItem('pendingRegistrationEmail', email);
     localStorage.setItem('pendingRegistrationPayload', JSON.stringify(registrationDetails));
 
     const actionCodeSettings = {
-        url: window.location.href, // Returns user exactly to this landing view index page
+        url: window.location.href,
         handleCodeInApp: true
     };
 
     try {
         await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-        alert("Verification Security Code Link Sent! Check your email inbox to activate account creation metrics.");
+        alert("Verification Link Sent! Go check your email inbox to activate your account configuration profile.");
     } catch (error) {
-        alert("Registration Blocked: " + error.message);
+        alert("Registration Refused: " + error.message);
     }
 });
 
-// --- 3. PASS-FREE SIGN IN HANDSHAKE GATE ON LOGIN SUBMIT ---
-// --- 4. PASS-FREE SIGN IN HANDSHAKE GATE ON LOGIN SUBMIT ---
+// --- 3. SEPARATED ACCESS GATE SIGN IN ENGINE ---
 document.getElementById('login-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
-    const role = document.getElementById('login-role').value; // <-- Captures the chosen role
+    const chosenRole = document.getElementById('login-role').value;
 
     const actionCodeSettings = {
         url: window.location.href,
@@ -212,10 +237,10 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
     try {
         await sendSignInLinkToEmail(auth, email, actionCodeSettings);
         localStorage.setItem('emailForSignIn', email);
-        localStorage.setItem('loginRole', role); // <-- Temporarily saves it to route them correctly on landing
-        alert("Security Login Link Generated! Check your email ID inbox to instantly access your dashboard.");
+        localStorage.setItem('loginRole', chosenRole);
+        alert("Access Code Token Shipped! Open your email inbox to verify identification credentials and access the dashboard.");
     } catch (error) {
-        alert("Gateway Authorization Failure: " + error.message);
+        alert("Authorization Denied: " + error.message);
     }
 });
 
