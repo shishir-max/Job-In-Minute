@@ -85,15 +85,64 @@
                     <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Password</label>
                     <input type="password" id="input-auth-pass" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm bg-slate-50 outline-none">
                 </div>
-                <div id="registration-role-box" class="hidden">
-                    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Select Profile Type</label>
-                    <select id="input-auth-role" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm bg-slate-50 outline-none">
-                        <option value="employee">Employee (Personal Email Only)</option>
-                        <option value="employer">Employer (Official/Business Email Only)</option>
-                    </select>
-                </div>
+              <div id="registration-role-box" class="hidden">
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Select Profile Type</label>
+    <select id="input-auth-role" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm bg-slate-50 outline-none">
+        <option value="employee">Employee (Personal Email Only)</option>
+        <option value="employer">Employer (Official/Business Email Only)</option>
+    </select>
+</div>
+
+<div id="common-fields" class="mt-4">
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Full Name *</label>
+    <input type="text" id="reg-name" required pattern="^[a-zA-Z\s]{2,50}$" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm outline-none mb-3" placeholder="Enter Full Name (Letters Only)">
+
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Mobile Number *</label>
+    <input type="tel" id="reg-phone" required pattern="^[6-9]\d{9}$" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm outline-none mb-3" placeholder="10-Digit Mobile Number">
+</div>
+
+<div id="employee-only-fields" class="mt-2">
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Job Sector *</label>
+    <select id="empSector" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm bg-slate-50 outline-none mb-3">
+        <option value="">-- Select Job Sector --</option>
+        <option value="healthcare">Healthcare / Medical</option>
+        <option value="it_software">IT & Software Services</option>
+        <option value="education">Education & Teaching</option>
+    </select>
+
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Current Address (Optional)</label>
+    <input type="text" id="empAddress" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm outline-none mb-3" placeholder="City, State">
+</div>
+
+<div id="employer-only-fields" class="mt-2 hidden">
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Organisation Name *</label>
+    <input type="text" id="orgName" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm outline-none mb-3" placeholder="Full Registered Company Name">
+
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Organisation Address *</label>
+    <input type="text" id="orgAddress" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm outline-none mb-3" placeholder="Complete Office Physical Address">
+
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Organisation Website *</label>
+    <input type="url" id="orgWebsite" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm outline-none mb-3" placeholder="https://www.company.com">
+
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Job Post Sector (Optional)</label>
+    <select id="orgSector" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm bg-slate-50 outline-none mb-3">
+        <option value="">-- Select Industry Sector --</option>
+        <option value="healthcare">Healthcare</option>
+        <option value="it_services">IT Support Services</option>
+    </select>
+
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">GST Registration No. (Optional)</label>
+    <input type="text" id="orgGST" pattern="^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm outline-none mb-3 uppercase" placeholder="15-Alphanumeric GSTIN">
+
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Business Registration No. (Optional)</label>
+    <input type="text" id="orgRegNo" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm outline-none mb-3" placeholder="Govt. Registration/LLP Number">
+
+    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">Business Identity Number (Optional)</label>
+    <input type="text" id="orgIdentity" pattern="^\d{12}$" maxlength="12" class="w-full border border-slate-200 p-2.5 rounded-lg text-sm outline-none mb-3" placeholder="12-Digit Identity Code">
+</div>
             </div>
             <button id="auth-action-btn" onclick="executeAuthentication()" class="w-full bg-slate-950 text-white py-3 rounded-lg font-semibold text-sm hover:bg-slate-900 transition mb-4">Sign In</button>
+            <button type="button" id="btn-forgot-password" class="text-xs text-blue-500 hover:underline">Forgot Password?</button>
             <p class="text-center text-xs text-slate-500">
                 <span id="auth-switch-prompt">New to the platform?</span>
                 <a href="#" onclick="toggleAuthWorkflow()" id="auth-switch-link" class="text-blue-600 font-bold hover:underline ml-1">Create an account</a>
