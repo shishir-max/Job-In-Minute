@@ -38,15 +38,15 @@ export { app };
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
 // 2. INSIDE YOUR LOGIN FORM SUBMIT LISTENER
 document.getElementById('login-form').addEventListener('submit', (e) => {
     e.preventDefault();
     
     const emailInputValue = document.getElementById('login-email').value;
 
-    // --- ADD THIS CRITICAL LINE HERE ---
+    // --- SAVE EMAIL FOR SECURITY HANDSHAKE ---
     window.localStorage.setItem('emailForSignIn', emailInputValue);
-    // ------------------------------------
 
     const actionCodeSettings = {
         url: 'https://www.jobinminute.com/',
@@ -61,6 +61,7 @@ document.getElementById('login-form').addEventListener('submit', (e) => {
             alert("Error sending link: " + error.message);
         });
 });
+
 // 3. INSIDE YOUR REGISTRATION FORM SUBMIT LISTENER
 document.getElementById('auth-registration-form').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -70,9 +71,8 @@ document.getElementById('auth-registration-form').addEventListener('submit', (e)
     const orgEmail = document.getElementById('org-email')?.value;
     const registrationEmail = empEmail || orgEmail;
 
-    // --- ADD THIS CRITICAL LINE HERE ---
+    // --- SAVE EMAIL FOR SECURITY HANDSHAKE ---
     window.localStorage.setItem('emailForSignIn', registrationEmail);
-    // ------------------------------------
 
     const actionCodeSettings = {
         url: 'https://www.jobinminute.com/',
@@ -88,13 +88,12 @@ document.getElementById('auth-registration-form').addEventListener('submit', (e)
         });
 });
 
-// 4. PASTE THIS AT THE ABSOLUTE BOTTOM OF YOUR FILE
-
+// 4. INCOMING LINK INTERCEPTOR (Fixed missing syntax at bottom)
 function handleIncomingAuthenticationLink() {
     // Check if the current URL has the secure tracking link parameters from Firebase
     if (isSignInWithEmailLink(auth, window.location.href)) {
         
-        // Pull the email address out of the browser memory that we saved in Step 2
+        // Pull the email address out of the browser memory
         let email = window.localStorage.getItem('emailForSignIn');
         
         // Fallback: If they clicked the link on a different browser/device, ask them to type it in
@@ -113,9 +112,6 @@ function handleIncomingAuthenticationLink() {
                     window.history.replaceState({}, document.title, window.location.pathname);
                     
                     alert("Identity verified successfully! Welcome back to JobInMinute.");
-                    
-                    // (Optional) If you have a function to change screens after login, call it here:
-                    // e.g., showDashboardView();
                 })
                 .catch((error) => {
                     console.error("Link handling error:", error);
@@ -125,7 +121,7 @@ function handleIncomingAuthenticationLink() {
     }
 }
 
-// RUN THIS IMMEDIATELY ON EVERY PAGE LOAD
+// EXECUTE THE INTERCEPTOR AUTOMATICALLY ON EVERY PAGE LOAD
 handleIncomingAuthenticationLink();
 /**
  * STREAM EMPLOYEES' OWN APPLICATIONS WITH LIVE STATUS AND TOGGLE DROPDOWNS
