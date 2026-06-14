@@ -38,7 +38,95 @@ export { app };
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+// 2. INSIDE YOUR LOGIN FORM SUBMIT LISTENER
+document.getElementById('login-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const emailInputValue = document.getElementById('login-email').value;
 
+    // --- ADD THIS CRITICAL LINE HERE ---
+    window.localStorage.setItem('emailForSignIn', emailInputValue);
+    // ------------------------------------
+
+    const actionCodeSettings = {
+        url: 'https://www.jobinminute.com/',
+        handleCodeInApp: true
+    };
+
+    sendSignInLinkToEmail(auth, emailInputValue, actionCodeSettings)
+        .then(() => {
+            alert("Security link sent! Please check your inbox.");
+        })
+        .catch((error) => {
+            alert("Error sending link: " + error.message);
+        });
+});
+// 3. INSIDE YOUR REGISTRATION FORM SUBMIT LISTENER
+document.getElementById('auth-registration-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    // Check whichever email input is active (Employee or Employer)
+    const empEmail = document.getElementById('emp-email')?.value;
+    const orgEmail = document.getElementById('org-email')?.value;
+    const registrationEmail = empEmail || orgEmail;
+
+    // --- ADD THIS CRITICAL LINE HERE ---
+    window.localStorage.setItem('emailForSignIn', registrationEmail);
+    // ------------------------------------
+
+    const actionCodeSettings = {
+        url: 'https://www.jobinminute.com/',
+        handleCodeInApp: true
+    };
+
+    sendSignInLinkToEmail(auth, registrationEmail, actionCodeSettings)
+        .then(() => {
+            alert("Verification link sent! Please check your inbox.");
+        })
+        .catch((error) => {
+            alert("Registration link error: " + error.message);
+        });
+});
+
+// 4. PASTE THIS AT THE ABSOLUTE BOTTOM OF YOUR FILE
+
+function handleIncomingAuthenticationLink() {
+    // Check if the current URL has the secure tracking link parameters from Firebase
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+        
+        // Pull the email address out of the browser memory that we saved in Step 2
+        let email = window.localStorage.getItem('emailForSignIn');
+        
+        // Fallback: If they clicked the link on a different browser/device, ask them to type it in
+        if (!email) {
+            email = window.prompt('Security Check: Please confirm your registered email address to complete sign in:');
+        }
+        
+        if (email) {
+            // Send the email and URL details to Firebase to clear the login check
+            signInWithEmailLink(auth, email, window.location.href)
+                .then((result) => {
+                    // Success! Remove the temporary email from storage
+                    window.localStorage.removeItem('emailForSignIn');
+                    
+                    // Clean up the address bar so the long text string disappears
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    
+                    alert("Identity verified successfully! Welcome back to JobInMinute.");
+                    
+                    // (Optional) If you have a function to change screens after login, call it here:
+                    // e.g., showDashboardView();
+                })
+                .catch((error) => {
+                    console.error("Link handling error:", error);
+                    alert("This verification link has expired or is invalid. Please request a new access link.");
+                });
+        }
+    }
+}
+
+// RUN THIS IMMEDIATELY ON EVERY PAGE LOAD
+handleIncomingAuthenticationLink();
 /**
  * STREAM EMPLOYEES' OWN APPLICATIONS WITH LIVE STATUS AND TOGGLE DROPDOWNS
  */
