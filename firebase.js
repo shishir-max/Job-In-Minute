@@ -1,25 +1,16 @@
-// firebase.js - Core SDK Initialization & Platform Streams
+// firebase.js - Complete Multi-Tenant Identity Verification Engine
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { 
   getAuth, 
-  sendSignInLinkToEmail, 
-  isSignInWithEmailLink, 
-  signInWithEmailLink,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
-  signOut,
   onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { 
   getFirestore, 
-  collection, 
-  query, 
-  where, 
-  onSnapshot, 
   doc, 
-  getDoc,
-  setDoc,
-  getDocs,
-  updateDoc 
+  setDoc 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
@@ -39,86 +30,128 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// 2. LOGIN FORM SUBMIT LISTENER
+// GLOBAL ENTRY WINDOW INTERCEPT FOR PASSWORD RESETS
+window.triggerPasswordResetLink = function() {
+    const emailTarget = document.getElementById('login-email').value;
+    if (!emailTarget) {
+        alert("Please type your registered account email ID into the input field first.");
+        return;
+    }
+    
+    sendPasswordResetEmail(auth, emailTarget)
+        .then(() => {
+            alert(`A secure password modification link has been sent to: ${emailTarget}. Please open your email inbox to proceed.`);
+        })
+        .catch((err) => {
+            alert("Reset Request Dropped: " + err.message);
+        });
+};
+
 document.addEventListener("DOMContentLoaded", () => {
+    
+    // 1. LIVE DIRECT ACCOUNT LOGIN LISTENER
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const emailInputValue = document.getElementById('login-email').value;
             
-            window.localStorage.setItem('emailForSignIn', emailInputValue);
+            const selectedRole = document.getElementById('login-role').value;
+            const emailInput = document.getElementById('login-email').value;
+            const passwordInput = document.getElementById('login-password').value;
 
-            const actionCodeSettings = {
-                url: 'https://www.jobinminute.com/',
-                handleCodeInApp: true
-            };
-
-            sendSignInLinkToEmail(auth, emailInputValue, actionCodeSettings)
-                .then(() => {
-                    alert("Security link sent! Please check your inbox.");
+            signInWithEmailAndPassword(auth, emailInput, passwordInput)
+                .then((userCredential) => {
+                    console.log("Session initialization complete:", userCredential.user.uid);
+                    alert("Identity validated successfully! Opening secure app workspace dashboard.");
                 })
-                .catch((error) => {
-                    alert("Error sending link: " + error.message);
+                .catch((err) => {
+                    alert("Access Denied: Invalid credentials pattern or profile node not matching. " + err.message);
                 });
         });
     }
 
-    // 3. REGISTRATION FORM SUBMIT LISTENER
-    const registrationForm = document.getElementById('auth-registration-form');
-    if (registrationForm) {
-        registrationForm.addEventListener('submit', (e) => {
+    // 2. LIVE PROFILE DATA PROVISIONING & ACCOUNT CREATION
+    const regForm = document.getElementById('auth-registration-form');
+    if (regForm) {
+        regForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const empEmail = document.getElementById('emp-email')?.value;
-            const orgEmail = document.getElementById('org-email')?.value;
-            const registrationEmail = empEmail || orgEmail;
 
-            if (!registrationEmail) {
-                alert("Please provide a valid email address.");
-                return;
+            const targetRole = window.getCurrentSelectedRegistrationRole();
+            const emailValue = document.getElementById('reg-core-email').value;
+            const passwordValue = document.getElementById('reg-core-password').value;
+
+            // Compile Data Object Based on Selected Role Mode
+            let profilePayload = {
+                accountRole: targetRole,
+                emailId: emailValue,
+                creationTimestamp: new Date().toISOString()
+            };
+
+            if (targetRole === 'employee') {
+                const name = document.getElementById('emp-name').value;
+                const phone = document.getElementById('emp-phone').value;
+                const sector = document.getElementById('emp-sector').value;
+                const addr = document.getElementById('emp-address').value;
+
+                if (!name || !phone || !sector) {
+                    alert("Please fill in all mandatory Employee registration fields.");
+                    return;
+                }
+
+                profilePayload.fullName = name;
+                profilePayload.phoneNumber = phone;
+                profilePayload.jobSector = sector;
+                profilePayload.address = addr || "Not Listed";
+
+            } else if (targetRole === 'employer') {
+                const execName = document.getElementById('org-exec-name').value;
+                const phone = document.getElementById('org-phone').value;
+                const brand = document.getElementById('org-brand-name').value;
+                const webUrl = document.getElementById('org-website').value;
+                const address = document.getElementById('org-address').value;
+                const sector = document.getElementById('org-sector').value;
+                const gst = document.getElementById('org-gst').value;
+                const idVerify = document.getElementById('org-id-verify').value;
+
+                if (!execName || !phone || !brand || !webUrl || !address) {
+                    alert("Please fill in all mandatory Employer registration fields.");
+                    return;
+                }
+
+                profilePayload.executiveName = execName;
+                profilePayload.contactPhone = phone;
+                profilePayload.companyBrandingName = brand;
+                profilePayload.officialWebsiteUrl = webUrl;
+                profilePayload.headquartersAddress = address;
+                profilePayload.sourcingSector = sector || "General Sourcing";
+                profilePayload.gstInNumber = gst || "Omitted";
+                profilePayload.businessVerificationId = idVerify || "Omitted";
             }
 
-            window.localStorage.setItem('emailForSignIn', registrationEmail);
-
-            const actionCodeSettings = {
-                url: 'https://www.jobinminute.com/',
-                handleCodeInApp: true
-            };
-
-            sendSignInLinkToEmail(auth, registrationEmail, actionCodeSettings)
-                .then(() => {
-                    alert("Verification link sent! Please check your inbox.");
+            // Create Authenticated Profile and Secure Firestore Document Storage
+            createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+                .then((userCredential) => {
+                    const dynamicCollectionName = targetRole === 'employee' ? "profiles_employee" : "profiles_employer";
+                    
+                    // Secure data mapping: Document ID matches the individual User's Unique ID
+                    return setDoc(doc(db, dynamicCollectionName, userCredential.user.uid), profilePayload);
                 })
-                .catch((error) => {
-                    alert("Registration link error: " + error.message);
+                .then(() => {
+                    alert("Account configuration initialized safely. Profile parameter node active!");
+                    window.switchAppView('home');
+                })
+                .catch((err) => {
+                    alert("Identity Allocation Error Exception: " + err.message);
                 });
         });
     }
+
+    // 3. PERSISTENT WORKSPACE HANDSHAKE LISTENER
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("Isolated user session handshake live:", user.email);
+        } else {
+            console.log("No active validation routing session active.");
+        }
+    });
 });
-
-// 4. INCOMING LINK INTERCEPTOR
-function handleIncomingAuthenticationLink() {
-    if (isSignInWithEmailLink(auth, window.location.href)) {
-        let email = window.localStorage.getItem('emailForSignIn');
-        
-        if (!email) {
-            email = window.prompt('Security Check: Please confirm your registered email address to complete sign in:');
-        }
-        
-        if (email) {
-            signInWithEmailLink(auth, email, window.location.href)
-                .then((result) => {
-                    window.localStorage.removeItem('emailForSignIn');
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                    alert("Identity verified successfully! Welcome back to JobInMinute.");
-                })
-                .catch((error) => {
-                    console.error("Link handling error:", error);
-                    alert("This verification link has expired or is invalid. Please request a new access link.");
-                });
-        }
-    }
-}
-
-// Check link immediately on script execution
-handleIncomingAuthenticationLink();
