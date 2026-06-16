@@ -54,9 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
             window.localStorage.setItem('emailForSignIn', emailInputValue);
 
             const actionCodeSettings = {
-                url: 'https://job-in-minute.firebaseapp.com/',
-                handleCodeInApp: true
-            };
+    // Point this back to your working custom domain
+    url: 'https://www.jobinminute.com/',
+    handleCodeInApp: true
+};
 
             sendSignInLinkToEmail(auth, emailInputValue, actionCodeSettings)
                 .then(() => {
@@ -87,9 +88,10 @@ document.addEventListener("DOMContentLoaded", () => {
             window.localStorage.setItem('emailForSignIn', registrationEmail);
 
             const actionCodeSettings = {
-                url: 'https://job-in-minute.firebaseapp.com/',
-                handleCodeInApp: true
-            };
+    // Point this back to your working custom domain
+    url: 'https://www.jobinminute.com/',
+    handleCodeInApp: true
+};
 
             sendSignInLinkToEmail(auth, registrationEmail, actionCodeSettings)
                 .then(() => {
