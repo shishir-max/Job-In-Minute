@@ -23,7 +23,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-// 1. FIREBASE SETTING INSTANCES
 const firebaseConfig = {
   apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
   authDomain: "job-in-minute.firebaseapp.com",
@@ -40,105 +39,86 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// 2. ACCOUNT ACCESS GATE (LOGIN ACTION HANDLER)
+// 2. LOGIN FORM SUBMIT LISTENER
 document.addEventListener("DOMContentLoaded", () => {
-    
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
             const emailInputValue = document.getElementById('login-email').value;
-
-            // Save tracking string into client memory loop
+            
             window.localStorage.setItem('emailForSignIn', emailInputValue);
 
             const actionCodeSettings = {
-    // Point this back to your working custom domain
-    url: 'https://www.jobinminute.com/',
-    handleCodeInApp: true
-};
+                url: 'https://www.jobinminute.com/',
+                handleCodeInApp: true
+            };
 
             sendSignInLinkToEmail(auth, emailInputValue, actionCodeSettings)
                 .then(() => {
-                    alert("Security gateway link sent! Please check your email inbox.");
+                    alert("Security link sent! Please check your inbox.");
                 })
                 .catch((error) => {
-                    alert("Error deploying transmission: " + error.message);
+                    alert("Error sending link: " + error.message);
                 });
         });
     }
 
-    // 3. IDENTITY SEED NODE (REGISTRATION ACTION HANDLER)
+    // 3. REGISTRATION FORM SUBMIT LISTENER
     const registrationForm = document.getElementById('auth-registration-form');
     if (registrationForm) {
         registrationForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
             const empEmail = document.getElementById('emp-email')?.value;
             const orgEmail = document.getElementById('org-email')?.value;
             const registrationEmail = empEmail || orgEmail;
 
             if (!registrationEmail) {
-                alert("Please provide a valid entry inside the core Email ID inputs.");
+                alert("Please provide a valid email address.");
                 return;
             }
 
-            // Save tracking string into client memory loop
             window.localStorage.setItem('emailForSignIn', registrationEmail);
 
             const actionCodeSettings = {
-    // Point this back to your working custom domain
-    url: 'https://www.jobinminute.com/',
-    handleCodeInApp: true
-};
+                url: 'https://www.jobinminute.com/',
+                handleCodeInApp: true
+            };
 
             sendSignInLinkToEmail(auth, registrationEmail, actionCodeSettings)
                 .then(() => {
-                    alert("Verification link deployed! Go directly to your mailbox container to authorize account creation.");
+                    alert("Verification link sent! Please check your inbox.");
                 })
                 .catch((error) => {
-                    alert("Registration stream aborted: " + error.message);
+                    alert("Registration link error: " + error.message);
                 });
         });
     }
 });
 
-// 4. LANDING INBOUND INTERCEPT HANDSHAKE
+// 4. INCOMING LINK INTERCEPTOR
 function handleIncomingAuthenticationLink() {
-    console.log("Monitoring browser landing environment layer...");
-    
     if (isSignInWithEmailLink(auth, window.location.href)) {
         let email = window.localStorage.getItem('emailForSignIn');
         
         if (!email) {
-            email = window.prompt('Identity Checkpoint: Enter your authorized security email address to unlock system nodes:');
+            email = window.prompt('Security Check: Please confirm your registered email address to complete sign in:');
         }
         
         if (email) {
             signInWithEmailLink(auth, email, window.location.href)
                 .then((result) => {
-                    // Flush the temporary storage item clean
                     window.localStorage.removeItem('emailForSignIn');
-                    
-                    // Clear tracking hashes from address window
                     window.history.replaceState({}, document.title, window.location.pathname);
-                    
-                    alert("Identity verified successfully! Account parameters active on JobInMinute.");
-                    
-                    // If you have a custom dashboard switcher function ready, you can add it here.
+                    alert("Identity verified successfully! Welcome back to JobInMinute.");
                 })
                 .catch((error) => {
-                    console.error("Handshake authorization loop dropped:", error);
-                    alert("This secure validation parameters string has expired or was already evaluated.");
+                    console.error("Link handling error:", error);
+                    alert("This verification link has expired or is invalid. Please request a new access link.");
                 });
         }
     }
 }
 
-// FORCE WAITING CYCLE FOR WINDOW INITIALIZATION 
-if (document.readyState === 'complete') {
-    handleIncomingAuthenticationLink();
-} else {
-    window.addEventListener('load', handleIncomingAuthenticationLink);
-}
+// Check link immediately on script execution
+handleIncomingAuthenticationLink();
