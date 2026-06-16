@@ -3,89 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobInMinute | Streamlined Tech Marketplace</title>
+    <title>JobInMinute | Fast Technical Recruitment Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .view-frame-node { display: none; }
+        .view-frame-node.active-frame { display: block; }
+        .mesh-texture {
+            background-color: #fafafa;
+            background-image: radial-gradient(#e0f2fe 1.5px, transparent 1.5px), radial-gradient(#f0f9ff 1.5px, #fafafa 1.5px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 font-sans min-h-screen flex flex-col justify-between">
+<body class="mesh-texture font-sans min-h-screen flex flex-col justify-between text-slate-800">
 
     <div id="global-header-root"></div>
 
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-12 flex items-center justify-center">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-6 py-12">
 
-        <div id="auth-panel" class="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-slate-200/80 border border-slate-100 p-8 dynamic-mount-transition">
-            
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-black text-slate-800 tracking-tight">Account Verification</h2>
-                <p class="text-sm text-slate-500 mt-1">Access your platform workspace profile container node.</p>
-            </div>
+        <section id="view-home" class="view-frame-node active-frame"></section>
 
-            <form id="login-form" class="space-y-5 mb-6">
-                <div>
-                    <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1">Registered Email *</label>
-                    <input type="email" id="login-email" required class="w-full border border-slate-200 p-3 rounded-xl text-sm bg-slate-50 outline-none focus:border-sky-500 transition-all" placeholder="name@company.com">
-                </div>
-                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm py-3 rounded-xl transition-all active:scale-98 shadow-sm">
-                    Send Security Access Code/Link
-                </button>
-            </form>
+        <section id="view-about" class="view-frame-node"></section>
 
-            <div class="relative flex py-2 items-center justify-center my-4">
-                <span class="absolute bg-white px-3 text-xs uppercase tracking-widest font-bold text-slate-300">Or Register</span>
-                <div class="w-full border-t border-slate-100"></div>
-            </div>
-
-            <form id="auth-registration-form" class="space-y-4">
-                <div class="grid grid-cols-2 gap-3 mb-2">
-                    <div>
-                        <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1">Employee Email</label>
-                        <input type="email" id="emp-email" class="w-full border border-slate-200 p-3 rounded-xl text-sm bg-slate-50 outline-none focus:border-sky-500 transition-all" placeholder="Personal Email">
+        <section id="view-auth" class="view-frame-node py-4 flex justify-center">
+            <div class="w-full max-w-lg bg-white border border-slate-100 shadow-2xl rounded-3xl p-8 relative">
+                
+                <div id="auth-sub-login" class="space-y-6">
+                    <div class="text-center space-y-1">
+                        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Account Access Gate</h2>
+                        <p class="text-xs text-slate-400">Sign in using your account credentials.</p>
                     </div>
-                    <div>
-                        <label class="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1">Employer Email</label>
-                        <input type="email" id="org-email" class="w-full border border-slate-200 p-3 rounded-xl text-sm bg-slate-50 outline-none focus:border-sky-500 transition-all" placeholder="Company Email">
+
+                    <form id="login-form" class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Account Category *</label>
+                            <select id="login-role" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 font-bold text-slate-700 outline-none">
+                                <option value="employee">Employee / Job Seeker Account</option>
+                                <option value="employer">Employer / Corporate Manager Account</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Registered Email *</label>
+                            <input type="email" id="login-email" required class="w-full border border-slate-200 p-3 rounded-xl text-sm bg-slate-50 outline-none focus:border-sky-500 transition-all" placeholder="name@company.com">
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400">Password *</label>
+                                <button type="button" onclick="triggerPasswordResetLink()" class="text-[10px] text-sky-600 font-bold hover:underline">Forgot Password?</button>
+                            </div>
+                            <input type="password" id="login-password" required class="w-full border border-slate-200 p-3 rounded-xl text-sm bg-slate-50 outline-none focus:border-sky-500 transition-all" placeholder="••••••••">
+                        </div>
+                        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider py-4 rounded-xl shadow-md transition-all active:scale-98">
+                            Verify Security Session
+                        </button>
+                    </form>
+
+                    <div class="text-center pt-2">
+                        <p class="text-xs text-slate-400 font-medium">New to the platform? <button onclick="toggleAuthSubView('register')" class="text-sky-600 font-bold hover:underline">Create an account</button></p>
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm py-3 rounded-xl transition-all active:scale-98 shadow-sm">
-                    Create Identity Node
-                </button>
-            </form>
-        </div>
+
+                <div id="auth-sub-register" class="space-y-6 hidden">
+                    <div class="text-center space-y-1">
+                        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Identity Initialization</h2>
+                        <p class="text-xs text-slate-400">Select account node architecture to register.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl text-xs font-bold text-slate-500">
+                        <button id="tab-reg-emp" onclick="switchRegistrationFormType('employee')" class="py-2.5 rounded-lg text-center bg-white text-slate-950 shadow-sm transition-all">Employee Node</button>
+                        <button id="tab-reg-org" onclick="switchRegistrationFormType('employer')" class="py-2.5 rounded-lg text-center hover:text-slate-800 transition-all">Employer Node</button>
+                    </div>
+
+                    <form id="auth-registration-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Account Email *</label>
+                                <input type="email" id="reg-core-email" required class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none focus:border-sky-500" placeholder="security@domain.com">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Secure Password *</label>
+                                <input type="password" id="reg-core-password" required class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none focus:border-sky-500" placeholder="Min. 6 values">
+                            </div>
+                        </div>
+
+                        <div class="w-full border-t border-slate-100 my-2"></div>
+
+                        <div id="form-fields-employee" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Full Name (Alpha Only) *</label>
+                                    <input type="text" id="emp-name" pattern="[A-Za-z\s]+" title="Alpha characters and spaces only" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="John Doe">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Phone Number (Numeric) *</label>
+                                    <input type="text" id="emp-phone" pattern="\d{10,12}" title="Numeric values between 10 to 12 digits" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="10-12 digits">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Job Sector Area *</label>
+                                <select id="emp-sector" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 text-slate-700 outline-none">
+                                    <option value="fullstack">Full-Stack Cloud Development</option>
+                                    <option value="java">Java Software Engineering</option>
+                                    <option value="uiux">UI/UX Strategic Layouts</option>
+                                    <option value="recruitment">US IT Sourcing & Recruitment</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Residential Address (Optional)</label>
+                                <input type="text" id="emp-address" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Sukhliya, Indore">
+                            </div>
+                        </div>
+
+                        <div id="form-fields-employer" class="space-y-4 hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Authorized Executive Name (Alpha Only) *</label>
+                                    <input type="text" id="org-exec-name" pattern="[A-Za-z\s]+" title="Alpha characters and spaces only" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Manager Name">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Official Mobile Contact (Numeric) *</label>
+                                    <input type="text" id="org-phone" pattern="\d{10,12}" title="Numeric values between 10 to 12 digits" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="10-12 digits">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Organization Branding Title *</label>
+                                    <input type="text" id="org-brand-name" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Company Name">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Corporate Web URL *</label>
+                                    <input type="url" id="org-website" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="https://domain.com">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Corporate Headquarters Address *</label>
+                                <input type="text" id="org-address" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Full operational headquarters location">
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Active Sourcing Sector (Optional)</label>
+                                    <input type="text" id="org-sector" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="e.g. IT, Healthcare">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">GSTIN Registry ID (Optional)</label>
+                                    <input type="text" id="org-gst" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Alpha-numeric pattern">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Business Verification Anchor (Optional)</label>
+                                <input type="text" id="org-id-verify" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Corporate registry or Business Aadhaar placeholder ID">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs uppercase tracking-wider py-4 rounded-xl shadow-md transition-all active:scale-98">
+                            Initialize Account Identity Node
+                        </button>
+                    </form>
+
+                    <div class="text-center pt-2">
+                        <p class="text-xs text-slate-400 font-medium">Already registered? <button onclick="toggleAuthSubView('login')" class="text-sky-600 font-bold hover:underline">Sign in instead</button></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-terms" class="view-frame-node py-8 max-w-2xl mx-auto space-y-4">
+            <h2 class="text-2xl font-black text-slate-900">Terms of Services</h2>
+            <div class="bg-white border border-slate-100 shadow-lg rounded-2xl p-6 text-xs text-slate-500 leading-relaxed">
+                <p>Platform access structures and legal framework patterns for JobInMinute users will be populated here.</p>
+            </div>
+        </section>
+
+        <section id="view-privacy" class="view-frame-node py-8 max-w-2xl mx-auto space-y-4">
+            <h2 class="text-2xl font-black text-slate-900">Privacy Policy</h2>
+            <div class="bg-white border border-slate-100 shadow-lg rounded-2xl p-6 text-xs text-slate-500 leading-relaxed">
+                <p>Data isolation protocols, identity authorization storage safety, and system data parameters will be outlined here.</p>
+            </div>
+        </section>
 
     </main>
 
     <div id="global-footer-root"></div>
 
     <script type="module" src="firebase.js"></script>
-    
     <script type="module">
-        // Helper to load external component templates safely into the index layout
-        async function mountExternalComponent(targetId, filePath, callbackAction) {
+        let currentActiveRoleMode = "employee";
+
+        async function injectTemplateComponent(elementId, assetPath, optionalCallback) {
             try {
-                const response = await fetch(filePath);
-                if (!response.ok) throw new Error(`Component fetch dropped: ${filePath}`);
-                const htmlContent = await response.text();
-                document.getElementById(targetId).innerHTML = htmlContent;
-                if(callbackAction) callbackAction();
-            } catch (err) {
-                console.error("Layout mounting error exception:", err);
-            }
+                const response = await fetch(assetPath);
+                if (!response.ok) throw new Error(`Asset delivery fault: ${assetPath}`);
+                document.getElementById(elementId).innerHTML = await response.text();
+                if(optionalCallback) optionalCallback();
+            } catch(e) { console.error("Mount system fault error:", e); }
         }
 
-        // Initialize UI Elements when view nodes load safely
+        window.switchAppView = function(viewKeyId) {
+            document.querySelectorAll('.view-frame-node').forEach(frame => frame.classList.remove('active-frame'));
+            const targetFrame = document.getElementById(`view-${viewKeyId}`);
+            if (targetFrame) {
+                targetFrame.classList.add('active-frame');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            console.log(`Navigation matrix updated to frame: ${viewKeyId}`);
+        };
+
+        window.toggleAuthSubView = function(subTargetKey) {
+            if(subTargetKey === 'login') {
+                document.getElementById('auth-sub-login').classList.remove('hidden');
+                document.getElementById('auth-sub-register').classList.add('hidden');
+            } else {
+                document.getElementById('auth-sub-login').classList.add('hidden');
+                document.getElementById('auth-sub-register').classList.remove('hidden');
+            }
+        };
+
+        window.switchRegistrationFormType = function(selectedRole) {
+            currentActiveRoleMode = selectedRole;
+            const empTab = document.getElementById('tab-reg-emp');
+            const orgTab = document.getElementById('tab-reg-org');
+            const empFields = document.getElementById('form-fields-employee');
+            const orgFields = document.getElementById('form-fields-employer');
+
+            if(selectedRole === 'employee') {
+                empTab.className = "py-2.5 rounded-lg text-center bg-white text-slate-950 shadow-sm transition-all";
+                orgTab.className = "py-2.5 rounded-lg text-center hover:text-slate-800 transition-all";
+                empFields.classList.remove('hidden');
+                orgFields.classList.add('hidden');
+            } else {
+                orgTab.className = "py-2.5 rounded-lg text-center bg-white text-slate-950 shadow-sm transition-all";
+                empTab.className = "py-2.5 rounded-lg text-center hover:text-slate-800 transition-all";
+                orgFields.classList.remove('hidden');
+                empFields.classList.add('hidden');
+            }
+        };
+
+        window.getCurrentSelectedRegistrationRole = function() {
+            return currentActiveRoleMode;
+        };
+
+        // On Load, Inject Components and Separate Content Assets dynamically
         document.addEventListener("DOMContentLoaded", () => {
-            // Mount Layout Elements
-            mountExternalComponent("global-header-root", "header.html", () => {
-                // Link the fresh dynamic button trigger back to reveal your existing auth panel card
-                const triggerBtn = document.getElementById("nav-auth-trigger");
-                const targetCard = document.getElementById("auth-panel");
-                if(triggerBtn && targetCard) {
-                    triggerBtn.addEventListener("click", () => {
-                        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    });
-                }
-            });
-            
-            mountExternalComponent("global-footer-root", "footer.html");
+            injectTemplateComponent("global-header-root", "header.html");
+            injectTemplateComponent("global-footer-root", "footer.html");
+            injectTemplateComponent("view-home", "home.html");
+            injectTemplateComponent("view-about", "about.html");
         });
     </script>
 </body>
