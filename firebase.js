@@ -40,6 +40,9 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 
 // 2. INSIDE YOUR LOGIN FORM SUBMIT LISTENER
+// ========================================================
+// PLACE 1: INSIDE YOUR LOGIN FORM SUBMIT LISTENER
+// ========================================================
 document.getElementById('login-form').addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -48,8 +51,9 @@ document.getElementById('login-form').addEventListener('submit', (e) => {
     // --- SAVE EMAIL FOR SECURITY HANDSHAKE ---
     window.localStorage.setItem('emailForSignIn', emailInputValue);
 
+    // CHANGE THIS URL RIGHT HERE:
     const actionCodeSettings = {
-        url: 'https://www.jobinminute.com/',
+        url: 'https://job-in-minute.firebaseapp.com/',
         handleCodeInApp: true
     };
 
@@ -62,7 +66,9 @@ document.getElementById('login-form').addEventListener('submit', (e) => {
         });
 });
 
-// 3. INSIDE YOUR REGISTRATION FORM SUBMIT LISTENER
+// ========================================================
+// PLACE 2: INSIDE YOUR REGISTRATION FORM SUBMIT LISTENER
+// ========================================================
 document.getElementById('auth-registration-form').addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -74,8 +80,9 @@ document.getElementById('auth-registration-form').addEventListener('submit', (e)
     // --- SAVE EMAIL FOR SECURITY HANDSHAKE ---
     window.localStorage.setItem('emailForSignIn', registrationEmail);
 
+    // CHANGE THIS URL HERE AS WELL:
     const actionCodeSettings = {
-        url: 'https://www.jobinminute.com/',
+        url: 'https://job-in-minute.firebaseapp.com/',
         handleCodeInApp: true
     };
 
@@ -87,38 +94,42 @@ document.getElementById('auth-registration-form').addEventListener('submit', (e)
             alert("Registration link error: " + error.message);
         });
 });
-
 // 4. INCOMING LINK INTERCEPTOR (Fixed missing syntax at bottom)
+// 4. INCOMING LINK INTERCEPTOR (Wrapped in a window load listener)
 function handleIncomingAuthenticationLink() {
-    // Check if the current URL has the secure tracking link parameters from Firebase
+    console.log("Checking for incoming Firebase authentication link...");
+    
     if (isSignInWithEmailLink(auth, window.location.href)) {
-        
-        // Pull the email address out of the browser memory
         let email = window.localStorage.getItem('emailForSignIn');
         
-        // Fallback: If they clicked the link on a different browser/device, ask them to type it in
         if (!email) {
             email = window.prompt('Security Check: Please confirm your registered email address to complete sign in:');
         }
         
         if (email) {
-            // Send the email and URL details to Firebase to clear the login check
             signInWithEmailLink(auth, email, window.location.href)
                 .then((result) => {
-                    // Success! Remove the temporary email from storage
                     window.localStorage.removeItem('emailForSignIn');
-                    
-                    // Clean up the address bar so the long text string disappears
                     window.history.replaceState({}, document.title, window.location.pathname);
                     
                     alert("Identity verified successfully! Welcome back to JobInMinute.");
+                    
+                    // If you have a dashboard function, trigger it here:
+                    // showDashboardView();
                 })
                 .catch((error) => {
-                    console.error("Link handling error:", error);
-                    alert("This verification link has expired or is invalid. Please request a new access link.");
+                    console.error("Link handling error details:", error);
+                    alert("Verification failed: " + error.message);
                 });
         }
     }
+}
+
+// WAIT FOR THE WINDOW TO FULLY LOAD BEFORE RUNNING
+if (document.readyState === 'complete') {
+    handleIncomingAuthenticationLink();
+} else {
+    window.addEventListener('load', handleIncomingAuthenticationLink);
 }
 
 // EXECUTE THE INTERCEPTOR AUTOMATICALLY ON EVERY PAGE LOAD
