@@ -23,6 +23,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
+// 1. FIREBASE SETTING INSTANCES
 const firebaseConfig = {
   apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
   authDomain: "job-in-minute.firebaseapp.com",
@@ -39,98 +40,103 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// 2. INSIDE YOUR LOGIN FORM SUBMIT LISTENER
-// ========================================================
-// PLACE 1: INSIDE YOUR LOGIN FORM SUBMIT LISTENER
-// ========================================================
-document.getElementById('login-form').addEventListener('submit', (e) => {
-    e.preventDefault();
+// 2. ACCOUNT ACCESS GATE (LOGIN ACTION HANDLER)
+document.addEventListener("DOMContentLoaded", () => {
     
-    const emailInputValue = document.getElementById('login-email').value;
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const emailInputValue = document.getElementById('login-email').value;
 
-    // --- SAVE EMAIL FOR SECURITY HANDSHAKE ---
-    window.localStorage.setItem('emailForSignIn', emailInputValue);
+            // Save tracking string into client memory loop
+            window.localStorage.setItem('emailForSignIn', emailInputValue);
 
-    // CHANGE THIS URL RIGHT HERE:
-    const actionCodeSettings = {
-        url: 'https://job-in-minute.firebaseapp.com/',
-        handleCodeInApp: true
-    };
+            const actionCodeSettings = {
+                url: 'https://job-in-minute.firebaseapp.com/',
+                handleCodeInApp: true
+            };
 
-    sendSignInLinkToEmail(auth, emailInputValue, actionCodeSettings)
-        .then(() => {
-            alert("Security link sent! Please check your inbox.");
-        })
-        .catch((error) => {
-            alert("Error sending link: " + error.message);
+            sendSignInLinkToEmail(auth, emailInputValue, actionCodeSettings)
+                .then(() => {
+                    alert("Security gateway link sent! Please check your email inbox.");
+                })
+                .catch((error) => {
+                    alert("Error deploying transmission: " + error.message);
+                });
         });
+    }
+
+    // 3. IDENTITY SEED NODE (REGISTRATION ACTION HANDLER)
+    const registrationForm = document.getElementById('auth-registration-form');
+    if (registrationForm) {
+        registrationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const empEmail = document.getElementById('emp-email')?.value;
+            const orgEmail = document.getElementById('org-email')?.value;
+            const registrationEmail = empEmail || orgEmail;
+
+            if (!registrationEmail) {
+                alert("Please provide a valid entry inside the core Email ID inputs.");
+                return;
+            }
+
+            // Save tracking string into client memory loop
+            window.localStorage.setItem('emailForSignIn', registrationEmail);
+
+            const actionCodeSettings = {
+                url: 'https://job-in-minute.firebaseapp.com/',
+                handleCodeInApp: true
+            };
+
+            sendSignInLinkToEmail(auth, registrationEmail, actionCodeSettings)
+                .then(() => {
+                    alert("Verification link deployed! Go directly to your mailbox container to authorize account creation.");
+                })
+                .catch((error) => {
+                    alert("Registration stream aborted: " + error.message);
+                });
+        });
+    }
 });
 
-// ========================================================
-// PLACE 2: INSIDE YOUR REGISTRATION FORM SUBMIT LISTENER
-// ========================================================
-document.getElementById('auth-registration-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // Check whichever email input is active (Employee or Employer)
-    const empEmail = document.getElementById('emp-email')?.value;
-    const orgEmail = document.getElementById('org-email')?.value;
-    const registrationEmail = empEmail || orgEmail;
-
-    // --- SAVE EMAIL FOR SECURITY HANDSHAKE ---
-    window.localStorage.setItem('emailForSignIn', registrationEmail);
-
-    // CHANGE THIS URL HERE AS WELL:
-    const actionCodeSettings = {
-        url: 'https://job-in-minute.firebaseapp.com/',
-        handleCodeInApp: true
-    };
-
-    sendSignInLinkToEmail(auth, registrationEmail, actionCodeSettings)
-        .then(() => {
-            alert("Verification link sent! Please check your inbox.");
-        })
-        .catch((error) => {
-            alert("Registration link error: " + error.message);
-        });
-});
-// 4. INCOMING LINK INTERCEPTOR (Fixed missing syntax at bottom)
-// 4. INCOMING LINK INTERCEPTOR (Wrapped in a window load listener)
+// 4. LANDING INBOUND INTERCEPT HANDSHAKE
 function handleIncomingAuthenticationLink() {
-    console.log("Checking for incoming Firebase authentication link...");
+    console.log("Monitoring browser landing environment layer...");
     
     if (isSignInWithEmailLink(auth, window.location.href)) {
         let email = window.localStorage.getItem('emailForSignIn');
         
         if (!email) {
-            email = window.prompt('Security Check: Please confirm your registered email address to complete sign in:');
+            email = window.prompt('Identity Checkpoint: Enter your authorized security email address to unlock system nodes:');
         }
         
         if (email) {
             signInWithEmailLink(auth, email, window.location.href)
                 .then((result) => {
+                    // Flush the temporary storage item clean
                     window.localStorage.removeItem('emailForSignIn');
+                    
+                    // Clear tracking hashes from address window
                     window.history.replaceState({}, document.title, window.location.pathname);
                     
-                    alert("Identity verified successfully! Welcome back to JobInMinute.");
+                    alert("Identity verified successfully! Account parameters active on JobInMinute.");
                     
-                    // If you have a dashboard function, trigger it here:
-                    // showDashboardView();
+                    // If you have a custom dashboard switcher function ready, you can add it here.
                 })
                 .catch((error) => {
-                    console.error("Link handling error details:", error);
-                    alert("Verification failed: " + error.message);
+                    console.error("Handshake authorization loop dropped:", error);
+                    alert("This secure validation parameters string has expired or was already evaluated.");
                 });
         }
     }
 }
 
-// WAIT FOR THE WINDOW TO FULLY LOAD BEFORE RUNNING
+// FORCE WAITING CYCLE FOR WINDOW INITIALIZATION 
 if (document.readyState === 'complete') {
     handleIncomingAuthenticationLink();
 } else {
     window.addEventListener('load', handleIncomingAuthenticationLink);
 }
-
-// EXECUTE THE INTERCEPTOR AUTOMATICALLY ON EVERY PAGE LOAD
-handleIncomingAuthenticationLink();
