@@ -366,11 +366,12 @@
     </footer>
 
     <!-- Runtime Engine Block -->
-    <script type="module">
-        import { auth, db, listenToMyApplications } from "./firebase.js";
-        import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { doc, setDoc, getDoc, collection, addDoc, getDocs, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+<script type="module" src="firebase.js"></script>
 
+<script type="module">
+    import { auth, db } from "./firebase.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { doc, setDoc, getDoc, collection, addDoc, getDocs, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         let currentAuthWorkflowState = "login";
         let localUserCache = null;
         let localUserRoleCache = null; 
@@ -801,6 +802,7 @@
                 console.error(err);
             }
         }
+    console.log("Interface engine loaded smoothly.");
     </script>
 </body>
 </html>
