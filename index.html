@@ -152,7 +152,7 @@
                             </div>
                             <div>
                                 <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Business Verification Anchor (Optional)</label>
-                                <input type="text" id="org-id-verify" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Corporate registry or Business Aadhaar placeholder ID">
+                                <input type="text" id="org-id-verify" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Corporate registry placeholder ID">
                             </div>
                         </div>
 
@@ -243,7 +243,7 @@
             return currentActiveRoleMode;
         };
 
-        // On Load, Inject Components and Separate Content Assets dynamically
+        // Initialize Dynamic Component Loading on Mount
         document.addEventListener("DOMContentLoaded", () => {
             injectTemplateComponent("global-header-root", "header.html");
             injectTemplateComponent("global-footer-root", "footer.html");
