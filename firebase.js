@@ -63,6 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 .then((userCredential) => {
                     console.log("Session initialization complete:", userCredential.user.uid);
                     alert("Identity validated successfully! Opening secure app workspace dashboard.");
+                    
+                    // FORCE REDIRECT ON SUCCESSFUL LOGIN
+                    window.location.href = "home.html";
                 })
                 .catch((err) => {
                     alert("Access Denied: Invalid credentials pattern or profile node not matching. " + err.message);
@@ -138,7 +141,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 })
                 .then(() => {
                     alert("Account configuration initialized safely. Profile parameter node active!");
-                    window.switchAppView('home');
+                    
+                    // FORCE REDIRECT ON SUCCESSFUL REGISTRATION
+                    window.location.href = "home.html";
                 })
                 .catch((err) => {
                     alert("Identity Allocation Error Exception: " + err.message);
