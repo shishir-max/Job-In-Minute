@@ -14,7 +14,7 @@
         <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <span class="flex items-center gap-1.5">
-                    <i class="fa-solid fa-envelope text-purple-400"></i> shishirbharti51@gmail.com
+                    <i class="fa-solid fa-envelope text-purple-400"></i> website-support@jobinminute.com
                 </span>
             </div>
             <div class="flex items-center gap-4">
@@ -93,9 +93,8 @@
     <div id="footer-node"></div>
 
     <script>
+        // Set context token strictly for Employer session
         localStorage.setItem("userRoleToken", "employer");
-        localStorage.setItem("loggedInUserEmail", "shishirbharti51@gmail.com");
-        localStorage.setItem("loggedInUserName", "Shishir Bharti");
 
         function updateDecision(dropdown) {
             if(dropdown.value === 'select') {
@@ -150,8 +149,8 @@
                 if(h.ok) {
                     document.getElementById('header-node').innerHTML = await h.text();
                     
-                    const cachedEmail = localStorage.getItem("loggedInUserEmail");
-                    const cachedName = localStorage.getItem("loggedInUserName");
+                    const cachedEmail = localStorage.getItem("loggedInUserEmail") || "employer@jobinminute.com";
+                    const cachedName = localStorage.getItem("loggedInUserName") || "Employer Account";
 
                     const loggedOutBtn = document.getElementById('logged-out-btn');
                     const loggedInDropdown = document.getElementById('logged-in-dropdown');
