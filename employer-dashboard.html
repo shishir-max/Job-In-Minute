@@ -1,3 +1,7 @@
+if (localStorage.getItem("userRoleToken") !== "employer") {
+    alert("Access Denied. Corporate credentials required.");
+    window.location.href = "login.html";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
