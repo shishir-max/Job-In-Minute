@@ -127,8 +127,10 @@
     <div id="footer-node"></div>
 
     <script>
-        // Set context token strictly for Employee session
+        // Strictly allocate roles to prevent employer screen overwrites
         localStorage.setItem("userRoleToken", "employee");
+        localStorage.setItem("employeeEmail", "shishirbharti51@gmail.com");
+        localStorage.setItem("employeeName", "Soni Singh");
 
         function filterSector(s) {
             document.querySelectorAll('.job-card').forEach(c => {
@@ -196,8 +198,8 @@
                 if(h.ok) {
                     document.getElementById('header-node').innerHTML = await h.text();
                     
-                    const cachedEmail = localStorage.getItem("loggedInUserEmail") || "employee@jobinminute.com";
-                    const cachedName = localStorage.getItem("loggedInUserName") || "Employee Account";
+                    const cachedEmail = localStorage.getItem("employeeEmail");
+                    const cachedName = localStorage.getItem("employeeName");
 
                     const loggedOutBtn = document.getElementById('logged-out-btn');
                     const loggedInDropdown = document.getElementById('logged-in-dropdown');
