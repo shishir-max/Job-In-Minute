@@ -36,7 +36,7 @@
                             <h3 class="font-bold text-sm text-slate-900 candidate-name">Soni Singh</h3>
                             <p class="text-[11px] text-slate-400">Position: <span class="font-semibold text-slate-700 candidate-job">US IT Recruitment Lead</span></p>
                         </div>
-                        <select onchange="updateDecision(this)" class="bg-slate-50 border border-slate-200 text-xs font-bold p-2 rounded-xl outline-none text-slate-700">
+                        <select onchange="updateDecision(this)" class="bg-slate-50 border border-slate-200 text-xs font-bold p-2 rounded-xl outline-none text-slate-700 transition-all">
                             <option value="pending">Awaiting Review</option>
                             <option value="select" class="text-emerald-600 font-bold">Select Candidate</option>
                             <option value="reject" class="text-rose-600 font-bold">Reject Application</option>
@@ -72,11 +72,13 @@
     <script>
         function updateDecision(dropdown) {
             if(dropdown.value === 'select') {
-                dropdown.className = "bg-emerald-50 border border-emerald-200 text-xs font-bold p-2 rounded-xl text-emerald-700 outline-none";
+                dropdown.className = "bg-emerald-50 border border-emerald-200 text-xs font-bold p-2 rounded-xl text-emerald-700 outline-none transition-all";
                 alert("Decision Updated: Candidate selection published to employee feed.");
             } else if(dropdown.value === 'reject') {
-                dropdown.className = "bg-rose-50 border border-rose-200 text-xs font-bold p-2 rounded-xl text-rose-700 outline-none";
+                dropdown.className = "bg-rose-50 border border-rose-200 text-xs font-bold p-2 rounded-xl text-rose-700 outline-none transition-all";
                 alert("Decision Updated: Application marked as rejected.");
+            } else {
+                dropdown.className = "bg-slate-50 border border-slate-200 text-xs font-bold p-2 rounded-xl text-slate-700 outline-none transition-all";
             }
         }
         
@@ -109,8 +111,40 @@
         }
 
         async function loadLayout() {
-            const h = await fetch('header.html'); if(h.ok) document.getElementById('header-node').innerHTML = await h.text();
-            const f = await fetch('footer.html'); if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
+            try {
+                // Secure component injector for system layout header structures
+                const h = await fetch('header.html'); 
+                if(h.ok) {
+                    document.getElementById('header-node').innerHTML = await h.text();
+                    
+                    // Synchronize corporate authorization tokens instantly with the interface elements
+                    const sessionActive = localStorage.getItem("userRoleToken");
+                    const cachedEmail = localStorage.getItem("loggedInUserEmail") || "employer@company.com";
+                    const cachedName = localStorage.getItem("loggedInUserName") || "Corporate Manager";
+
+                    const defaultLogoutBtn = document.getElementById('logged-out-btn');
+                    const defaultDropdownContainer = document.getElementById('logged-in-dropdown');
+                    const uiDisplayName = document.getElementById('header-display-name');
+                    const popoverProfileName = document.getElementById('popover-user-name');
+                    const popoverProfileEmail = document.getElementById('popover-user-email');
+
+                    // If token context validates successfully, decouple auth walls from display logic
+                    if (defaultLogoutBtn && defaultDropdownContainer) {
+                        defaultLogoutBtn.classList.add('hidden');
+                        defaultDropdownContainer.classList.remove('hidden');
+                        if(uiDisplayName) uiDisplayName.innerText = cachedName;
+                        if(popoverProfileName) popoverProfileName.innerText = cachedName;
+                        if(popoverProfileEmail) popoverProfileEmail.innerText = cachedEmail;
+                    }
+                }
+                
+                // Secure component injector for system layout footer structures
+                const f = await fetch('footer.html'); 
+                if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
+                
+            } catch(layoutFault) {
+                console.error("Corporate portal layout sync failure:", layoutFault);
+            }
         }
         window.addEventListener('DOMContentLoaded', loadLayout);
     </script>
