@@ -1,13 +1,18 @@
-if (localStorage.getItem("userRoleToken") !== "employer") {
-    alert("Access Denied. Corporate credentials required.");
-    window.location.href = "login.html";
-}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employer Workspace | JobInMinute</title>
+    
+    <!-- Enforce Workspace Verification Gate BEFORE layout rendering -->
+    <script>
+        if (localStorage.getItem("userRoleToken") !== "employer") {
+            alert("Access Denied. Corporate credentials required.");
+            window.location.href = "login.html";
+        }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -41,7 +46,8 @@ if (localStorage.getItem("userRoleToken") !== "employer") {
                     <p class="text-xs text-slate-400">Review candidate resume pools and modulate corporate job listings status.</p>
                 </div>
                 <div class="mt-3 md:mt-0">
-                    <a href="workspace.html" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl transition inline-block">
+                    <!-- FIXED: Route points securely to employee-dashboard.html instead of workspace.html -->
+                    <a href="employee-dashboard.html" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl transition inline-block">
                         <i class="fa-solid fa-user-tie mr-1.5 text-blue-500"></i> Go to Employee Dashboard
                     </a>
                 </div>
