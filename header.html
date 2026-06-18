@@ -7,15 +7,18 @@
             <span class="text-base font-black tracking-tight text-slate-900">JobIn<span class="text-purple-600">Minute</span></span>
         </a>
 
-        <div class="flex items-center gap-4">
-            <a href="index.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition mr-2">Home</a>
-            <a href="login.html" id="logged-out-btn" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Sign In</a>
+        <div class="flex items-center gap-6">
+            <a href="index.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition">Home</a>
+            <a href="about.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition">About Us</a>
+            
+            <!-- Default Unified Sign In / Register Action Button -->
+            <a href="login.html" id="logged-out-btn" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Sign In / Register</a>
 
-            <!-- Dropdown Structure -->
+            <!-- Dropdown Structure (Reveals strictly on active session states) -->
             <div id="logged-in-dropdown" class="relative hidden">
                 <button id="user-menu-button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 transition">
                     <div class="w-5 h-5 rounded-md bg-purple-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-user"></i></div>
-                    <span id="header-display-name">Loading...</span>
+                    <span id="header-display-name">Loading Profile...</span>
                     <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                 </button>
 
