@@ -9,6 +9,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
 
+    <!-- TOP NAV BAR SECTION -->
     <div class="bg-white border-b border-slate-100 py-4 shadow-sm">
         <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
             <div class="flex items-center gap-2">
@@ -24,14 +25,17 @@
         </div>
     </div>
 
+    <!-- MAIN FORM WRAPPER -->
     <main class="flex-grow flex items-center justify-center px-4 py-12">
         <div class="bg-white rounded-3xl p-8 max-w-xl w-full border border-slate-100 shadow-xl space-y-6">
             
+            <!-- VIEW TAB TOGGLE: SIGN IN vs CREATE ACCOUNT -->
             <div class="flex justify-center border-b border-slate-100 pb-2 gap-8 text-sm font-bold">
                 <button id="view-tab-signin" onclick="switchViewMode('signin')" class="pb-2 text-blue-600 border-b-2 border-blue-600 transition-all">Sign In</button>
                 <button id="view-tab-register" onclick="switchViewMode('register')" class="pb-2 text-slate-400 hover:text-slate-600 transition-all">Create Account</button>
             </div>
 
+            <!-- AUDIENCE ROLE TOGGLE: EMPLOYER vs CANDIDATE -->
             <div class="bg-slate-100 p-1 rounded-xl flex gap-1">
                 <button id="role-tab-employer" onclick="switchRole('employer')" class="w-1/2 py-2 text-xs font-bold rounded-lg text-slate-600 transition-all">
                     <i class="fa-solid fa-briefcase mr-1.5"></i>Employer
@@ -41,21 +45,26 @@
                 </button>
             </div>
 
+            <!-- SINGLE DYNAMIC FORM PIPELINE -->
             <form id="auth-form-flow" onsubmit="handleAuthSubmission(event)" class="space-y-4">
                 
+                <!-- CONTAINER FOR FIELDS INJECTED DYNAMICALLY BY JAVASCRIPT -->
                 <div id="dynamic-fields-injection-area" class="space-y-4"></div>
 
+                <!-- SUBMIT ACTION -->
                 <button type="submit" id="auth-submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition shadow-md shadow-blue-200">
                     Access Candidate Dashboard &rarr;
                 </button>
             </form>
 
+            <!-- FORGOT PASSWORD TRIGGER -->
             <div class="text-center pt-2" id="forgot-password-trigger-wrapper">
                 <button onclick="toggleForgotPasswordModal(true)" class="text-xs font-semibold text-slate-400 hover:text-blue-600 transition">Forgot your account password?</button>
             </div>
         </div>
     </main>
 
+    <!-- RECOVERY FORGOT PASSWORD MODAL -->
     <div id="forgot-password-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100">
             <div class="flex justify-between items-center">
@@ -70,6 +79,7 @@
         </div>
     </div>
 
+    <!-- FOOTER SEGMENT -->
     <footer class="bg-white border-t border-slate-100 py-4 text-center text-xs text-slate-400">
         &copy; 2026 JobInMinute Security Pipeline infrastructure. All profile data securely isolated.
     </footer>
@@ -248,7 +258,7 @@
                         localStorage.setItem("userRoleToken", "employer");
                         localStorage.setItem("employerEmail", inputtedEmail);
                         alert("Employer Identity Token Validated. Loading Command Center pipeline...");
-                        window.location.href = "employer.html";
+                        window.location.href = "employer-dashboard.html"; // Fixed from employer.html to resolve 404 deployment error
                     }
                 } else {
                     if (activeRole === 'candidate') {
@@ -261,7 +271,7 @@
                         localStorage.setItem("userRoleToken", "employer");
                         localStorage.setItem("employerEmail", inputtedEmail);
                         alert("Dynamic Corporate Sandbox Module Setup completed successfully.");
-                        window.location.href = "employer.html";
+                        window.location.href = "employer-dashboard.html"; // Fixed from employer.html to resolve 404 deployment error
                     }
                 }
             } else {
