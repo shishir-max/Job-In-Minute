@@ -27,7 +27,7 @@
         <section id="view-about" class="view-frame-node"></section>
 
         <section id="view-auth" class="view-frame-node py-4 flex justify-center">
-            <div class="w-full max-w-lg bg-white border border-slate-100 shadow-2xl rounded-3xl p-8 relative">
+            <div id="auth-gate-box" class="w-full max-w-lg bg-white border border-slate-100 shadow-2xl rounded-3xl p-8 relative">
                 
                 <div id="auth-sub-login" class="space-y-6">
                     <div class="text-center space-y-1">
@@ -200,6 +200,15 @@
         }
 
         window.switchAppView = function(viewKeyId) {
+            // Handle logical routing blocks
+            const sessionActive = localStorage.getItem("userRoleToken");
+            
+            // If user clicks home/about and has a valid session token, keep home template clean instead of showing credentials form
+            if (viewKeyId === 'home' && sessionActive) {
+                const formBox = document.getElementById('auth-gate-box');
+                if (formBox) formBox.style.display = 'none';
+            }
+
             document.querySelectorAll('.view-frame-node').forEach(frame => frame.classList.remove('active-frame'));
             const targetFrame = document.getElementById(`view-${viewKeyId}`);
             if (targetFrame) {
@@ -245,9 +254,31 @@
 
         // Initialize Dynamic Component Loading on Mount
         document.addEventListener("DOMContentLoaded", () => {
-            injectTemplateComponent("global-header-root", "header.html");
+            // Check session bounds immediately
+            const sessionActive = localStorage.getItem("userRoleToken");
+
+            injectTemplateComponent("global-header-root", "header.html", () => {
+                // Synchronization routine after header maps safely
+                if(sessionActive) {
+                    const btn = document.getElementById('logged-out-btn');
+                    const dropdown = document.getElementById('logged-in-dropdown');
+                    if(btn && dropdown) {
+                        btn.classList.add('hidden');
+                        dropdown.classList.remove('hidden');
+                    }
+                }
+            });
+
             injectTemplateComponent("global-footer-root", "footer.html");
-            injectTemplateComponent("view-home", "home.html");
+            
+            injectTemplateComponent("view-home", "home.html", () => {
+                // If logged in, safely obscure login form inside the domestic frame node block
+                if (sessionActive) {
+                    const formBox = document.getElementById('auth-gate-box');
+                    if (formBox) formBox.style.display = 'none';
+                }
+            });
+
             injectTemplateComponent("view-about", "about.html");
         });
     </script>
