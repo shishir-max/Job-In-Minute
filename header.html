@@ -11,22 +11,22 @@
             <a href="index.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition">Home</a>
             <a href="about.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition">About Us</a>
             
-            <!-- Default Unified Sign In / Register Action Button -->
+            <!-- Default Unified Action Text Link -->
             <a href="login.html" id="logged-out-btn" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Sign In / Register</a>
 
-            <!-- Dropdown Structure (Reveals strictly on active session states) -->
+            <!-- Dropdown Structure -->
             <div id="logged-in-dropdown" class="relative hidden">
                 <button id="user-menu-button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 transition">
                     <div class="w-5 h-5 rounded-md bg-purple-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-user"></i></div>
-                    <span id="header-display-name">Loading Profile...</span>
+                    <span id="header-display-name">Profile Session</span>
                     <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                 </button>
 
                 <div id="logged-in-dropdown-menu" class="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 hidden z-50">
                     <div class="px-4 py-2 border-b border-slate-50 mb-1">
                         <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Signed Account</p>
-                        <p id="popover-user-name" class="text-xs font-black text-slate-800 truncate">User Profile</p>
-                        <p id="popover-user-email" class="text-[10px] text-slate-400 truncate">user@email.com</p>
+                        <p id="popover-user-name" class="text-xs font-black text-slate-800 truncate">Loading Account...</p>
+                        <p id="popover-user-email" class="text-[10px] text-slate-400 truncate">loading@jobinminute.com</p>
                     </div>
                     <a href="employer.html" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
                         <i class="fa-solid fa-chart-pie text-purple-500 w-4"></i> Corporate Panel
