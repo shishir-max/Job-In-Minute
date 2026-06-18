@@ -9,10 +9,26 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
+    <!-- TOP BAR SECTION -->
+    <div class="bg-slate-900 text-slate-300 text-[11px] py-2 border-b border-slate-800">
+        <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-envelope text-blue-400"></i> shishirbharti51@gmail.com
+                </span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="https://linkedin.com" target="_blank" class="hover:text-blue-400 transition"><i class="fa-brands fa-linkedin text-sm"></i></a>
+                <a href="https://facebook.com" target="_blank" class="hover:text-blue-400 transition"><i class="fa-brands fa-facebook text-sm"></i></a>
+                <a href="https://instagram.com" target="_blank" class="hover:text-blue-400 transition"><i class="fa-brands fa-instagram text-sm"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Injection Node -->
     <div id="header-node"></div>
 
     <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
-        
         <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm mb-6 space-y-4">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div>
@@ -29,7 +45,7 @@
 
             <div class="relative max-w-xl">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
-                <input type="text" id="job-search-input" onkeyup="searchJobsAndPlatform()" placeholder="Search active job titles, sectors, keywords, or website pages..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-xs outline-none focus:border-blue-500 transition">
+                <input type="text" id="job-search-input" onkeyup="searchJobsAndPlatform()" placeholder="Search active job titles, sectors, keywords..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-xs outline-none focus:border-blue-500 transition">
             </div>
         </div>
 
@@ -69,7 +85,7 @@
             <div class="space-y-4">
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-4">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 flex items-center">
-                        <i class="fa-solid fa-bell text-blue-500 mr-2"></i> Employer Application Responses
+                        <i class="fa-solid fa-bell text-blue-500 mr-2"></i> Application Responses
                     </h3>
                     <div class="space-y-3">
                         <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/60 flex justify-between items-center">
@@ -84,6 +100,7 @@
             </div>
         </div>
 
+        <!-- Application Modal -->
         <div id="apply-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
             <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100">
                 <div class="flex justify-between items-center">
@@ -96,7 +113,7 @@
                         <input type="text" id="modal-field-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500" placeholder="e.g. Soni Singh">
                     </div>
                     <div>
-                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Paste Full Professional Resume Text *</label>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Paste Full Resume Text *</label>
                         <textarea rows="6" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-mono outline-none focus:border-blue-500" placeholder="Paste structural resume text details here..."></textarea>
                     </div>
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition">
@@ -110,57 +127,42 @@
     <div id="footer-node"></div>
 
     <script>
+        localStorage.setItem("userRoleToken", "employee");
+        localStorage.setItem("loggedInUserEmail", "shishirbharti51@gmail.com");
+        localStorage.setItem("loggedInUserName", "Shishir Bharti");
+
         function filterSector(s) {
-            // Filter out view cards
             document.querySelectorAll('.job-card').forEach(c => {
                 c.style.display = (s === 'all' || c.getAttribute('data-sector') === s) ? 'block' : 'none';
             });
-
-            // Toggle active styling states on workspace tab selectors
-            const sectors = ['all', 'it', 'health'];
-            sectors.forEach(item => {
+            ['all', 'it', 'health'].forEach(item => {
                 const targetBtn = document.getElementById(`btn-sector-${item}`);
                 if(targetBtn) {
-                    if(item === s) {
-                        targetBtn.className = "px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition-all";
-                    } else {
-                        targetBtn.className = "px-3 py-1.5 rounded-lg hover:bg-white/50 transition-all";
-                    }
+                    targetBtn.className = (item === s) 
+                        ? "px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition-all" 
+                        : "px-3 py-1.5 rounded-lg hover:bg-white/50 transition-all";
                 }
             });
         }
 
         function searchJobsAndPlatform() {
             const query = document.getElementById('job-search-input').value.toLowerCase();
-            
-            // Core Website Redirect Keyword Queries
             if (query === 'home' || query === 'about us') {
-                alert(`Navigating away from isolated dashboard context to platform page: ${query}`);
                 window.location.href = query === 'home' ? 'index.html' : 'about.html';
                 return;
             }
-
-            // Real-time filtering logic
             document.querySelectorAll('.job-card').forEach(card => {
                 const title = card.querySelector('.job-title').innerText.toLowerCase();
                 const description = card.innerText.toLowerCase();
-                if (title.includes(query) || description.includes(query)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = (title.includes(query) || description.includes(query)) ? 'block' : 'none';
             });
         }
 
         function openApplyModal(title) {
             document.getElementById('modal-title').innerText = `Apply For: ${title}`;
-            
-            // Auto-populate user parameters if logged in
-            const localName = localStorage.getItem("loggedInUserName");
-            if(localName && document.getElementById('modal-field-name')) {
-                document.getElementById('modal-field-name').value = localName;
+            if(document.getElementById('modal-field-name')) {
+                document.getElementById('modal-field-name').value = "Soni Singh";
             }
-
             document.getElementById('apply-modal').classList.remove('hidden');
         }
         
@@ -171,40 +173,52 @@
             alert("Application data transmitted successfully to employer pipeline.");
             closeApplyModal();
         }
-        
+
+        function setupDropdownInteractions() {
+            const menuBtn = document.getElementById('user-menu-button');
+            const menuDropdown = document.getElementById('logged-in-dropdown-menu');
+
+            if (menuBtn && menuDropdown) {
+                menuBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    menuDropdown.classList.toggle('hidden');
+                };
+                document.addEventListener('click', function(e) {
+                    if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+                        menuDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
         async function loadLayout() {
             try {
-                // Fetch header layout component structure safely
                 const h = await fetch('header.html'); 
                 if(h.ok) {
                     document.getElementById('header-node').innerHTML = await h.text();
                     
-                    // Core fix: Synchronize session structures with new layout elements instantly
-                    const userSessionRole = localStorage.getItem("userRoleToken") || "employee";
-                    const email = localStorage.getItem("loggedInUserEmail") || "shishirbharti51@gmail.com";
-                    const name = localStorage.getItem("loggedInUserName") || "shishir bharti";
+                    const cachedEmail = localStorage.getItem("loggedInUserEmail");
+                    const cachedName = localStorage.getItem("loggedInUserName");
 
-                    const btn = document.getElementById('logged-out-btn');
-                    const dropdown = document.getElementById('logged-in-dropdown');
-                    const displayName = document.getElementById('header-display-name');
-                    const popoverName = document.getElementById('popover-user-name');
-                    const popoverEmail = document.getElementById('popover-user-email');
+                    const loggedOutBtn = document.getElementById('logged-out-btn');
+                    const loggedInDropdown = document.getElementById('logged-in-dropdown');
+                    const headerDisplayName = document.getElementById('header-display-name');
+                    const popoverUserName = document.getElementById('popover-user-name');
+                    const popoverUserEmail = document.getElementById('popover-user-email');
 
-                    if(btn && dropdown) {
-                        btn.classList.add('hidden');
-                        dropdown.classList.remove('hidden');
-                        if(displayName) displayName.innerText = name;
-                        if(popoverName) popoverName.innerText = name;
-                        if(popoverEmail) popoverEmail.innerText = email;
+                    if (loggedOutBtn && loggedInDropdown) {
+                        loggedOutBtn.classList.add('hidden');
+                        loggedInDropdown.classList.remove('hidden');
+                        if(headerDisplayName) headerDisplayName.innerText = cachedName;
+                        if(popoverUserName) popoverUserName.innerText = cachedName;
+                        if(popoverUserEmail) popoverUserEmail.innerText = cachedEmail;
                     }
+                    setupDropdownInteractions();
                 }
-                
-                // Fetch footer layout component structure safely
                 const f = await fetch('footer.html'); 
                 if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
-                
-            } catch (err) {
-                console.error("Workspace mounting context failure:", err);
+            } catch(err) {
+                console.error("Layout mounting context failure:", err);
             }
         }
         window.addEventListener('DOMContentLoaded', loadLayout);
