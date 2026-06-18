@@ -93,8 +93,10 @@
     <div id="footer-node"></div>
 
     <script>
-        // Set context token strictly for Employer session
+        // Separate storage variables securely for your corporate operations
         localStorage.setItem("userRoleToken", "employer");
+        localStorage.setItem("employerEmail", "shishirbharti51@gmail.com");
+        localStorage.setItem("employerName", "Shishir Bharti");
 
         function updateDecision(dropdown) {
             if(dropdown.value === 'select') {
@@ -149,8 +151,8 @@
                 if(h.ok) {
                     document.getElementById('header-node').innerHTML = await h.text();
                     
-                    const cachedEmail = localStorage.getItem("loggedInUserEmail") || "employer@jobinminute.com";
-                    const cachedName = localStorage.getItem("loggedInUserName") || "Employer Account";
+                    const cachedEmail = localStorage.getItem("employerEmail");
+                    const cachedName = localStorage.getItem("employerName");
 
                     const loggedOutBtn = document.getElementById('logged-out-btn');
                     const loggedInDropdown = document.getElementById('logged-in-dropdown');
