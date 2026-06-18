@@ -21,9 +21,9 @@
                     <p class="text-xs text-slate-400">Discover live career opportunities filtered by your technical sector.</p>
                 </div>
                 <div class="mt-3 md:mt-0 bg-slate-100 p-1 rounded-xl text-xs font-bold text-slate-600 flex gap-2">
-                    <button onclick="filterSector('all')" class="px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm">All Sectors</button>
-                    <button onclick="filterSector('it')" class="px-3 py-1.5 rounded-lg hover:bg-white/50">Information Tech</button>
-                    <button onclick="filterSector('health')" class="px-3 py-1.5 rounded-lg hover:bg-white/50">Healthcare</button>
+                    <button id="btn-sector-all" onclick="filterSector('all')" class="px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition-all">All Sectors</button>
+                    <button id="btn-sector-it" onclick="filterSector('it')" class="px-3 py-1.5 rounded-lg hover:bg-white/50 transition-all">Information Tech</button>
+                    <button id="btn-sector-health" onclick="filterSector('health')" class="px-3 py-1.5 rounded-lg hover:bg-white/50 transition-all">Healthcare</button>
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
                 <form class="space-y-4" onsubmit="submitApplication(event)">
                     <div>
                         <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Full Name *</label>
-                        <input type="text" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500" placeholder="e.g. Soni Singh">
+                        <input type="text" id="modal-field-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500" placeholder="e.g. Soni Singh">
                     </div>
                     <div>
                         <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Paste Full Professional Resume Text *</label>
@@ -111,8 +111,22 @@
 
     <script>
         function filterSector(s) {
+            // Filter out view cards
             document.querySelectorAll('.job-card').forEach(c => {
                 c.style.display = (s === 'all' || c.getAttribute('data-sector') === s) ? 'block' : 'none';
+            });
+
+            // Toggle active styling states on workspace tab selectors
+            const sectors = ['all', 'it', 'health'];
+            sectors.forEach(item => {
+                const targetBtn = document.getElementById(`btn-sector-${item}`);
+                if(targetBtn) {
+                    if(item === s) {
+                        targetBtn.className = "px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition-all";
+                    } else {
+                        targetBtn.className = "px-3 py-1.5 rounded-lg hover:bg-white/50 transition-all";
+                    }
+                }
             });
         }
 
@@ -140,9 +154,18 @@
 
         function openApplyModal(title) {
             document.getElementById('modal-title').innerText = `Apply For: ${title}`;
+            
+            // Auto-populate user parameters if logged in
+            const localName = localStorage.getItem("loggedInUserName");
+            if(localName && document.getElementById('modal-field-name')) {
+                document.getElementById('modal-field-name').value = localName;
+            }
+
             document.getElementById('apply-modal').classList.remove('hidden');
         }
+        
         function closeApplyModal() { document.getElementById('apply-modal').classList.add('hidden'); }
+        
         function submitApplication(e) {
             e.preventDefault();
             alert("Application data transmitted successfully to employer pipeline.");
@@ -150,8 +173,39 @@
         }
         
         async function loadLayout() {
-            const h = await fetch('header.html'); if(h.ok) document.getElementById('header-node').innerHTML = await h.text();
-            const f = await fetch('footer.html'); if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
+            try {
+                // Fetch header layout component structure safely
+                const h = await fetch('header.html'); 
+                if(h.ok) {
+                    document.getElementById('header-node').innerHTML = await h.text();
+                    
+                    // Core fix: Synchronize session structures with new layout elements instantly
+                    const userSessionRole = localStorage.getItem("userRoleToken") || "employee";
+                    const email = localStorage.getItem("loggedInUserEmail") || "shishirbharti51@gmail.com";
+                    const name = localStorage.getItem("loggedInUserName") || "shishir bharti";
+
+                    const btn = document.getElementById('logged-out-btn');
+                    const dropdown = document.getElementById('logged-in-dropdown');
+                    const displayName = document.getElementById('header-display-name');
+                    const popoverName = document.getElementById('popover-user-name');
+                    const popoverEmail = document.getElementById('popover-user-email');
+
+                    if(btn && dropdown) {
+                        btn.classList.add('hidden');
+                        dropdown.classList.remove('hidden');
+                        if(displayName) displayName.innerText = name;
+                        if(popoverName) popoverName.innerText = name;
+                        if(popoverEmail) popoverEmail.innerText = email;
+                    }
+                }
+                
+                // Fetch footer layout component structure safely
+                const f = await fetch('footer.html'); 
+                if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
+                
+            } catch (err) {
+                console.error("Workspace mounting context failure:", err);
+            }
         }
         window.addEventListener('DOMContentLoaded', loadLayout);
     </script>
