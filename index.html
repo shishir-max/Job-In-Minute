@@ -3,284 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobInMinute | Fast Technical Recruitment Engine</title>
+    <title>Home | JobInMinute</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .view-frame-node { display: none; }
-        .view-frame-node.active-frame { display: block; }
-        .mesh-texture {
-            background-color: #fafafa;
-            background-image: radial-gradient(#e0f2fe 1.5px, transparent 1.5px), radial-gradient(#f0f9ff 1.5px, #fafafa 1.5px);
-            background-size: 40px 40px;
-            background-position: 0 0, 20px 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="mesh-texture font-sans min-h-screen flex flex-col justify-between text-slate-800">
+<body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <div id="global-header-root"></div>
-
-    <main class="flex-grow max-w-7xl w-full mx-auto px-6 py-12">
-
-        <section id="view-home" class="view-frame-node active-frame"></section>
-
-        <section id="view-about" class="view-frame-node"></section>
-
-        <section id="view-auth" class="view-frame-node py-4 flex justify-center">
-            <div id="auth-gate-box" class="w-full max-w-lg bg-white border border-slate-100 shadow-2xl rounded-3xl p-8 relative">
-                
-                <div id="auth-sub-login" class="space-y-6">
-                    <div class="text-center space-y-1">
-                        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Account Access Gate</h2>
-                        <p class="text-xs text-slate-400">Sign in using your account credentials.</p>
-                    </div>
-
-                    <form id="login-form" class="space-y-4">
-                        <div>
-                            <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Account Category *</label>
-                            <select id="login-role" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 font-bold text-slate-700 outline-none">
-                                <option value="employee">Employee / Job Seeker Account</option>
-                                <option value="employer">Employer / Corporate Manager Account</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Registered Email *</label>
-                            <input type="email" id="login-email" required class="w-full border border-slate-200 p-3 rounded-xl text-sm bg-slate-50 outline-none focus:border-sky-500 transition-all" placeholder="name@company.com">
-                        </div>
-                        <div>
-                            <div class="flex justify-between items-center mb-1">
-                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400">Password *</label>
-                                <button type="button" onclick="triggerPasswordResetLink()" class="text-[10px] text-sky-600 font-bold hover:underline">Forgot Password?</button>
-                            </div>
-                            <input type="password" id="login-password" required class="w-full border border-slate-200 p-3 rounded-xl text-sm bg-slate-50 outline-none focus:border-sky-500 transition-all" placeholder="••••••••">
-                        </div>
-                        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider py-4 rounded-xl shadow-md transition-all active:scale-98">
-                            Verify Security Session
-                        </button>
-                    </form>
-
-                    <div class="text-center pt-2">
-                        <p class="text-xs text-slate-400 font-medium">New to the platform? <button onclick="toggleAuthSubView('register')" class="text-sky-600 font-bold hover:underline">Create an account</button></p>
-                    </div>
-                </div>
-
-                <div id="auth-sub-register" class="space-y-6 hidden">
-                    <div class="text-center space-y-1">
-                        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Identity Initialization</h2>
-                        <p class="text-xs text-slate-400">Select account node architecture to register.</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl text-xs font-bold text-slate-500">
-                        <button id="tab-reg-emp" onclick="switchRegistrationFormType('employee')" class="py-2.5 rounded-lg text-center bg-white text-slate-950 shadow-sm transition-all">Employee Node</button>
-                        <button id="tab-reg-org" onclick="switchRegistrationFormType('employer')" class="py-2.5 rounded-lg text-center hover:text-slate-800 transition-all">Employer Node</button>
-                    </div>
-
-                    <form id="auth-registration-form" class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Account Email *</label>
-                                <input type="email" id="reg-core-email" required class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none focus:border-sky-500" placeholder="security@domain.com">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Secure Password *</label>
-                                <input type="password" id="reg-core-password" required class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none focus:border-sky-500" placeholder="Min. 6 values">
-                            </div>
-                        </div>
-
-                        <div class="w-full border-t border-slate-100 my-2"></div>
-
-                        <div id="form-fields-employee" class="space-y-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Full Name (Alpha Only) *</label>
-                                    <input type="text" id="emp-name" pattern="[A-Za-z\s]+" title="Alpha characters and spaces only" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="John Doe">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Phone Number (Numeric) *</label>
-                                    <input type="text" id="emp-phone" pattern="\d{10,12}" title="Numeric values between 10 to 12 digits" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="10-12 digits">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Job Sector Area *</label>
-                                <select id="emp-sector" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 text-slate-700 outline-none">
-                                    <option value="fullstack">Full-Stack Cloud Development</option>
-                                    <option value="java">Java Software Engineering</option>
-                                    <option value="uiux">UI/UX Strategic Layouts</option>
-                                    <option value="recruitment">US IT Sourcing & Recruitment</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Residential Address (Optional)</label>
-                                <input type="text" id="emp-address" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Sukhliya, Indore">
-                            </div>
-                        </div>
-
-                        <div id="form-fields-employer" class="space-y-4 hidden">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Authorized Executive Name (Alpha Only) *</label>
-                                    <input type="text" id="org-exec-name" pattern="[A-Za-z\s]+" title="Alpha characters and spaces only" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Manager Name">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Official Mobile Contact (Numeric) *</label>
-                                    <input type="text" id="org-phone" pattern="\d{10,12}" title="Numeric values between 10 to 12 digits" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="10-12 digits">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Organization Branding Title *</label>
-                                    <input type="text" id="org-brand-name" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Company Name">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Corporate Web URL *</label>
-                                    <input type="url" id="org-website" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="https://domain.com">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Corporate Headquarters Address *</label>
-                                <input type="text" id="org-address" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Full operational headquarters location">
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Active Sourcing Sector (Optional)</label>
-                                    <input type="text" id="org-sector" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="e.g. IT, Healthcare">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">GSTIN Registry ID (Optional)</label>
-                                    <input type="text" id="org-gst" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Alpha-numeric pattern">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Business Verification Anchor (Optional)</label>
-                                <input type="text" id="org-id-verify" class="w-full border border-slate-200 p-3 rounded-xl text-xs bg-slate-50 outline-none" placeholder="Corporate registry placeholder ID">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs uppercase tracking-wider py-4 rounded-xl shadow-md transition-all active:scale-98">
-                            Initialize Account Identity Node
-                        </button>
-                    </form>
-
-                    <div class="text-center pt-2">
-                        <p class="text-xs text-slate-400 font-medium">Already registered? <button onclick="toggleAuthSubView('login')" class="text-sky-600 font-bold hover:underline">Sign in instead</button></p>
-                    </div>
-                </div>
+    <!-- TOP BAR SECTION -->
+    <div class="bg-slate-900 text-slate-300 text-[11px] py-2 border-b border-slate-800">
+        <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-envelope text-purple-400"></i> website-support@jobinminute.com
+                </span>
             </div>
-        </section>
-
-        <section id="view-terms" class="view-frame-node py-8 max-w-2xl mx-auto space-y-4">
-            <h2 class="text-2xl font-black text-slate-900">Terms of Services</h2>
-            <div class="bg-white border border-slate-100 shadow-lg rounded-2xl p-6 text-xs text-slate-500 leading-relaxed">
-                <p>Platform access structures and legal framework patterns for JobInMinute users will be populated here.</p>
+            <div class="flex items-center gap-4">
+                <a href="https://linkedin.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-linkedin text-sm"></i></a>
+                <a href="https://facebook.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-facebook text-sm"></i></a>
+                <a href="https://instagram.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-instagram text-sm"></i></a>
             </div>
-        </section>
+        </div>
+    </div>
 
-        <section id="view-privacy" class="view-frame-node py-8 max-w-2xl mx-auto space-y-4">
-            <h2 class="text-2xl font-black text-slate-900">Privacy Policy</h2>
-            <div class="bg-white border border-slate-100 shadow-lg rounded-2xl p-6 text-xs text-slate-500 leading-relaxed">
-                <p>Data isolation protocols, identity authorization storage safety, and system data parameters will be outlined here.</p>
+    <!-- Header Injection Node -->
+    <div id="header-node"></div>
+
+    <!-- MAIN HERO CONTENT (Replaces the broken "Verifying Account" loader) -->
+    <main class="flex-grow flex items-center justify-center py-16">
+        <div class="container mx-auto px-4 max-w-4xl text-center space-y-6">
+            <span class="text-xs font-bold uppercase tracking-widest text-purple-600 bg-purple-50 px-4 py-1.5 rounded-full">
+                Welcome to JobInMinute
+            </span>
+            <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none">
+                Connecting Technical Experts <br>With Global Workspaces.
+            </h1>
+            <p class="text-sm text-slate-500 max-w-xl mx-auto leading-relaxed">
+                Log in to access your direct workspace dashboard panel, configure job application matrices, or review active incoming candidates.
+            </p>
+            <div id="action-routing-zone" class="pt-4 flex justify-center gap-4">
+                <!-- Fallback actions when no active session is loaded yet -->
+                <a href="login.html" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-6 py-3 rounded-xl shadow-md transition">
+                    Access Portal Gate
+                </a>
             </div>
-        </section>
-
+        </div>
     </main>
 
-    <div id="global-footer-root"></div>
+    <!-- Footer Injection Node -->
+    <div id="footer-node"></div>
 
-    <script type="module" src="firebase.js"></script>
-    <script type="module">
-        let currentActiveRoleMode = "employee";
+    <script>
+        function setupDropdownInteractions() {
+            const menuBtn = document.getElementById('user-menu-button');
+            const menuDropdown = document.getElementById('logged-in-dropdown-menu');
 
-        async function injectTemplateComponent(elementId, assetPath, optionalCallback) {
-            try {
-                const response = await fetch(assetPath);
-                if (!response.ok) throw new Error(`Asset delivery fault: ${assetPath}`);
-                document.getElementById(elementId).innerHTML = await response.text();
-                if(optionalCallback) optionalCallback();
-            } catch(e) { console.error("Mount system fault error:", e); }
+            if (menuBtn && menuDropdown) {
+                menuBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    menuDropdown.classList.toggle('hidden');
+                };
+                document.addEventListener('click', function(e) {
+                    if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+                        menuDropdown.classList.add('hidden');
+                    }
+                });
+            }
         }
 
-        window.switchAppView = function(viewKeyId) {
-            // Handle logical routing blocks
-            const sessionActive = localStorage.getItem("userRoleToken");
-            
-            // If user clicks home/about and has a valid session token, keep home template clean instead of showing credentials form
-            if (viewKeyId === 'home' && sessionActive) {
-                const formBox = document.getElementById('auth-gate-box');
-                if (formBox) formBox.style.display = 'none';
-            }
+        async function loadLayout() {
+            try {
+                const h = await fetch('header.html'); 
+                if(h.ok) {
+                    document.getElementById('header-node').innerHTML = await h.text();
+                    
+                    // Detect what session is actually active
+                    const currentRole = localStorage.getItem("userRoleToken");
+                    let cachedEmail = "";
+                    let cachedName = "";
 
-            document.querySelectorAll('.view-frame-node').forEach(frame => frame.classList.remove('active-frame'));
-            const targetFrame = document.getElementById(`view-${viewKeyId}`);
-            if (targetFrame) {
-                targetFrame.classList.add('active-frame');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-            console.log(`Navigation matrix updated to frame: ${viewKeyId}`);
-        };
-
-        window.toggleAuthSubView = function(subTargetKey) {
-            if(subTargetKey === 'login') {
-                document.getElementById('auth-sub-login').classList.remove('hidden');
-                document.getElementById('auth-sub-register').classList.add('hidden');
-            } else {
-                document.getElementById('auth-sub-login').classList.add('hidden');
-                document.getElementById('auth-sub-register').classList.remove('hidden');
-            }
-        };
-
-        window.switchRegistrationFormType = function(selectedRole) {
-            currentActiveRoleMode = selectedRole;
-            const empTab = document.getElementById('tab-reg-emp');
-            const orgTab = document.getElementById('tab-reg-org');
-            const empFields = document.getElementById('form-fields-employee');
-            const orgFields = document.getElementById('form-fields-employer');
-
-            if(selectedRole === 'employee') {
-                empTab.className = "py-2.5 rounded-lg text-center bg-white text-slate-950 shadow-sm transition-all";
-                orgTab.className = "py-2.5 rounded-lg text-center hover:text-slate-800 transition-all";
-                empFields.classList.remove('hidden');
-                orgFields.classList.add('hidden');
-            } else {
-                orgTab.className = "py-2.5 rounded-lg text-center bg-white text-slate-950 shadow-sm transition-all";
-                empTab.className = "py-2.5 rounded-lg text-center hover:text-slate-800 transition-all";
-                orgFields.classList.remove('hidden');
-                empFields.classList.add('hidden');
-            }
-        };
-
-        window.getCurrentSelectedRegistrationRole = function() {
-            return currentActiveRoleMode;
-        };
-
-        // Initialize Dynamic Component Loading on Mount
-        document.addEventListener("DOMContentLoaded", () => {
-            // Check session bounds immediately
-            const sessionActive = localStorage.getItem("userRoleToken");
-
-            injectTemplateComponent("global-header-root", "header.html", () => {
-                // Synchronization routine after header maps safely
-                if(sessionActive) {
-                    const btn = document.getElementById('logged-out-btn');
-                    const dropdown = document.getElementById('logged-in-dropdown');
-                    if(btn && dropdown) {
-                        btn.classList.add('hidden');
-                        dropdown.classList.remove('hidden');
+                    if (currentRole === "employer") {
+                        cachedEmail = localStorage.getItem("employerEmail") || "shishirbharti51@gmail.com";
+                        cachedName = localStorage.getItem("employerName") || "Shishir Bharti";
+                    } else if (currentRole === "employee") {
+                        cachedEmail = localStorage.getItem("employeeEmail") || "shishirbharti51@gmail.com";
+                        cachedName = localStorage.getItem("employeeName") || "Soni Singh";
                     }
-                }
-            });
 
-            injectTemplateComponent("global-footer-root", "footer.html");
-            
-            injectTemplateComponent("view-home", "home.html", () => {
-                // If logged in, safely obscure login form inside the domestic frame node block
-                if (sessionActive) {
-                    const formBox = document.getElementById('auth-gate-box');
-                    if (formBox) formBox.style.display = 'none';
-                }
-            });
+                    const loggedOutBtn = document.getElementById('logged-out-btn');
+                    const loggedInDropdown = document.getElementById('logged-in-dropdown');
+                    const headerDisplayName = document.getElementById('header-display-name');
+                    const popoverUserName = document.getElementById('popover-user-name');
+                    const popoverUserEmail = document.getElementById('popover-user-email');
+                    const routingZone = document.getElementById('action-routing-zone');
 
-            injectTemplateComponent("view-about", "about.html");
-        });
+                    // If a valid session exists, immediately update the layout headers
+                    if (currentRole && loggedOutBtn && loggedInDropdown) {
+                        loggedOutBtn.classList.add('hidden');
+                        loggedInDropdown.classList.remove('hidden');
+                        if(headerDisplayName) headerDisplayName.innerText = cachedName;
+                        if(popoverUserName) popoverUserName.innerText = cachedName;
+                        if(popoverUserEmail) popoverUserEmail.innerText = cachedEmail;
+
+                        // Dynamically change the big button in the middle to point to the correct workspace dashboard
+                        if(routingZone) {
+                            const destinationPage = currentRole === "employer" ? "employer.html" : "workspace.html";
+                            const themeColor = currentRole === "employer" ? "bg-purple-600 hover:bg-purple-700" : "bg-blue-600 hover:bg-blue-700";
+                            routingZone.innerHTML = `
+                                <a href="${destinationPage}" class="${themeColor} text-white text-xs font-bold px-6 py-3 rounded-xl shadow-md transition">
+                                    Go directly to your ${currentRole === "employer" ? "Corporate Dashboard" : "Employee Workspace"} →
+                                </a>
+                            `;
+                        }
+                    }
+                    setupDropdownInteractions();
+                }
+
+                const f = await fetch('footer.html'); 
+                if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
+            } catch(err) {
+                console.error("Layout mounting context failure:", err);
+            }
+        }
+        window.addEventListener('DOMContentLoaded', loadLayout);
     </script>
 </body>
 </html>
