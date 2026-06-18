@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Gateway | JobInMinute</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
+
+    <!-- TOP BAR SECTION -->
+    <div class="bg-slate-900 text-slate-300 text-[11px] py-2 border-b border-slate-800">
+        <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-envelope text-purple-400"></i> website-support@jobinminute.com
+                </span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="https://linkedin.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-linkedin text-sm"></i></a>
+                <a href="https://facebook.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-facebook text-sm"></i></a>
+                <a href="https://instagram.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-instagram text-sm"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Injection Node -->
+    <div id="header-node"></div>
+
+    <!-- MAIN ACCESS GATEWAY SECTION -->
+    <main class="flex-grow flex items-center justify-center py-12 px-4">
+        <div class="bg-white max-w-md w-full rounded-3xl border border-slate-100 shadow-xl p-8 space-y-6">
+            <div class="text-center space-y-2">
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Portal Gateway</h1>
+                <p class="text-xs text-slate-400">Select your authorization channel below to log into your workspace session.</p>
+            </div>
+
+            <!-- Profile Channel Toggle Tabs -->
+            <div class="bg-slate-100 p-1 rounded-xl grid grid-cols-2 text-xs font-bold text-center text-slate-500">
+                <button id="tab-employer" onclick="switchLoginChannel('employer')" class="py-2.5 rounded-lg bg-white text-slate-900 shadow-sm transition-all">
+                    <i class="fa-solid fa-building-user mr-1.5 text-purple-600"></i> Employer
+                </button>
+                <button id="tab-employee" onclick="switchLoginChannel('employee')" class="py-2.5 rounded-lg hover:text-slate-900 transition-all">
+                    <i class="fa-solid fa-user-tie mr-1.5 text-blue-500"></i> Candidate
+                </button>
+            </div>
+
+            <!-- Dynamic Form Wrapper -->
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] uppercase font-black tracking-wider text-slate-400 mb-1">Email Address</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-envelope absolute left-4 top-3.5 text-slate-400 text-xs"></i>
+                        <input type="email" id="auth-email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-xs outline-none focus:border-purple-500 transition" placeholder="Enter registration email">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] uppercase font-black tracking-wider text-slate-400 mb-1">Account Password</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-4 top-3.5 text-slate-400 text-xs"></i>
+                        <input type="password" required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-xs outline-none focus:border-purple-500 transition" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition shadow-md shadow-purple-100">
+                    Authenticate Employer Profile →
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer Injection Node -->
+    <div id="footer-node"></div>
+
+    <script>
+        // Set the initial chosen routing track to employer
+        let chosenChannel = 'employer';
+
+        function switchLoginChannel(channel) {
+            chosenChannel = channel;
+            const employerBtn = document.getElementById('tab-employer');
+            const employeeBtn = document.getElementById('tab-employee');
+            const submitBtn = document.getElementById('submit-btn');
+            const emailInput = document.getElementById('auth-email');
+
+            if (channel === 'employer') {
+                employerBtn.className = "py-2.5 rounded-lg bg-white text-slate-900 shadow-sm transition-all";
+                employeeBtn.className = "py-2.5 rounded-lg hover:text-slate-900 transition-all";
+                submitBtn.className = "w-full bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition shadow-md";
+                submitBtn.innerText = "Authenticate Employer Profile →";
+                emailInput.focus();
+            } else {
+                employeeBtn.className = "py-2.5 rounded-lg bg-white text-slate-900 shadow-sm transition-all";
+                employerBtn.className = "py-2.5 rounded-lg hover:text-slate-900 transition-all";
+                submitBtn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition shadow-md";
+                submitBtn.innerText = "Authenticate Candidate Profile →";
+                emailInput.focus();
+            }
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const inputEmailValue = document.getElementById('auth-email').value;
+
+            // Securely isolate keys based on chosen workspace tracking criteria
+            if (chosenChannel === 'employer') {
+                localStorage.setItem("userRoleToken", "employer");
+                localStorage.setItem("employerEmail", inputEmailValue);
+                localStorage.setItem("employerName", "Shishir Bharti");
+                window.location.href = "employer.html";
+            } else {
+                localStorage.setItem("userRoleToken", "employee");
+                localStorage.setItem("employeeEmail", inputEmailValue);
+                localStorage.setItem("employeeName", "Soni Singh");
+                window.location.href = "workspace.html";
+            }
+        }
+
+        async function loadLayout() {
+            try {
+                const h = await fetch('header.html'); 
+                if(h.ok) document.getElementById('header-node').innerHTML = await h.text();
+                
+                const f = await fetch('footer.html'); 
+                if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
+            } catch(err) {
+                console.error("Gateway layout template mount fault:", err);
+            }
+        }
+        window.addEventListener('DOMContentLoaded', loadLayout);
+    </script>
+</body>
+</html>
