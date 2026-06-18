@@ -9,20 +9,43 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
+    <!-- TOP BAR SECTION -->
+    <div class="bg-slate-900 text-slate-300 text-[11px] py-2 border-b border-slate-800">
+        <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-envelope text-purple-400"></i> shishirbharti51@gmail.com
+                </span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="https://linkedin.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-linkedin text-sm"></i></a>
+                <a href="https://facebook.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-facebook text-sm"></i></a>
+                <a href="https://instagram.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-instagram text-sm"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Injection Node -->
     <div id="header-node"></div>
 
     <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
-        
         <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm mb-6 space-y-4">
-            <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Corporate Portal</span>
-                <h1 class="text-2xl font-black text-slate-900 mt-2">Incoming Applications Matrix</h1>
-                <p class="text-xs text-slate-400">Review candidate resume pools and modulate corporate job listings status.</p>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Corporate Portal</span>
+                    <h1 class="text-2xl font-black text-slate-900 mt-2">Incoming Applications Matrix</h1>
+                    <p class="text-xs text-slate-400">Review candidate resume pools and modulate corporate job listings status.</p>
+                </div>
+                <div class="mt-3 md:mt-0">
+                    <a href="workspace.html" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl transition inline-block">
+                        <i class="fa-solid fa-user-tie mr-1.5 text-blue-500"></i> Go to Employee Dashboard
+                    </a>
+                </div>
             </div>
 
             <div class="relative max-w-xl">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
-                <input type="text" id="candidate-search-input" onkeyup="searchCandidatesAndPlatform()" placeholder="Search live candidates by name, target position, skill rules, or web pages..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-xs outline-none focus:border-purple-500 transition">
+                <input type="text" id="candidate-search-input" onkeyup="searchCandidatesAndPlatform()" placeholder="Search live candidates by name, target position..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-xs outline-none focus:border-purple-500 transition">
             </div>
         </div>
 
@@ -70,6 +93,10 @@
     <div id="footer-node"></div>
 
     <script>
+        localStorage.setItem("userRoleToken", "employer");
+        localStorage.setItem("loggedInUserEmail", "shishirbharti51@gmail.com");
+        localStorage.setItem("loggedInUserName", "Shishir Bharti");
+
         function updateDecision(dropdown) {
             if(dropdown.value === 'select') {
                 dropdown.className = "bg-emerald-50 border border-emerald-200 text-xs font-bold p-2 rounded-xl text-emerald-700 outline-none transition-all";
@@ -88,62 +115,63 @@
 
         function searchCandidatesAndPlatform() {
             const query = document.getElementById('candidate-search-input').value.toLowerCase();
-            
-            // Core Website Redirect Keyword Queries
             if (query === 'home' || query === 'about us') {
-                alert(`Navigating away from isolated dashboard context to platform page: ${query}`);
                 window.location.href = query === 'home' ? 'index.html' : 'about.html';
                 return;
             }
-
-            // Filter applicant components in real-time
             document.querySelectorAll('.candidate-card').forEach(card => {
                 const name = card.querySelector('.candidate-name').innerText.toLowerCase();
                 const appliedJob = card.querySelector('.candidate-job').innerText.toLowerCase();
                 const textBody = card.innerText.toLowerCase();
-
-                if (name.includes(query) || appliedJob.includes(query) || textBody.includes(query)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = (name.includes(query) || appliedJob.includes(query) || textBody.includes(query)) ? 'block' : 'none';
             });
+        }
+
+        function setupDropdownInteractions() {
+            const menuBtn = document.getElementById('user-menu-button');
+            const menuDropdown = document.getElementById('logged-in-dropdown-menu');
+
+            if (menuBtn && menuDropdown) {
+                menuBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    menuDropdown.classList.toggle('hidden');
+                };
+                document.addEventListener('click', function(e) {
+                    if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+                        menuDropdown.classList.add('hidden');
+                    }
+                });
+            }
         }
 
         async function loadLayout() {
             try {
-                // Secure component injector for system layout header structures
                 const h = await fetch('header.html'); 
                 if(h.ok) {
                     document.getElementById('header-node').innerHTML = await h.text();
                     
-                    // Synchronize corporate authorization tokens instantly with the interface elements
-                    const sessionActive = localStorage.getItem("userRoleToken");
-                    const cachedEmail = localStorage.getItem("loggedInUserEmail") || "employer@company.com";
-                    const cachedName = localStorage.getItem("loggedInUserName") || "Corporate Manager";
+                    const cachedEmail = localStorage.getItem("loggedInUserEmail");
+                    const cachedName = localStorage.getItem("loggedInUserName");
 
-                    const defaultLogoutBtn = document.getElementById('logged-out-btn');
-                    const defaultDropdownContainer = document.getElementById('logged-in-dropdown');
-                    const uiDisplayName = document.getElementById('header-display-name');
-                    const popoverProfileName = document.getElementById('popover-user-name');
-                    const popoverProfileEmail = document.getElementById('popover-user-email');
+                    const loggedOutBtn = document.getElementById('logged-out-btn');
+                    const loggedInDropdown = document.getElementById('logged-in-dropdown');
+                    const headerDisplayName = document.getElementById('header-display-name');
+                    const popoverUserName = document.getElementById('popover-user-name');
+                    const popoverUserEmail = document.getElementById('popover-user-email');
 
-                    // If token context validates successfully, decouple auth walls from display logic
-                    if (defaultLogoutBtn && defaultDropdownContainer) {
-                        defaultLogoutBtn.classList.add('hidden');
-                        defaultDropdownContainer.classList.remove('hidden');
-                        if(uiDisplayName) uiDisplayName.innerText = cachedName;
-                        if(popoverProfileName) popoverProfileName.innerText = cachedName;
-                        if(popoverProfileEmail) popoverProfileEmail.innerText = cachedEmail;
+                    if (loggedOutBtn && loggedInDropdown) {
+                        loggedOutBtn.classList.add('hidden');
+                        loggedInDropdown.classList.remove('hidden');
+                        if(headerDisplayName) headerDisplayName.innerText = cachedName;
+                        if(popoverUserName) popoverUserName.innerText = cachedName;
+                        if(popoverUserEmail) popoverUserEmail.innerText = cachedEmail;
                     }
+                    setupDropdownInteractions();
                 }
-                
-                // Secure component injector for system layout footer structures
                 const f = await fetch('footer.html'); 
                 if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
-                
-            } catch(layoutFault) {
-                console.error("Corporate portal layout sync failure:", layoutFault);
+            } catch(err) {
+                console.error("Layout mounting fault:", err);
             }
         }
         window.addEventListener('DOMContentLoaded', loadLayout);
