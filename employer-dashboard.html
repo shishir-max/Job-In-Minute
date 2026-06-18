@@ -9,27 +9,32 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <!-- GLOBAL NAVIGATION HEADER -->
     <div id="header-node"></div>
 
     <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
-        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm mb-6">
-            <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Corporate Portal</span>
-            <h1 class="text-2xl font-black text-slate-900 mt-2">Incoming Applications Matrix</h1>
-            <p class="text-xs text-slate-400">Review candidate resume pools and modulate corporate job listings status.</p>
+        
+        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm mb-6 space-y-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Corporate Portal</span>
+                <h1 class="text-2xl font-black text-slate-900 mt-2">Incoming Applications Matrix</h1>
+                <p class="text-xs text-slate-400">Review candidate resume pools and modulate corporate job listings status.</p>
+            </div>
+
+            <div class="relative max-w-xl">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                <input type="text" id="candidate-search-input" onkeyup="searchCandidatesAndPlatform()" placeholder="Search live candidates by name, target position, skill rules, or web pages..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-xs outline-none focus:border-purple-500 transition">
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Received Resumes (Left) -->
-            <div class="lg:col-span-2 space-y-4">
+            <div class="lg:col-span-2 space-y-4" id="candidate-cards-list">
                 <h2 class="text-xs font-black uppercase tracking-wider text-slate-400 mb-2"><i class="fa-solid fa-users-gear text-purple-500 mr-2"></i> Received Applications</h2>
 
-                <!-- Application Node 1 -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-4 candidate-card">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h3 class="font-bold text-sm text-slate-900">Soni Singh</h3>
-                            <p class="text-[11px] text-slate-400">Position: <span class="font-semibold text-slate-700">US IT Recruitment Lead</span></p>
+                            <h3 class="font-bold text-sm text-slate-900 candidate-name">Soni Singh</h3>
+                            <p class="text-[11px] text-slate-400">Position: <span class="font-semibold text-slate-700 candidate-job">US IT Recruitment Lead</span></p>
                         </div>
                         <select onchange="updateDecision(this)" class="bg-slate-50 border border-slate-200 text-xs font-bold p-2 rounded-xl outline-none text-slate-700">
                             <option value="pending">Awaiting Review</option>
@@ -43,7 +48,6 @@
                 </div>
             </div>
 
-            <!-- Job Status Modulator (Right) -->
             <div class="space-y-4">
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-4">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 flex items-center">
@@ -57,20 +61,12 @@
                                 <option value="closed">Closed</option>
                             </select>
                         </div>
-                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/60 flex justify-between items-center">
-                            <h4 class="text-xs font-bold text-slate-800">Senior Java Software Engineer</h4>
-                            <select onchange="toggleJob(this)" class="bg-white border text-[10px] font-bold p-1 rounded-lg outline-none">
-                                <option value="active">Active</option>
-                                <option value="closed">Closed</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- GLOBAL FOOTER -->
     <div id="footer-node"></div>
 
     <script>
@@ -83,9 +79,35 @@
                 alert("Decision Updated: Application marked as rejected.");
             }
         }
+        
         function toggleJob(dropdown) {
             alert(`Job status switched to: ${dropdown.value.toUpperCase()}`);
         }
+
+        function searchCandidatesAndPlatform() {
+            const query = document.getElementById('candidate-search-input').value.toLowerCase();
+            
+            // Core Website Redirect Keyword Queries
+            if (query === 'home' || query === 'about us') {
+                alert(`Navigating away from isolated dashboard context to platform page: ${query}`);
+                window.location.href = query === 'home' ? 'index.html' : 'about.html';
+                return;
+            }
+
+            // Filter applicant components in real-time
+            document.querySelectorAll('.candidate-card').forEach(card => {
+                const name = card.querySelector('.candidate-name').innerText.toLowerCase();
+                const appliedJob = card.querySelector('.candidate-job').innerText.toLowerCase();
+                const textBody = card.innerText.toLowerCase();
+
+                if (name.includes(query) || appliedJob.includes(query) || textBody.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
         async function loadLayout() {
             const h = await fetch('header.html'); if(h.ok) document.getElementById('header-node').innerHTML = await h.text();
             const f = await fetch('footer.html'); if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
