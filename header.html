@@ -1,76 +1,42 @@
-<header class="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-50">
+<header class="bg-white border-b border-slate-100 sticky top-0 z-40 shadow-sm">
     <div class="container mx-auto px-4 py-4 max-w-6xl flex justify-between items-center">
-        
-        <a href="index.html" class="flex items-center space-x-2">
-            <div class="bg-blue-600 text-white font-black text-xs px-2.5 py-1.5 rounded-lg">JIM</div>
-            <span class="text-xl font-black tracking-tight text-slate-900">JobInMinute<span class="text-blue-600">.com</span></span>
+        <a href="index.html" class="flex items-center gap-2 group">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
+                <i class="fa-solid fa-bolt text-sm"></i>
+            </div>
+            <span class="text-base font-black tracking-tight text-slate-900">JobIn<span class="text-purple-600">Minute</span></span>
         </a>
 
-        <nav class="hidden md:flex space-x-8 text-xs font-bold text-slate-600">
-            <a href="index.html" class="hover:text-blue-600 transition">Home</a>
-            <a href="about.html" class="hover:text-blue-600 transition">About Us</a>
-        </nav>
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition mr-2">Home</a>
+            <a href="login.html" id="logged-out-btn" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Sign In</a>
 
-        <div class="relative" id="nav-auth-zone">
-            <a href="index.html" id="logged-out-btn" class="hidden bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition">SIGN IN / REGISTER</a>
-
-            <div id="logged-in-dropdown" class="hidden flex items-center">
-                <button onclick="toggleAccountMenuMenu(event)" class="bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold px-4 py-2.5 rounded-xl flex items-center space-x-2 hover:bg-slate-100 transition focus:outline-none">
-                    <i class="fa-solid fa-circle-user text-blue-600 text-sm"></i>
-                    <span id="header-display-name">My Account</span>
+            <!-- Dropdown Structure -->
+            <div id="logged-in-dropdown" class="relative hidden">
+                <button id="user-menu-button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 transition">
+                    <div class="w-5 h-5 rounded-md bg-purple-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-user"></i></div>
+                    <span id="header-display-name">Loading...</span>
                     <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                 </button>
 
-                <div id="account-popover-menu" class="hidden absolute right-0 top-12 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50">
-                    <div class="px-4 py-2.5 border-b border-slate-50">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Account Identity</p>
-                        <p id="popover-user-name" class="text-xs font-black text-slate-800 mt-0.5 truncate">User Profile</p>
-                        <p id="popover-user-email" class="text-[11px] text-slate-400 truncate">user@mail.com</p>
+                <div id="logged-in-dropdown-menu" class="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 hidden z-50">
+                    <div class="px-4 py-2 border-b border-slate-50 mb-1">
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Signed Account</p>
+                        <p id="popover-user-name" class="text-xs font-black text-slate-800 truncate">User Profile</p>
+                        <p id="popover-user-email" class="text-[10px] text-slate-400 truncate">user@email.com</p>
                     </div>
-                    <div class="p-1">
-                        <button onclick="executeSessionLogout()" class="w-full text-left font-bold text-xs text-rose-600 hover:bg-rose-50 px-3 py-2 rounded-xl transition flex items-center space-x-2">
-                            <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
-                            <span>Terminate Session (Logout)</span>
-                        </button>
-                    </div>
+                    <a href="employer.html" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-chart-pie text-purple-500 w-4"></i> Corporate Panel
+                    </a>
+                    <a href="workspace.html" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-user-tie text-blue-500 w-4"></i> Employee Workspace
+                    </a>
+                    <hr class="border-slate-50 my-1">
+                    <button onclick="localStorage.clear(); window.location.href='index.html';" class="w-full flex items-center gap-2 px-4 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50/50 transition text-left">
+                        <i class="fa-solid fa-arrow-right-from-bracket w-4"></i> Disconnect Account
+                    </button>
                 </div>
             </div>
         </div>
-
     </div>
 </header>
-
-<script>
-    function toggleAccountMenuMenu(event) {
-        event.stopPropagation();
-        const popover = document.getElementById('account-popover-menu');
-        popover.classList.toggle('hidden');
-    }
-
-    function executeSessionLogout() {
-        localStorage.removeItem("userRoleToken");
-        localStorage.removeItem("loggedInUserEmail");
-        localStorage.removeItem("loggedInUserName");
-        alert("Session parameters dropped clean. Redirecting to home index.");
-        window.location.href = "index.html";
-    }
-
-    // Initialize Header Session View States
-    (function syncHeaderState() {
-        const userSessionRole = localStorage.getItem("userRoleToken") || "employee";
-        const email = localStorage.getItem("loggedInUserEmail") || "shishirbharti51@gmail.com";
-        const name = localStorage.getItem("loggedInUserName") || "shishir bharti";
-
-        // Always show profile dropdown on dashboard views
-        document.getElementById('logged-out-btn').classList.add('hidden');
-        document.getElementById('logged-in-dropdown').classList.remove('hidden');
-        document.getElementById('header-display-name').innerText = name;
-        document.getElementById('popover-user-name').innerText = name;
-        document.getElementById('popover-user-email').innerText = email;
-
-        window.addEventListener('click', () => {
-            const popover = document.getElementById('account-popover-menu');
-            if(popover) popover.classList.add('hidden');
-        });
-    })();
-</script>
