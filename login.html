@@ -14,11 +14,13 @@
     <main class="flex-grow flex items-center justify-center py-12 px-4">
         <div class="bg-white max-w-md w-full rounded-3xl border border-slate-100 shadow-xl p-8 space-y-6">
             
+            <!-- Toggle between Sign In and Register -->
             <div class="flex justify-center border-b border-slate-100 pb-4 gap-6 text-sm font-bold">
                 <button id="mode-login" onclick="toggleAuthMode('login')" class="text-purple-600 border-b-2 border-purple-600 pb-2">Sign In</button>
                 <button id="mode-register" onclick="toggleAuthMode('register')" class="text-slate-400 hover:text-slate-600 pb-2">Create Account</button>
             </div>
 
+            <!-- Role Selector -->
             <div class="bg-slate-100 p-1 rounded-xl grid grid-cols-2 text-xs font-bold text-center text-slate-500">
                 <button id="tab-employer" onclick="switchRole('employer')" class="py-2.5 rounded-lg bg-white text-slate-900 shadow-sm">
                     <i class="fa-solid fa-building-user mr-1.5 text-purple-600"></i> Employer
@@ -36,7 +38,7 @@
 
                 <div>
                     <label class="block text-[10px] uppercase font-black tracking-wider text-slate-400 mb-1">Email Address</label>
-                    <input type="email" id="auth-email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none" placeholder="name@company.com">
+                    <input type="email" id="auth-email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none" placeholder="name@domain.com">
                 </div>
 
                 <div>
@@ -56,12 +58,6 @@
     <script>
         let currentRole = 'employer';
         let authMode = 'login';
-
-        // Simulated Accounts Database to resolve your wrong-channel glitch
-        const registeredUsers = {
-            "shishirbharti51@gmail.com": { role: "employer", name: "Shishir Bharti" },
-            "sonisingh@jobinminute.com": { role: "employee", name: "Soni Singh" }
-        };
 
         function toggleAuthMode(mode) {
             authMode = mode;
@@ -97,32 +93,44 @@
             const name = document.getElementById('auth-name').value.trim();
 
             if (authMode === 'register') {
-                registeredUsers[email] = { role: currentRole, name: name || "New User" };
-                alert("Account created successfully! Switching to sign in.");
+                // Store registration data in localStorage dynamically
+                let users = JSON.parse(localStorage.getItem("appUsersDatabase")) || {};
+                users[email] = { role: currentRole, name: name || (currentRole === 'employer' ? "Shishir Bharti" : "Soni Singh") };
+                localStorage.setItem("appUsersDatabase", JSON.stringify(users));
+                
+                alert("Account created successfully! Switching to sign in tab.");
                 toggleAuthMode('login');
                 return;
             }
 
-            // Strictly check roles to prevent candidate/employer mixups
-            const user = registeredUsers[email];
-            if (user) {
-                if (user.role !== currentRole) {
-                    alert(`Access Denied! This email is registered as an ${user.role.toUpperCase()}, not a ${currentRole.toUpperCase()}. Please switch tabs.`);
+            // Local fallback seed data database profiles 
+            let users = JSON.parse(localStorage.getItem("appUsersDatabase")) || {};
+            if (!users["shishirbharti51@gmail.com"]) {
+                users["shishirbharti51@gmail.com"] = { role: "employer", name: "Shishir Bharti" };
+            }
+            if (!users["sonisingh@jobinminute.com"]) {
+                users["sonisingh@jobinminute.com"] = { role: "employee", name: "Soni Singh" };
+            }
+            localStorage.setItem("appUsersDatabase", JSON.stringify(users));
+
+            const verifiedUser = users[email];
+            if (verifiedUser) {
+                if (verifiedUser.role !== currentRole) {
+                    alert(`Access Denied! This email profile is registered as an ${verifiedUser.role.toUpperCase()} channel. Select the correct tab.`);
                     return;
                 }
                 
-                localStorage.setItem("userRoleToken", user.role);
+                localStorage.setItem("userRoleToken", verifiedUser.role);
                 localStorage.setItem("userEmail", email);
-                localStorage.setItem("userName", user.name);
-                
-                window.location.href = user.role === 'employer' ? "employer.html" : "employee-dashboard.html";
+                localStorage.setItem("userName", verifiedUser.name);
             } else {
-                // Temporary fallback if email isn't in simulation block yet
+                // Create profile context on the fly if not exists
                 localStorage.setItem("userRoleToken", currentRole);
                 localStorage.setItem("userEmail", email);
                 localStorage.setItem("userName", currentRole === 'employer' ? "Shishir Bharti" : "Soni Singh");
-                window.location.href = currentRole === 'employer' ? "employer.html" : "employee-dashboard.html";
             }
+
+            window.location.href = currentRole === 'employer' ? "employer-dashboard.html" : "employee-dashboard.html";
         }
 
         async function loadLayout() {
