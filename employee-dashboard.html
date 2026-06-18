@@ -9,30 +9,36 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <!-- GLOBAL NAVIGATION HEADER -->
     <div id="header-node"></div>
 
     <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
-        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-            <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Employee Workspace</span>
-                <h1 class="text-2xl font-black text-slate-900 mt-2">Available Job Openings Matrix</h1>
-                <p class="text-xs text-slate-400">Discover live career opportunities filtered by your technical sector.</p>
+        
+        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm mb-6 space-y-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Employee Workspace</span>
+                    <h1 class="text-2xl font-black text-slate-900 mt-2">Available Job Openings Matrix</h1>
+                    <p class="text-xs text-slate-400">Discover live career opportunities filtered by your technical sector.</p>
+                </div>
+                <div class="mt-3 md:mt-0 bg-slate-100 p-1 rounded-xl text-xs font-bold text-slate-600 flex gap-2">
+                    <button onclick="filterSector('all')" class="px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm">All Sectors</button>
+                    <button onclick="filterSector('it')" class="px-3 py-1.5 rounded-lg hover:bg-white/50">Information Tech</button>
+                    <button onclick="filterSector('health')" class="px-3 py-1.5 rounded-lg hover:bg-white/50">Healthcare</button>
+                </div>
             </div>
-            <div class="mt-3 md:mt-0 bg-slate-100 p-1 rounded-xl text-xs font-bold text-slate-600 flex gap-2">
-                <button onclick="filterSector('all')" class="px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm">All Sectors</button>
-                <button onclick="filterSector('it')" class="px-3 py-1.5 rounded-lg hover:bg-white/50">Information Tech</button>
-                <button onclick="filterSector('health')" class="px-3 py-1.5 rounded-lg hover:bg-white/50">Healthcare</button>
+
+            <div class="relative max-w-xl">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                <input type="text" id="job-search-input" onkeyup="searchJobsAndPlatform()" placeholder="Search active job titles, sectors, keywords, or website pages..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-xs outline-none focus:border-blue-500 transition">
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Job Listings (Left) -->
-            <div class="lg:col-span-2 space-y-4">
+            <div class="lg:col-span-2 space-y-4" id="job-cards-list">
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3 job-card" data-sector="it">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h3 class="font-bold text-base text-slate-900">Senior Java Software Engineer</h3>
+                            <h3 class="font-bold text-base text-slate-900 job-title">Senior Java Software Engineer</h3>
                             <p class="text-xs text-slate-400">Enterprise Systems Corp · Remote</p>
                         </div>
                         <span class="text-[10px] uppercase font-bold tracking-wider text-sky-600 bg-sky-50 px-2.5 py-1 rounded-md">IT Sector</span>
@@ -47,7 +53,7 @@
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3 job-card" data-sector="health">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h3 class="font-bold text-base text-slate-900">Clinical Data Analyst</h3>
+                            <h3 class="font-bold text-base text-slate-900 job-title">Clinical Data Analyst</h3>
                             <p class="text-xs text-slate-400">Implant Medical Care · Indore</p>
                         </div>
                         <span class="text-[10px] uppercase font-bold tracking-wider text-teal-600 bg-teal-50 px-2.5 py-1 rounded-md">Healthcare</span>
@@ -60,7 +66,6 @@
                 </div>
             </div>
 
-            <!-- Feedback Feed (Right) -->
             <div class="space-y-4">
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-4">
                     <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 flex items-center">
@@ -74,19 +79,11 @@
                             </div>
                             <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Selected ✓</span>
                         </div>
-                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/60 flex justify-between items-center">
-                            <div>
-                                <h4 class="text-xs font-bold text-slate-800">UI/UX Layout Designer</h4>
-                                <p class="text-[10px] text-slate-400">Kinetics Source Corp</p>
-                            </div>
-                            <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded">Rejected ✕</span>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- UPLOAD / PASTE RESUME MODAL -->
         <div id="apply-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
             <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100">
                 <div class="flex justify-between items-center">
@@ -110,7 +107,6 @@
         </div>
     </main>
 
-    <!-- GLOBAL FOOTER -->
     <div id="footer-node"></div>
 
     <script>
@@ -119,6 +115,29 @@
                 c.style.display = (s === 'all' || c.getAttribute('data-sector') === s) ? 'block' : 'none';
             });
         }
+
+        function searchJobsAndPlatform() {
+            const query = document.getElementById('job-search-input').value.toLowerCase();
+            
+            // Core Website Redirect Keyword Queries
+            if (query === 'home' || query === 'about us') {
+                alert(`Navigating away from isolated dashboard context to platform page: ${query}`);
+                window.location.href = query === 'home' ? 'index.html' : 'about.html';
+                return;
+            }
+
+            // Real-time filtering logic
+            document.querySelectorAll('.job-card').forEach(card => {
+                const title = card.querySelector('.job-title').innerText.toLowerCase();
+                const description = card.innerText.toLowerCase();
+                if (title.includes(query) || description.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
         function openApplyModal(title) {
             document.getElementById('modal-title').innerText = `Apply For: ${title}`;
             document.getElementById('apply-modal').classList.remove('hidden');
@@ -129,6 +148,7 @@
             alert("Application data transmitted successfully to employer pipeline.");
             closeApplyModal();
         }
+        
         async function loadLayout() {
             const h = await fetch('header.html'); if(h.ok) document.getElementById('header-node').innerHTML = await h.text();
             const f = await fetch('footer.html'); if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
