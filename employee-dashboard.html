@@ -1,3 +1,7 @@
+if (localStorage.getItem("userRoleToken") !== "employee") {
+    alert("Access Denied. Candidate credentials required.");
+    window.location.href = "login.html";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
