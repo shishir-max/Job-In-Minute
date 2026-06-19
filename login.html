@@ -9,7 +9,6 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
 
-    <!-- TOP NAV BAR SECTION -->
     <div class="bg-white border-b border-slate-100 py-4 shadow-sm">
         <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
             <div class="flex items-center gap-2">
@@ -25,17 +24,14 @@
         </div>
     </div>
 
-    <!-- MAIN FORM WRAPPER -->
     <main class="flex-grow flex items-center justify-center px-4 py-12">
         <div class="bg-white rounded-3xl p-8 max-w-xl w-full border border-slate-100 shadow-xl space-y-6">
             
-            <!-- VIEW TAB TOGGLE: SIGN IN vs CREATE ACCOUNT -->
             <div class="flex justify-center border-b border-slate-100 pb-2 gap-8 text-sm font-bold">
                 <button id="view-tab-signin" onclick="switchViewMode('signin')" class="pb-2 text-blue-600 border-b-2 border-blue-600 transition-all">Sign In</button>
                 <button id="view-tab-register" onclick="switchViewMode('register')" class="pb-2 text-slate-400 hover:text-slate-600 transition-all">Create Account</button>
             </div>
 
-            <!-- AUDIENCE ROLE TOGGLE: EMPLOYER vs CANDIDATE -->
             <div class="bg-slate-100 p-1 rounded-xl flex gap-1">
                 <button id="role-tab-employer" onclick="switchRole('employer')" class="w-1/2 py-2 text-xs font-bold rounded-lg text-slate-600 transition-all">
                     <i class="fa-solid fa-briefcase mr-1.5"></i>Employer
@@ -45,26 +41,21 @@
                 </button>
             </div>
 
-            <!-- SINGLE DYNAMIC FORM PIPELINE -->
             <form id="auth-form-flow" onsubmit="handleAuthSubmission(event)" class="space-y-4">
                 
-                <!-- CONTAINER FOR FIELDS INJECTED DYNAMICALLY BY JAVASCRIPT -->
                 <div id="dynamic-fields-injection-area" class="space-y-4"></div>
 
-                <!-- SUBMIT ACTION -->
                 <button type="submit" id="auth-submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition shadow-md shadow-blue-200">
                     Access Candidate Dashboard &rarr;
                 </button>
             </form>
 
-            <!-- FORGOT PASSWORD TRIGGER -->
             <div class="text-center pt-2" id="forgot-password-trigger-wrapper">
                 <button onclick="toggleForgotPasswordModal(true)" class="text-xs font-semibold text-slate-400 hover:text-blue-600 transition">Forgot your account password?</button>
             </div>
         </div>
     </main>
 
-    <!-- RECOVERY FORGOT PASSWORD MODAL -->
     <div id="forgot-password-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100">
             <div class="flex justify-between items-center">
@@ -79,7 +70,6 @@
         </div>
     </div>
 
-    <!-- FOOTER SEGMENT -->
     <footer class="bg-white border-t border-slate-100 py-4 text-center text-xs text-slate-400">
         &copy; 2026 JobInMinute Security Pipeline infrastructure. All profile data securely isolated.
     </footer>
@@ -88,9 +78,6 @@
         // System variables for authentication state tracking
         let activeViewMode = 'signin'; 
         let activeRole = 'candidate';   
-
-        // Core user registration registry mock database
-        const globalVerifiedRegistry = {};
 
         // Initialize display configuration on document execution context
         document.addEventListener("DOMContentLoaded", function() {
@@ -182,135 +169,4 @@
                 } else {
                     container.innerHTML = '<div>' +
                         '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Employer Name *</label>' +
-                        '<input type="text" id="reg-emp-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="Authorized Personnel Full Name">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Phone Number *</label>' +
-                        '<input type="text" id="reg-emp-phone" required pattern="[0-9 \\-+()]+" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="Official contact entry">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Business / Official Email ID *</label>' +
-                        '<input type="email" id="reg-emp-email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="corporate@company.com">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Organisation Name *</label>' +
-                        '<input type="text" id="reg-emp-orgname" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="Legal Registered Entity Structural Name">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Organisation Address *</label>' +
-                        '<input type="text" id="reg-emp-orgaddr" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="HQ or Corporate Branch Address Context">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Job Post Sector (Optional)</label>' +
-                        '<select id="reg-emp-sector" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-purple-500 transition">' +
-                        '<option value="">Select Standard Industry Context Segment</option>' +
-                        '<option value="it">Information Technology (IT)</option>' +
-                        '<option value="healthcare">Healthcare Systems</option>' +
-                        '</select>' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Organisation Website *</label>' +
-                        '<input type="url" id="reg-emp-web" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="https://www.corporate.com">' +
-                        '</div>' +
-                        '<div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-3">' +
-                        '<span class="block font-black text-[10px] uppercase tracking-wider text-slate-400">Identity Verification Identifiers (Alphanumeric Fields)</span>' +
-                        '<div>' +
-                        '<label class="block text-[9px] uppercase font-bold tracking-wider text-slate-400 mb-0.5">GST Registration No. / Corporate Registration (Optional)</label>' +
-                        '<input type="text" id="reg-emp-gst" pattern="[A-Za-z0-9]+" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs outline-none focus:border-blue-500 transition" placeholder="Alphanumeric Identification Formats Only">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[9px] uppercase font-bold tracking-wider text-slate-400 mb-0.5">Business Aadhaar Identifier ID (Optional)</label>' +
-                        '<input type="text" id="reg-emp-uid" pattern="[A-Za-z0-9]+" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs outline-none focus:border-blue-500 transition" placeholder="Secure alphanumeric parsing mask string">' +
-                        '</div>' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Create Corporate Access Password *</label>' +
-                        '<input type="password" id="reg-emp-pass" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="••••••••••••">' +
-                        '</div>';
-                    
-                    submitBtn.innerText = "Register New Employer Account ✓";
-                }
-            }
-        }
-
-        function handleAuthSubmission(e) {
-            e.preventDefault();
-
-            if (activeViewMode === 'signin') {
-                const inputtedEmail = document.getElementById('field-email').value.trim();
-                const matchedRecord = globalVerifiedRegistry[inputtedEmail];
-
-                // FORCEFUL PURGE OF INTERMINGLED BROWSING STATE TO PRESERVE USER ISOLATION
-                localStorage.clear();
-
-                if (matchedRecord) {
-                    if (matchedRecord.role !== activeRole) {
-                        alert("Access Denied! This email profile is registered as an " + matchedRecord.role.toUpperCase() + " channel. Select the correct tab.");
-                        return;
-                    }
-                    
-                    if (activeRole === 'candidate') {
-                        localStorage.setItem("userRoleToken", "employee");
-                        localStorage.setItem("employeeEmail", inputtedEmail);
-                        localStorage.setItem("employeeName", matchedRecord.name);
-                        alert("Google Account Authentication Handshake Successful. Entering Candidate Workspace...");
-                        window.location.href = "employee-dashboard.html"; 
-                    } else {
-                        localStorage.setItem("userRoleToken", "employer");
-                        localStorage.setItem("employerEmail", inputtedEmail);
-                        localStorage.setItem("employerName", matchedRecord.name);
-                        alert("Employer Identity Token Validated. Loading Command Center pipeline...");
-                        window.location.href = "employer-dashboard.html";
-                    }
-                } else {
-                    // Fallback sandboxing routine for new sessions
-                    if (activeRole === 'candidate') {
-                        localStorage.setItem("userRoleToken", "employee");
-                        localStorage.setItem("employeeEmail", inputtedEmail);
-                        localStorage.setItem("employeeName", "Guest Applicant");
-                        alert("Dynamic User Sandbox Profile Created via OAuth workflow validation.");
-                        window.location.href = "employee-dashboard.html";
-                    } else {
-                        localStorage.setItem("userRoleToken", "employer");
-                        localStorage.setItem("employerEmail", inputtedEmail);
-                        localStorage.setItem("employerName", "Shishir Bharti");
-                        alert("Dynamic Corporate Sandbox Module Setup completed successfully.");
-                        window.location.href = "employer-dashboard.html";
-                    }
-                }
-            } else {
-                let targetedEmail = "";
-                let designatedName = "";
-
-                if (activeRole === 'candidate') {
-                    targetedEmail = document.getElementById('reg-cand-email').value.trim();
-                    designatedName = document.getElementById('reg-cand-name').value.trim();
-                } else {
-                    targetedEmail = document.getElementById('reg-emp-email').value.trim();
-                    designatedName = document.getElementById('reg-emp-name').value.trim();
-                }
-
-                globalVerifiedRegistry[targetedEmail] = {
-                    role: activeRole,
-                    name: designatedName
-                };
-
-                alert("Profile configuration generated securely via Authorized Global Verification. Switching to portal access view...");
-                switchViewMode('signin');
-            }
-        }
-
-        function toggleForgotPasswordModal(visible) {
-            const modal = document.getElementById('forgot-password-modal');
-            if(visible) modal.classList.remove('hidden');
-            else modal.classList.add('hidden');
-        }
-
-        function handleRecoveryFlow(e) {
-            e.preventDefault();
-            alert("Cryptographic token dispatch script initiated. Verify your inbound mail records shortly.");
-            toggleForgotPasswordModal(false);
-        }
-    </script>
-</body>
-</html>
+                        '<input type="text" id="reg-emp-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl
