@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <script>
-        // STRICT SECURITY PIPELINE ACCESS CHECK
+        // STRICT SECURITY ACCESS VERIFICATION
         if (localStorage.getItem("userRoleToken") !== "employer") {
             alert("Access Denied. Corporate credentials required.");
             window.location.href = "login.html";
@@ -16,7 +16,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <!-- TOP SYSTEM BANNER -->
+    <!-- TOP SYSTEM INFRASTRUCTURE BANNER -->
     <div class="bg-slate-900 text-white text-[11px] py-2 px-4 shadow-inner">
         <div class="container mx-auto max-w-6xl flex justify-between items-center">
             <span class="flex items-center gap-2 text-slate-400">
@@ -34,21 +34,21 @@
     <header class="bg-white border-b border-slate-100 py-4 shadow-sm relative z-40">
         <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="bg-purple-600 text-white p-2 rounded-xl">
+                <div class="bg-blue-600 text-white p-2 rounded-xl">
                     <i class="fa-solid fa-bolt text-lg"></i>
                 </div>
                 <span class="font-black text-xl tracking-tight text-slate-900">JobInMinute</span>
             </div>
             
             <nav class="flex items-center gap-8 text-sm font-bold text-slate-600">
-                <a href="index.html" class="hover:text-purple-600 transition">Home</a>
-                <a href="about.html" class="hover:text-purple-600 transition">About Us</a>
+                <a href="index.html" class="hover:text-blue-600 transition">Home</a>
+                <a href="about.html" class="hover:text-blue-600 transition">About Us</a>
                 
-                <!-- PROFILE DROP-DOWN SEGMENT -->
+                <!-- PROFILE DROP-DOWN PIPELINE -->
                 <div class="relative">
                     <button onclick="toggleDropdownMenu(event)" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-900 px-4 py-2 rounded-xl transition text-xs font-black">
-                        <i class="fa-solid fa-user-tie text-purple-600"></i>
-                        <span id="nav-profile-display-name">Loading Profile...</span>
+                        <i class="fa-solid fa-user-tie text-blue-600"></i>
+                        <span id="nav-profile-display-name">Loading Account Context...</span>
                         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                     </button>
                     
@@ -60,7 +60,7 @@
                         </div>
                         <ul class="space-y-1 text-xs font-bold text-slate-600">
                             <li>
-                                <a href="employer-dashboard.html" class="flex items-center gap-2.5 p-2 rounded-lg bg-purple-50 text-purple-700">
+                                <a href="employer-dashboard.html" class="flex items-center gap-2.5 p-2 rounded-lg bg-blue-50 text-blue-700">
                                     <i class="fa-solid fa-building-user text-sm"></i> Corporate Panel
                                 </a>
                             </li>
@@ -87,12 +87,12 @@
         <!-- DASHBOARD CALL TO ACTION CARD -->
         <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
-                <span class="bg-purple-100 text-purple-700 text-[10px] uppercase tracking-wider font-black px-2.5 py-1 rounded-md">Corporate Portal</span>
+                <span class="bg-blue-100 text-blue-700 text-[10px] uppercase tracking-wider font-black px-2.5 py-1 rounded-md">Corporate Portal</span>
                 <h1 class="text-2xl font-black text-slate-900 tracking-tight mt-2">Incoming Applications Matrix</h1>
-                <p class="text-xs text-slate-500 mt-1">Review candidate resume pools and modulate corporate job listings status.</p>
+                <p class="text-xs text-slate-500 mt-1">Review candidate resume pools and modulate corporate job listings status dynamically.</p>
             </div>
             
-            <button onclick="toggleJobModal(true)" class="bg-purple-600 hover:bg-purple-700 text-white font-black text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl transition shadow-md shadow-purple-200 flex items-center gap-2">
+            <button onclick="toggleJobModal(true)" class="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl transition shadow-md shadow-blue-200 flex items-center gap-2">
                 <i class="fa-solid fa-plus"></i> Post A New Job
             </button>
         </div>
@@ -106,17 +106,8 @@
                     <i class="fa-solid fa-users-viewfinder"></i> Received Candidate Profiles
                 </h2>
                 
-                <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-6">
-                    <div class="flex justify-between items-start border-b border-slate-50 pb-4">
-                        <div>
-                            <h3 class="font-black text-sm text-slate-900">Soni Singh</h3>
-                            <p class="text-xs text-purple-600 font-bold mt-0.5">Position: <span class="text-slate-500">US IT Recruitment Lead</span></p>
-                        </div>
-                        <span class="bg-amber-50 text-amber-700 border border-amber-200 rounded-lg px-3 py-1.5 font-bold text-[11px]">Awaiting Review</span>
-                    </div>
-                    <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
-                        4 years of experience executing technical candidate sourcing workflows at Lucky Brilliant School. High core expertise across US IT recruitment clients, CTC evaluations, background verification loops (BGV).
-                    </p>
+                <div id="dynamic-candidates-container" class="space-y-4">
+                    <!-- Loaded dynamically via JavaScript based on who is logged in -->
                 </div>
             </div>
 
@@ -127,11 +118,7 @@
                 </h2>
                 
                 <div id="live-postings-container" class="space-y-3">
-                    <!-- Default baseline hardcoded item -->
-                    <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center">
-                        <span class="font-bold text-xs text-slate-800">US IT Recruitment Lead</span>
-                        <span class="bg-emerald-50 text-emerald-700 border border-emerald-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Active</span>
-                    </div>
+                    <!-- Dynamic entries render here -->
                 </div>
             </div>
 
@@ -143,7 +130,7 @@
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100 transform transition-all duration-300">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <h3 class="font-black text-base text-slate-900 tracking-tight">
-                    <i class="fa-solid fa-bullhorn text-purple-500 mr-2"></i>Deploy Corporate Requirement
+                    <i class="fa-solid fa-bullhorn text-blue-500 mr-2"></i>Deploy Corporate Requirement
                 </h3>
                 <button onclick="toggleJobModal(false)" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -151,45 +138,45 @@
             <form id="job-posting-form" class="space-y-4" onsubmit="handleJobSubmission(event)">
                 <div>
                     <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Job Designation Role Title *</label>
-                    <input type="text" id="modal-job-title" required placeholder="e.g. Senior Java Developer / US IT Recruiter" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-purple-500 transition">
+                    <input type="text" id="modal-job-title" required placeholder="e.g. Senior Java Developer / Web Architecture Engineer" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Target Sector *</label>
-                    <select id="modal-job-sector" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-purple-500 transition">
+                    <select id="modal-job-sector" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                         <option value="it">Information Technology (IT)</option>
                         <option value="healthcare">Healthcare Operations</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Core Operational Description & Parameters *</label>
-                    <textarea id="modal-job-desc" required rows="4" placeholder="Outline specific tech stack targets, required background criteria, and baseline verification milestones..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-purple-500 transition"></textarea>
+                    <textarea id="modal-job-desc" required rows="4" placeholder="Outline specific tech stack targets, required background criteria..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition"></textarea>
                 </div>
                 
-                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase py-3.5 rounded-xl transition tracking-wider shadow-md">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase py-3.5 rounded-xl transition tracking-wider shadow-md">
                     Broadcast Opening Globally &rarr;
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- RESTRUCTURING FOOTER TERMINAL -->
+    <!-- FOOTER TERMINAL -->
     <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-400 mt-12">
         &copy; 2026 JobInMinute Executive Infrastructures. All rights reserved.
     </footer>
 
     <script>
-        // System initialization lifecycle setup
+        // System initialization initialization
         document.addEventListener("DOMContentLoaded", function() {
-            const corporateEmail = localStorage.getItem("employerEmail") || "shishirbharti51@gmail.com";
-            const corporateName = localStorage.getItem("employerName") || "Shishir Bharti";
+            const corporateEmail = localStorage.getItem("employerEmail") || "corporate@domain.com";
+            const corporateName = localStorage.getItem("employerName") || "Corporate User";
 
-            // Establish DOM mapping
+            // Map data to header context elements
             document.getElementById('nav-profile-display-name').innerText = corporateName;
             document.getElementById('dropdown-card-name').innerText = corporateName;
             document.getElementById('dropdown-card-email').innerText = corporateEmail;
 
-            // Load dynamically created entries
-            renderStoredPostings();
+            // Render live content based cleanly on current session
+            renderDashboardDynamicContent(corporateEmail);
         });
 
         function toggleDropdownMenu(e) {
@@ -204,58 +191,89 @@
             else modal.classList.add('hidden');
         }
 
-        // Render persistent jobs tracker array
-        function renderStoredPostings() {
+        // Dynamically segments applicants based on account verification
+        function renderDashboardDynamicContent(email) {
+            const candidatesContainer = document.getElementById('dynamic-candidates-container');
             const listingsContainer = document.getElementById('live-postings-container');
-            const customJobs = JSON.parse(localStorage.getItem('employerCustomJobs')) || [];
             
-            customJobs.forEach(function(jobTitle) {
+            candidatesContainer.innerHTML = "";
+            listingsContainer.innerHTML = "";
+
+            // Access unique storage arrays linked directly to this email session context
+            const storageKey = `jobs_${email}`;
+            let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+            // ONLY draw data if account criteria aligns with the targeted system registry
+            if (email === "shishirbharti51@gmail.com") {
+                // Show default data ONLY for this deployment configuration profile
+                candidatesContainer.innerHTML = `
+                    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-6">
+                        <div class="flex justify-between items-start border-b border-slate-50 pb-4">
+                            <div>
+                                <h3 class="font-black text-sm text-slate-900">Soni Singh</h3>
+                                <p class="text-xs text-blue-600 font-bold mt-0.5">Position: <span class="text-slate-500">US IT Recruitment Lead</span></p>
+                            </div>
+                            <span class="bg-amber-50 text-amber-700 border border-amber-200 rounded-lg px-3 py-1.5 font-bold text-[11px]">Awaiting Review</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            4 years of experience executing technical candidate sourcing workflows at Lucky Brilliant School. High core expertise across US IT recruitment clients, CTC evaluations, background verification loops (BGV).
+                        </p>
+                    </div>`;
+
+                const defaultNode = document.createElement('div');
+                defaultNode.className = "bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center";
+                defaultNode.innerHTML = `<span class="font-bold text-xs text-slate-800">US IT Recruitment Lead</span>` +
+                                        `<span class="bg-emerald-50 text-emerald-700 border border-emerald-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Active</span>`;
+                listingsContainer.appendChild(defaultNode);
+            } else {
+                // Completely fresh interface screen for alternative employer entities
+                candidatesContainer.innerHTML = `
+                    <div class="bg-white rounded-2xl p-8 border border-slate-100 text-center text-slate-400 text-xs">
+                        <i class="fa-solid fa-folder-open text-2xl mb-2 text-slate-300 block"></i>
+                        No dynamic applications have hit your custom listings yet.
+                    </div>`;
+            }
+
+            // Append any dynamically created unique user requirements
+            registeredJobs.forEach(function(jobTitle) {
                 const node = document.createElement('div');
                 node.className = "bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center";
                 node.innerHTML = `<span class="font-bold text-xs text-slate-800">${jobTitle}</span>` +
-                                 `<span class="bg-purple-50 text-purple-700 border border-purple-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Pending Review</span>`;
+                                 `<span class="bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Active</span>`;
                 listingsContainer.prepend(node);
             });
         }
 
-        // Processing persistent structural submissions 
+        // Submitting new requirements cleanly into custom arrays
         function handleJobSubmission(e) {
             e.preventDefault();
             const titleValue = document.getElementById('modal-job-title').value.trim();
-            const listingsContainer = document.getElementById('live-postings-container');
+            const corporateEmail = localStorage.getItem("employerEmail") || "corporate@domain.com";
             
-            // Build visual component directly
-            const newListing = document.createElement('div');
-            newListing.className = "bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center animate-pulse";
-            newListing.style.animationIterationCount = "1";
-            newListing.style.animationDuration = "1s";
-            newListing.innerHTML = `<span class="font-bold text-xs text-slate-800">${titleValue}</span>` +
-                                   `<span class="bg-purple-50 text-purple-700 border border-purple-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Pending Review</span>`;
+            const storageKey = `jobs_${corporateEmail}`;
+            let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
+            registeredJobs.push(titleValue);
+            localStorage.setItem(storageKey, JSON.stringify(registeredJobs));
             
-            listingsContainer.prepend(newListing);
-
-            // Save object state dynamically into local registry
-            let customJobs = JSON.parse(localStorage.getItem('employerCustomJobs')) || [];
-            customJobs.push(titleValue);
-            localStorage.setItem('employerCustomJobs', JSON.stringify(customJobs));
+            alert("Corporate Opening broadcast successfully into active data context!");
             
-            alert("Corporate Requirement has been submitted into the active index framework successfully!");
             document.getElementById('job-posting-form').reset();
             toggleJobModal(false);
+            
+            // Re-render matching listings seamlessly
+            renderDashboardDynamicContent(corporateEmail);
         }
 
         function executeAccountDisconnect() {
-            // Preserve the user registry data structure, clean session variables securely
             const registryCache = localStorage.getItem('globalUserRegistry');
             localStorage.clear();
             if(registryCache) localStorage.setItem('globalUserRegistry', registryCache);
             
-            alert("Corporate Session Invalidated safely. Redirecting to access terminal...");
+            alert("Session terminated securely.");
             window.location.href = "login.html";
         }
 
-        // Global coordinate listener interface window tracking definitions
-        window.addEventListener('click', function(e) {
+        window.addEventListener('click', function() {
             const dropdown = document.getElementById('account-dropdown-card');
             if (dropdown && !dropdown.classList.contains('hidden')) {
                 dropdown.classList.add('hidden');
