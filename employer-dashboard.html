@@ -1,22 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-        // STRICT SECURITY ACCESS VERIFICATION
-        if (localStorage.getItem("userRoleToken") !== "employer") {
-            alert("Access Denied. Corporate credentials required.");
-            window.location.href = "login.html";
-        }
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employer Workspace | JobInMinute</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <script>
+        // ENGINE IDENTITY MATRIX ALIGNMENT BLOCK
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY_HERE", // Match this exactly with the config key used in login.html
+            authDomain: "job-in-minute.firebaseapp.com",
+            projectId: "job-in-minute",
+            storageBucket: "job-in-minute.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID_HERE",
+            appId: "YOUR_APP_ID_HERE"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // STRICT ACCOUNT LAYER ROADBLOCK GATEKEEPER
+        if (localStorage.getItem("userRoleToken") !== "employer") {
+            alert("Access Denied. Corporate workspace verification metrics missing.");
+            window.location.href = "login.html";
+        }
+    </script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <!-- TOP SYSTEM INFRASTRUCTURE BANNER -->
     <div class="bg-slate-900 text-white text-[11px] py-2 px-4 shadow-inner">
         <div class="container mx-auto max-w-6xl flex justify-between items-center">
             <span class="flex items-center gap-2 text-slate-400">
@@ -30,7 +46,6 @@
         </div>
     </div>
 
-    <!-- MAIN CORPORATE HEADER -->
     <header class="bg-white border-b border-slate-100 py-4 shadow-sm relative z-40">
         <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
             <div class="flex items-center gap-2">
@@ -44,11 +59,10 @@
                 <a href="index.html" class="hover:text-blue-600 transition">Home</a>
                 <a href="about.html" class="hover:text-blue-600 transition">About Us</a>
                 
-                <!-- PROFILE DROP-DOWN PIPELINE -->
                 <div class="relative">
                     <button onclick="toggleDropdownMenu(event)" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-900 px-4 py-2 rounded-xl transition text-xs font-black">
                         <i class="fa-solid fa-user-tie text-blue-600"></i>
-                        <span id="nav-profile-display-name">Loading Account Context...</span>
+                        <span id="nav-profile-display-name">Loading Profile Registry...</span>
                         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                     </button>
                     
@@ -81,10 +95,8 @@
         </div>
     </header>
 
-    <!-- CONTENT WRAPPER -->
     <main class="container mx-auto px-4 max-w-6xl flex-grow py-10 space-y-8">
         
-        <!-- DASHBOARD CALL TO ACTION CARD -->
         <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
                 <span class="bg-blue-100 text-blue-700 text-[10px] uppercase tracking-wider font-black px-2.5 py-1 rounded-md">Corporate Portal</span>
@@ -97,35 +109,29 @@
             </button>
         </div>
 
-        <!-- MATRIX LAYOUT GRID -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <!-- LEFT APPLICATIONS TRACKING TRACK -->
             <div class="lg:col-span-2 space-y-4">
                 <h2 class="font-black text-xs uppercase tracking-wider text-slate-400 flex items-center gap-2">
                     <i class="fa-solid fa-users-viewfinder"></i> <span id="candidate-header-text">Received Candidate Profiles</span>
                 </h2>
                 
                 <div id="dynamic-candidates-container" class="space-y-4">
-                    <!-- Loaded dynamically via JavaScript based on chosen filter -->
-                </div>
+                    </div>
             </div>
 
-            <!-- RIGHT SYSTEM LISTINGS MONITOR -->
             <div class="space-y-4">
                 <h2 class="font-black text-xs uppercase tracking-wider text-slate-400 flex items-center gap-2">
                     <i class="fa-solid fa-list-check"></i> Our Postings Status
                 </h2>
                 
                 <div id="live-postings-container" class="space-y-3">
-                    <!-- Dynamic entries render here -->
-                </div>
+                    </div>
             </div>
 
         </div>
     </main>
 
-    <!-- JOB POSTING DEPLOYMENT MODAL -->
     <div id="job-posting-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100 transform transition-all duration-300">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
@@ -159,23 +165,30 @@
         </div>
     </div>
 
-    <!-- FOOTER TERMINAL -->
     <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-400 mt-12">
         &copy; 2026 JobInMinute Executive Infrastructures. All rights reserved.
     </footer>
 
     <script>
         let currentSelectedFilter = "all";
+        let activeUserEmail = "";
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const corporateEmail = localStorage.getItem("employerEmail") || "corporate@domain.com";
-            const corporateName = localStorage.getItem("employerName") || "Corporate User";
+        // FIREBASE STATE LISTENER WATCH ENGINE
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                // Read authenticated cloud fields directly to eliminate cache desyncs
+                activeUserEmail = user.email;
+                const corporateName = user.displayName || "Corporate Member";
 
-            document.getElementById('nav-profile-display-name').innerText = corporateName;
-            document.getElementById('dropdown-card-name').innerText = corporateName;
-            document.getElementById('dropdown-card-email').innerText = corporateEmail;
+                document.getElementById('nav-profile-display-name').innerText = corporateName;
+                document.getElementById('dropdown-card-name').innerText = corporateName;
+                document.getElementById('dropdown-card-email').innerText = activeUserEmail;
 
-            renderDashboardDynamicContent(corporateEmail);
+                renderDashboardDynamicContent(activeUserEmail);
+            } else {
+                // Push back to terminal gateway if authentication tokens crumble
+                window.location.href = "login.html";
+            }
         });
 
         function toggleDropdownMenu(e) {
@@ -192,8 +205,7 @@
 
         function selectJobFilter(title) {
             currentSelectedFilter = title;
-            const corporateEmail = localStorage.getItem("employerEmail") || "corporate@domain.com";
-            renderDashboardDynamicContent(corporateEmail);
+            renderDashboardDynamicContent(activeUserEmail);
         }
 
         function renderDashboardDynamicContent(email) {
@@ -212,9 +224,10 @@
 
             const storageKey = `jobs_${email}`;
             let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
+            const isDefaultHidden = localStorage.getItem(`hide_default_${email}`) === "true";
 
-            // 1. RENDER LEFT HAND SIDE (CANDIDATES MATRIX)
-            if (email === "shishirbharti51@gmail.com") {
+            // 1. DYNAMIC APPLICANT POOL SEGMENT RENDERING LOOPS
+            if (email === "shishirbharti51@gmail.com" && !isDefaultHidden) {
                 if (currentSelectedFilter === "all" || currentSelectedFilter === "US IT Recruitment Lead") {
                     candidatesContainer.innerHTML = `
                         <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-6">
@@ -237,7 +250,7 @@
                         </div>`;
                 }
 
-                // Native initial static card structure layout configurations
+                // Render out template card node metrics
                 const defaultNode = document.createElement('div');
                 defaultNode.className = `bg-white rounded-2xl p-4 border shadow-sm flex flex-col gap-3 transition cursor-pointer ${currentSelectedFilter === 'US IT Recruitment Lead' ? 'border-blue-500 bg-blue-50/30' : 'border-slate-100 hover:border-slate-300'}`;
                 defaultNode.setAttribute("onclick", "selectJobFilter('US IT Recruitment Lead')");
@@ -268,7 +281,7 @@
                 }
             }
 
-            // 2. RENDER DYNAMICALLY POSTED OPENINGS WITH SEPARATED ACTION ROW
+            // 2. RENDER THE REST OF DYNAMIC OWNED LISTINGS FROM REGISTERED ACCOUNT
             registeredJobs.forEach(function(jobTitle, index) {
                 const node = document.createElement('div');
                 node.className = `bg-white rounded-2xl p-4 border shadow-sm flex flex-col gap-3 transition cursor-pointer ${currentSelectedFilter === jobTitle ? 'border-blue-500 bg-blue-50/30' : 'border-slate-100 hover:border-slate-300'}`;
@@ -287,36 +300,26 @@
             });
         }
 
-        // DESTRUCTION PIPELINE: REMOVE EXPLICIT LISTINGS
         function deleteJobListing(index) {
             if (confirm("Are you sure you want to completely delete this job post from your workspace?")) {
-                const corporateEmail = localStorage.getItem("employerEmail") || "corporate@domain.com";
-                
                 if (index === -1) {
-                    // Turn off context flag if user tries to remove baseline profile target elements
-                    alert("System template item deleted successfully.");
-                    localStorage.setItem(`hide_default_${corporateEmail}`, "true");
+                    localStorage.setItem(`hide_default_${activeUserEmail}`, "true");
                 } else {
-                    const storageKey = `jobs_${corporateEmail}`;
+                    const storageKey = `jobs_${activeUserEmail}`;
                     let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
-                    
-                    // Pull specific position element layout out of stack
                     registeredJobs.splice(registeredJobs.length - 1 - index, 1);
                     localStorage.setItem(storageKey, JSON.stringify(registeredJobs));
                 }
-                
-                // Reset filtering matrices safely back to baseline data track
                 currentSelectedFilter = "all";
-                renderDashboardDynamicContent(corporateEmail);
+                renderDashboardDynamicContent(activeUserEmail);
             }
         }
 
         function handleJobSubmission(e) {
             e.preventDefault();
             const titleValue = document.getElementById('modal-job-title').value.trim();
-            const corporateEmail = localStorage.getItem("employerEmail") || "corporate@domain.com";
+            const storageKey = `jobs_${activeUserEmail}`;
             
-            const storageKey = `jobs_${corporateEmail}`;
             let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
             registeredJobs.push(titleValue);
             localStorage.setItem(storageKey, JSON.stringify(registeredJobs));
@@ -326,16 +329,15 @@
             document.getElementById('job-posting-form').reset();
             toggleJobModal(false);
             
-            renderDashboardDynamicContent(corporateEmail);
+            renderDashboardDynamicContent(activeUserEmail);
         }
 
         function executeAccountDisconnect() {
-            const registryCache = localStorage.getItem('globalUserRegistry');
-            localStorage.clear();
-            if(registryCache) localStorage.setItem('globalUserRegistry', registryCache);
-            
-            alert("Session terminated securely.");
-            window.location.href = "login.html";
+            auth.signOut().then(() => {
+                localStorage.clear();
+                alert("Session terminated securely via Firebase Auth.");
+                window.location.href = "login.html";
+            });
         }
 
         window.addEventListener('click', function() {
