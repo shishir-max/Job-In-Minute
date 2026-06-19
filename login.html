@@ -90,9 +90,7 @@
         let activeRole = 'candidate';   
 
         // Core user registration registry mock database
-        const globalVerifiedRegistry = {
-            "shishirbharti51@gmail.com": { role: "candidate", name: "Soni Singh" }
-        };
+        const globalVerifiedRegistry = {};
 
         // Initialize display configuration on document execution context
         document.addEventListener("DOMContentLoaded", function() {
@@ -153,7 +151,7 @@
                 if (activeRole === 'candidate') {
                     container.innerHTML = '<div>' +
                         '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Full Name *</label>' +
-                        '<input type="text" id="reg-cand-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="e.g. Soni Singh">' +
+                        '<input type="text" id="reg-cand-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="e.g. Shishir Bharti">' +
                         '</div>' +
                         '<div>' +
                         '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Phone Number *</label>' +
@@ -204,7 +202,7 @@
                         '</div>' +
                         '<div>' +
                         '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Job Post Sector (Optional)</label>' +
-                        '<select id="reg-emp-sector" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">' +
+                        '<select id="reg-emp-sector" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-purple-500 transition">' +
                         '<option value="">Select Standard Industry Context Segment</option>' +
                         '<option value="it">Information Technology (IT)</option>' +
                         '<option value="healthcare">Healthcare Systems</option>' +
@@ -242,6 +240,9 @@
                 const inputtedEmail = document.getElementById('field-email').value.trim();
                 const matchedRecord = globalVerifiedRegistry[inputtedEmail];
 
+                // FORCEFUL PURGE OF INTERMINGLED BROWSING STATE TO PRESERVE USER ISOLATION
+                localStorage.clear();
+
                 if (matchedRecord) {
                     if (matchedRecord.role !== activeRole) {
                         alert("Access Denied! This email profile is registered as an " + matchedRecord.role.toUpperCase() + " channel. Select the correct tab.");
@@ -257,10 +258,12 @@
                     } else {
                         localStorage.setItem("userRoleToken", "employer");
                         localStorage.setItem("employerEmail", inputtedEmail);
+                        localStorage.setItem("employerName", matchedRecord.name);
                         alert("Employer Identity Token Validated. Loading Command Center pipeline...");
-                        window.location.href = "employer-dashboard.html"; // Fixed from employer.html to resolve 404 deployment error
+                        window.location.href = "employer-dashboard.html";
                     }
                 } else {
+                    // Fallback sandboxing routine for new sessions
                     if (activeRole === 'candidate') {
                         localStorage.setItem("userRoleToken", "employee");
                         localStorage.setItem("employeeEmail", inputtedEmail);
@@ -270,8 +273,9 @@
                     } else {
                         localStorage.setItem("userRoleToken", "employer");
                         localStorage.setItem("employerEmail", inputtedEmail);
+                        localStorage.setItem("employerName", "Shishir Bharti");
                         alert("Dynamic Corporate Sandbox Module Setup completed successfully.");
-                        window.location.href = "employer-dashboard.html"; // Fixed from employer.html to resolve 404 deployment error
+                        window.location.href = "employer-dashboard.html";
                     }
                 }
             } else {
