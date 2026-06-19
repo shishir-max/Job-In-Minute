@@ -28,7 +28,7 @@
     <!-- Header Injection Node -->
     <div id="header-node"></div>
 
-    <!-- MAIN HERO CONTENT (Replaces the broken "Verifying Account" loader) -->
+    <!-- MAIN HERO CONTENT -->
     <main class="flex-grow flex items-center justify-center py-16">
         <div class="container mx-auto px-4 max-w-4xl text-center space-y-6">
             <span class="text-xs font-bold uppercase tracking-widest text-purple-600 bg-purple-50 px-4 py-1.5 rounded-full">
@@ -106,7 +106,8 @@
 
                         // Dynamically change the big button in the middle to point to the correct workspace dashboard
                         if(routingZone) {
-                            const destinationPage = currentRole === "employer" ? "employer.html" : "workspace.html";
+                            // FIXED FILENAMES TO PREVENT 404 SYSTEM ROUTING ISSUES
+                            const destinationPage = currentRole === "employer" ? "employer-dashboard.html" : "employee-dashboard.html";
                             const themeColor = currentRole === "employer" ? "bg-purple-600 hover:bg-purple-700" : "bg-blue-600 hover:bg-blue-700";
                             routingZone.innerHTML = `
                                 <a href="${destinationPage}" class="${themeColor} text-white text-xs font-bold px-6 py-3 rounded-xl shadow-md transition">
