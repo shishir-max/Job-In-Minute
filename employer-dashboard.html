@@ -16,6 +16,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
+    <!-- TOP SYSTEM BANNER -->
     <div class="bg-slate-900 text-white text-[11px] py-2 px-4 shadow-inner">
         <div class="container mx-auto max-w-6xl flex justify-between items-center">
             <span class="flex items-center gap-2 text-slate-400">
@@ -29,6 +30,7 @@
         </div>
     </div>
 
+    <!-- MAIN CORPORATE HEADER -->
     <header class="bg-white border-b border-slate-100 py-4 shadow-sm relative z-40">
         <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
             <div class="flex items-center gap-2">
@@ -42,8 +44,9 @@
                 <a href="index.html" class="hover:text-purple-600 transition">Home</a>
                 <a href="about.html" class="hover:text-purple-600 transition">About Us</a>
                 
+                <!-- PROFILE DROP-DOWN SEGMENT -->
                 <div class="relative">
-                    <button onclick="toggleDropdownMenu()" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-900 px-4 py-2 rounded-xl transition text-xs font-black">
+                    <button onclick="toggleDropdownMenu(event)" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-900 px-4 py-2 rounded-xl transition text-xs font-black">
                         <i class="fa-solid fa-user-tie text-purple-600"></i>
                         <span id="nav-profile-display-name">Loading Profile...</span>
                         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
@@ -78,8 +81,10 @@
         </div>
     </header>
 
+    <!-- CONTENT WRAPPER -->
     <main class="container mx-auto px-4 max-w-6xl flex-grow py-10 space-y-8">
         
+        <!-- DASHBOARD CALL TO ACTION CARD -->
         <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
                 <span class="bg-purple-100 text-purple-700 text-[10px] uppercase tracking-wider font-black px-2.5 py-1 rounded-md">Corporate Portal</span>
@@ -92,8 +97,10 @@
             </button>
         </div>
 
+        <!-- MATRIX LAYOUT GRID -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
+            <!-- LEFT APPLICATIONS TRACKING TRACK -->
             <div class="lg:col-span-2 space-y-4">
                 <h2 class="font-black text-xs uppercase tracking-wider text-slate-400 flex items-center gap-2">
                     <i class="fa-solid fa-users-viewfinder"></i> Received Candidate Profiles
@@ -113,12 +120,14 @@
                 </div>
             </div>
 
+            <!-- RIGHT SYSTEM LISTINGS MONITOR -->
             <div class="space-y-4">
                 <h2 class="font-black text-xs uppercase tracking-wider text-slate-400 flex items-center gap-2">
                     <i class="fa-solid fa-list-check"></i> Our Postings Status
                 </h2>
                 
                 <div id="live-postings-container" class="space-y-3">
+                    <!-- Default baseline hardcoded item -->
                     <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center">
                         <span class="font-bold text-xs text-slate-800">US IT Recruitment Lead</span>
                         <span class="bg-emerald-50 text-emerald-700 border border-emerald-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Active</span>
@@ -129,6 +138,7 @@
         </div>
     </main>
 
+    <!-- JOB POSTING DEPLOYMENT MODAL -->
     <div id="job-posting-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100 transform transition-all duration-300">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
@@ -162,24 +172,28 @@
         </div>
     </div>
 
+    <!-- RESTRUCTURING FOOTER TERMINAL -->
     <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-400 mt-12">
         &copy; 2026 JobInMinute Executive Infrastructures. All rights reserved.
     </footer>
 
     <script>
-        // DOM Profile Integration Handler
+        // System initialization lifecycle setup
         document.addEventListener("DOMContentLoaded", function() {
-            const currentRole = localStorage.getItem("userRoleToken");
             const corporateEmail = localStorage.getItem("employerEmail") || "shishirbharti51@gmail.com";
             const corporateName = localStorage.getItem("employerName") || "Shishir Bharti";
 
-            // Enforce profile visual parameters separation explicitly
+            // Establish DOM mapping
             document.getElementById('nav-profile-display-name').innerText = corporateName;
             document.getElementById('dropdown-card-name').innerText = corporateName;
             document.getElementById('dropdown-card-email').innerText = corporateEmail;
+
+            // Load dynamically created entries
+            renderStoredPostings();
         });
 
-        function toggleDropdownMenu() {
+        function toggleDropdownMenu(e) {
+            e.stopPropagation();
             const card = document.getElementById('account-dropdown-card');
             card.classList.toggle('hidden');
         }
@@ -190,22 +204,40 @@
             else modal.classList.add('hidden');
         }
 
-        // Handle dynamic live injection of posted requirements
+        // Render persistent jobs tracker array
+        function renderStoredPostings() {
+            const listingsContainer = document.getElementById('live-postings-container');
+            const customJobs = JSON.parse(localStorage.getItem('employerCustomJobs')) || [];
+            
+            customJobs.forEach(function(jobTitle) {
+                const node = document.createElement('div');
+                node.className = "bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center";
+                node.innerHTML = `<span class="font-bold text-xs text-slate-800">${jobTitle}</span>` +
+                                 `<span class="bg-purple-50 text-purple-700 border border-purple-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Pending Review</span>`;
+                listingsContainer.prepend(node);
+            });
+        }
+
+        // Processing persistent structural submissions 
         function handleJobSubmission(e) {
             e.preventDefault();
             const titleValue = document.getElementById('modal-job-title').value.trim();
-            
             const listingsContainer = document.getElementById('live-postings-container');
             
-            // Generate clean UI nodes for newly created corporate requirements
+            // Build visual component directly
             const newListing = document.createElement('div');
-            newListing classList = "bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center animate-pulse";
+            newListing.className = "bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center animate-pulse";
             newListing.style.animationIterationCount = "1";
             newListing.style.animationDuration = "1s";
             newListing.innerHTML = `<span class="font-bold text-xs text-slate-800">${titleValue}</span>` +
                                    `<span class="bg-purple-50 text-purple-700 border border-purple-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Pending Review</span>`;
             
             listingsContainer.prepend(newListing);
+
+            // Save object state dynamically into local registry
+            let customJobs = JSON.parse(localStorage.getItem('employerCustomJobs')) || [];
+            customJobs.push(titleValue);
+            localStorage.setItem('employerCustomJobs', JSON.stringify(customJobs));
             
             alert("Corporate Requirement has been submitted into the active index framework successfully!");
             document.getElementById('job-posting-form').reset();
@@ -213,16 +245,19 @@
         }
 
         function executeAccountDisconnect() {
+            // Preserve the user registry data structure, clean session variables securely
+            const registryCache = localStorage.getItem('globalUserRegistry');
             localStorage.clear();
+            if(registryCache) localStorage.setItem('globalUserRegistry', registryCache);
+            
             alert("Corporate Session Invalidated safely. Redirecting to access terminal...");
             window.location.href = "login.html";
         }
 
-        // Close dropdown when clicking into external coordinate segments
+        // Global coordinate listener interface window tracking definitions
         window.addEventListener('click', function(e) {
             const dropdown = document.getElementById('account-dropdown-card');
-            const button = document.querySelector('nav relative button');
-            if (dropdown && !dropdown.classList.contains('hidden') && !e.target.closest('nav')) {
+            if (dropdown && !dropdown.classList.contains('hidden')) {
                 dropdown.classList.add('hidden');
             }
         });
