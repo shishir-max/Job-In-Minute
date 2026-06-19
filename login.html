@@ -3,13 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authentication Portal | JobInMinute</title>
+    <title>Authentication Pipeline | JobInMinute</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
-    <div class="bg-white border-b border-slate-100 py-4 shadow-sm">
+    <script>
+        // CORE INTEGRATION FRAMEWORK CONFIGURATION
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY_HERE", // Replace this with your actual Web API Key from Firebase Project Settings
+            authDomain: "job-in-minute.firebaseapp.com",
+            projectId: "job-in-minute",
+            storageBucket: "job-in-minute.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID_HERE", // Replace with your messaging sender ID
+            appId: "YOUR_APP_ID_HERE" // Replace with your actual App ID
+        };
+        
+        // Initialize Core Firebase System
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
+
+    <header class="bg-white border-b border-slate-100 py-4 shadow-sm relative z-40">
         <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <div class="bg-blue-600 text-white p-2 rounded-xl">
@@ -17,210 +36,180 @@
                 </div>
                 <span class="font-black text-xl tracking-tight text-slate-900">JobInMinute</span>
             </div>
-            <div class="flex items-center gap-6 text-sm font-bold text-slate-600">
+            <nav class="flex items-center gap-8 text-sm font-bold text-slate-600">
                 <a href="index.html" class="hover:text-blue-600 transition">Home</a>
                 <a href="about.html" class="hover:text-blue-600 transition">About Us</a>
-            </div>
+            </nav>
         </div>
-    </div>
+    </header>
 
     <main class="flex-grow flex items-center justify-center px-4 py-12">
-        <div class="bg-white rounded-3xl p-8 max-w-xl w-full border border-slate-100 shadow-xl space-y-6">
+        <div class="bg-white border border-slate-100 rounded-3xl p-8 max-w-md w-full shadow-2xl space-y-6">
             
-            <div class="flex justify-center border-b border-slate-100 pb-2 gap-8 text-sm font-bold">
-                <button id="view-tab-signin" onclick="switchViewMode('signin')" class="pb-2 text-blue-600 border-b-2 border-blue-600 transition-all">Sign In</button>
-                <button id="view-tab-register" onclick="switchViewMode('register')" class="pb-2 text-slate-400 hover:text-slate-600 transition-all">Create Account</button>
+            <div class="flex border-b border-slate-100 pb-2 justify-center gap-6 text-sm font-bold text-slate-400">
+                <button id="tab-signin-btn" onclick="switchFormContext('signin')" class="text-blue-600 border-b-2 border-blue-600 pb-2 transition">Sign In</button>
+                <button id="tab-signup-btn" onclick="switchFormContext('signup')" class="pb-2 transition hover:text-slate-600">Create Account</button>
             </div>
 
-            <div class="bg-slate-100 p-1 rounded-xl flex gap-1">
-                <button id="role-tab-employer" onclick="switchRole('employer')" class="w-1/2 py-2 text-xs font-bold rounded-lg text-slate-600 transition-all">
-                    <i class="fa-solid fa-briefcase mr-1.5"></i>Employer
+            <div class="grid grid-cols-2 gap-3 bg-slate-100 p-1.5 rounded-xl text-xs font-black">
+                <button id="role-employer-btn" onclick="selectRoleContext('employer')" class="bg-white text-slate-900 shadow-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-building"></i> Employer
                 </button>
-                <button id="role-tab-candidate" onclick="switchRole('candidate')" class="w-1/2 py-2 text-xs font-bold rounded-lg bg-white text-slate-900 shadow-sm transition-all">
-                    <i class="fa-solid fa-user mr-1.5"></i>Candidate
+                <button id="role-candidate-btn" onclick="selectRoleContext('candidate')" class="text-slate-400 py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-user"></i> Candidate
                 </button>
             </div>
 
-            <form id="auth-form-flow" onsubmit="handleAuthSubmission(event)" class="space-y-4">
-                
-                <div id="dynamic-fields-injection-area" class="space-y-4"></div>
+            <div>
+                <form id="signin-context-form" class="space-y-4" onsubmit="executeFirebaseLogin(event)">
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Corporate / Candidate Email</label>
+                        <input type="email" id="signin-email" required placeholder="name@domain.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Account Secret Access Key</label>
+                        <input type="password" id="signin-password" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                    </div>
+                    <button type="submit" id="main-submit-cta" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase py-3.5 rounded-xl transition tracking-wider shadow-md">
+                        Access Corporate Dashboard &rarr;
+                    </button>
+                </form>
 
-                <button type="submit" id="auth-submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition shadow-md shadow-blue-200">
-                    Access Candidate Dashboard &rarr;
-                </button>
-            </form>
+                <form id="signup-context-form" class="space-y-4 hidden" onsubmit="executeFirebaseRegistration(event)">
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Full Representative Identity Name</label>
+                        <input type="text" id="signup-name" placeholder="e.g. Shishir Bharti" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Target Account Operational Email Address</label>
+                        <input type="email" id="signup-email" required placeholder="yourname@domain.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Secure Creation Password</label>
+                        <input type="password" id="signup-password" required placeholder="Minimum 6 characters" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase py-3.5 rounded-xl transition tracking-wider shadow-md">
+                        Provision Profile Environment &rarr;
+                    </button>
+                </form>
+            </div>
 
-            
-                <button onclick="toggleForgotPasswordModal(true)" class="text-xs font-semibold text-slate-400 hover:text-blue-600 transition">Forgot your account password?</button>
+            <div class="text-center">
+                <a href="#" class="text-[11px] font-bold text-slate-400 hover:text-blue-500 transition">Forgot your account password?</a>
             </div>
         </div>
     </main>
 
-    <div id="forgot-password-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-100">
-            <div class="flex justify-between items-center">
-                <h3 class="font-black text-base text-slate-900 tracking-tight"><i class="fa-solid fa-key text-blue-500 mr-2"></i>Account Access Recovery</h3>
-                <button onclick="toggleForgotPasswordModal(false)" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <p class="text-xs text-slate-500 leading-relaxed">Enter your verified email profile configuration. Security micro-protocols will transmit encrypted reset directives natively to that verified inbox.</p>
-            <form class="space-y-3" onsubmit="handleRecoveryFlow(event)">
-                <input type="email" required placeholder="Registered Email Address" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
-                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase py-3 rounded-xl transition">Transmit Recovery Link</button>
-            </form>
-        </div>
-    </div>
-
-    <footer class="bg-white border-t border-slate-100 py-4 text-center text-xs text-slate-400">
+    <footer class="bg-white border-t border-slate-100 py-6 text-center text-[11px] text-slate-400">
         &copy; 2026 JobInMinute Security Pipeline infrastructure. All profile data securely isolated.
     </footer>
 
     <script>
-        let activeViewMode = 'signin'; 
-        let activeRole = 'candidate';   
+        let currentActiveRole = "employer";
+        let currentFormMode = "signin";
 
-        document.addEventListener("DOMContentLoaded", function() {
-            renderFormLayout();
-        });
+        function switchFormContext(mode) {
+            currentFormMode = mode;
+            const signinForm = document.getElementById("signin-context-form");
+            const signupForm = document.getElementById("signup-context-form");
+            const signinBtn = document.getElementById("tab-signin-btn");
+            const signupBtn = document.getElementById("tab-signup-btn");
 
-        function switchViewMode(mode) {
-            activeViewMode = mode;
-            const btnSignIn = document.getElementById('view-tab-signin');
-            const btnRegister = document.getElementById('view-tab-register');
-            const forgotWrapper = document.getElementById('forgot-password-trigger-wrapper');
-
-            if (mode === 'signin') {
-                btnSignIn.className = "pb-2 text-blue-600 border-b-2 border-blue-600 transition-all";
-                btnRegister.className = "pb-2 text-slate-400 hover:text-slate-600 transition-all";
-                if(forgotWrapper) forgotWrapper.classList.remove('hidden');
+            if (mode === "signin") {
+                signinForm.classList.remove("hidden");
+                signupForm.classList.add("hidden");
+                signinBtn.className = "text-blue-600 border-b-2 border-blue-600 pb-2 transition";
+                signupBtn.className = "pb-2 transition hover:text-slate-600 text-slate-400";
             } else {
-                btnSignIn.className = "pb-2 text-slate-400 hover:text-slate-600 transition-all";
-                btnRegister.className = "pb-2 text-blue-600 border-b-2 border-blue-600 transition-all";
-                if(forgotWrapper) forgotWrapper.classList.add('hidden');
+                signupForm.classList.remove("hidden");
+                signinForm.classList.add("hidden");
+                signupBtn.className = "text-blue-600 border-b-2 border-blue-600 pb-2 transition";
+                signinBtn.className = "pb-2 transition hover:text-slate-600 text-slate-400";
             }
-            renderFormLayout();
+            updateButtonLabelContext();
         }
 
-        function switchRole(role) {
-            activeRole = role;
-            const btnEmp = document.getElementById('role-tab-employer');
-            const btnCand = document.getElementById('role-tab-candidate');
+        function selectRoleContext(role) {
+            currentActiveRole = role;
+            const employerBtn = document.getElementById("role-employer-btn");
+            const candidateBtn = document.getElementById("role-candidate-btn");
 
-            if (role === 'employer') {
-                btnEmp.className = "w-1/2 py-2 text-xs font-bold rounded-lg bg-white text-slate-900 shadow-sm transition-all";
-                btnCand.className = "w-1/2 py-2 text-xs font-bold rounded-lg text-slate-600 transition-all";
+            if (role === "employer") {
+                employerBtn.className = "bg-white text-slate-900 shadow-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2";
+                candidateBtn.className = "text-slate-400 py-2.5 rounded-lg transition flex items-center justify-center gap-2";
             } else {
-                btnEmp.className = "w-1/2 py-2 text-xs font-bold rounded-lg text-slate-600 transition-all";
-                btnCand.className = "w-1/2 py-2 text-xs font-bold rounded-lg bg-white text-slate-900 shadow-sm transition-all";
+                candidateBtn.className = "bg-white text-slate-900 shadow-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2";
+                employerBtn.className = "text-slate-400 py-2.5 rounded-lg transition flex items-center justify-center gap-2";
             }
-            renderFormLayout();
+            updateButtonLabelContext();
         }
 
-        function renderFormLayout() {
-            const container = document.getElementById('dynamic-fields-injection-area');
-            const submitBtn = document.getElementById('auth-submit-btn');
-            container.innerHTML = ""; 
-
-            if (activeViewMode === 'signin') {
-                container.innerHTML = '<div>' +
-                    '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Email Address</label>' +
-                    '<input type="email" id="field-email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="Enter registered email...">' +
-                    '</div>' +
-                    '<div>' +
-                    '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Password</label>' +
-                    '<input type="password" id="field-pass" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="••••••••••••">' +
-                    '</div>';
-                
-                submitBtn.innerText = activeRole === 'employer' ? "Access Employer Dashboard ➔" : "Access Candidate Dashboard ➔";
-            } else {
-                if (activeRole === 'candidate') {
-                    container.innerHTML = '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Full Name *</label>' +
-                        '<input type="text" id="reg-cand-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="e.g. Shishir Bharti">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Phone Number *</label>' +
-                        '<input type="text" id="reg-cand-phone" required pattern="[0-9 \\-+()]+" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="Numeric value contact field">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Email ID *</label>' +
-                        '<input type="email" id="reg-cand-email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="candidate@domain.com">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Job Sector *</label>' +
-                        '<select id="reg-cand-sector" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">' +
-                        '<option value="">Select Primary Professional Core Sector</option>' +
-                        '<option value="it">Information Technology (IT)</option>' +
-                        '<option value="healthcare">Healthcare & Medicine</option>' +
-                        '</select>' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Address (Optional)</label>' +
-                        '<input type="text" id="reg-cand-addr" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="e.g. Indore, Madhya Pradesh">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Create Access Password *</label>' +
-                        '<input type="password" id="reg-cand-pass" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="••••••••••••">' +
-                        '</div>';
-                    
-                    submitBtn.innerText = "Register New Candidate Account ✓";
-                } else {
-                    container.innerHTML = '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Employer Name *</label>' +
-                        '<input type="text" id="reg-emp-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="Authorized Personnel Full Name">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Business / Official Email ID *</label>' +
-                        '<input type="email" id="reg-emp-email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="corporate@company.com">' +
-                        '</div>' +
-                        '<div>' +
-                        '<label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Create Corporate Access Password *</label>' +
-                        '<input type="password" id="reg-emp-pass" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition" placeholder="••••••••••••">' +
-                        '</div>';
-
-                    submitBtn.innerText = "Register New Employer Account ✓";
-                }
+        function updateButtonLabelContext() {
+            const submitBtn = document.getElementById("main-submit-cta");
+            if (currentFormMode === "signin") {
+                submitBtn.innerText = currentActiveRole === "employer" ? "Access Corporate Dashboard →" : "Access Candidate Dashboard →";
             }
         }
 
-        // AUTH SUBMISSION PIPELINE LOGIC
-        function handleAuthSubmission(e) {
+        // FIREBASE INTERACTION ENGINE A: REGISTER NEW END-USERS
+        function executeFirebaseRegistration(e) {
             e.preventDefault();
-            
-            if (activeViewMode === 'signin') {
-                const emailInput = document.getElementById('field-email').value.trim();
-                
-                // Route as Corporate Employer vs Individual Candidate
-                if (activeRole === 'employer') {
-                    localStorage.setItem("userRoleToken", "employer");
-                    localStorage.setItem("employerEmail", emailInput);
-                    localStorage.setItem("employerName", "Shishir Bharti");
-                    
-                    alert("Corporate Access Granted! Opening Employer Dashboard Matrix...");
-                    window.location.href = "employer-dashboard.html";
-                } else {
-                    localStorage.setItem("userRoleToken", "candidate");
-                    localStorage.setItem("candidateEmail", emailInput);
-                    
-                    alert("Access Granted! Routing to Employee Workspace...");
-                    window.location.href = "employee-dashboard.html";
-                }
-            } else {
-                // Handle Registration logic locally
-                alert("Account Registration Processed Successfully! You can now sign in.");
-                switchViewMode('signin');
-            }
+            const email = document.getElementById("signup-email").value.trim();
+            const password = document.getElementById("signup-password").value;
+            const fullName = document.getElementById("signup-name").value.trim() || "User Identity";
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    // Append metadata directly to display profiles list in cloud systems
+                    return user.updateProfile({
+                        displayName: fullName
+                    }).then(() => {
+                        // Bind customized access token values permanently inside Local Storage for redirection syncs
+                        localStorage.setItem("userRoleToken", currentActiveRole);
+                        localStorage.setItem("employerEmail", user.email);
+                        localStorage.setItem("employerName", fullName);
+
+                        alert("Account provisioned and deployed securely inside Firebase database!");
+                        
+                        if (currentActiveRole === "employer") {
+                            window.location.href = "employer-dashboard.html";
+                        } else {
+                            window.location.href = "employee-dashboard.html";
+                        }
+                    });
+                })
+                .catch((error) => {
+                    alert("Database Registry Failure: " + error.message);
+                });
         }
 
-        function toggleForgotPasswordModal(show) {
-            const modal = document.getElementById('forgot-password-modal');
-            if(show) modal.classList.remove('hidden');
-            else modal.classList.add('hidden');
-        }
-
-        function handleRecoveryFlow(e) {
+        // FIREBASE INTERACTION ENGINE B: LOGIN AND INITIATE SECURED SESSION PIPELINE
+        function executeFirebaseLogin(e) {
             e.preventDefault();
-            alert("Security Recovery Directives dispatched into pipeline successfully!");
-            toggleForgotPasswordModal(false);
+            const email = document.getElementById("signin-email").value.trim();
+            const password = document.getElementById("signin-password").value;
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    
+                    // Capture active profile configurations dynamically from cloud auth state updates
+                    localStorage.setItem("userRoleToken", currentActiveRole);
+                    localStorage.setItem("employerEmail", user.email);
+                    localStorage.setItem("employerName", user.displayName || "Corporate Member");
+
+                    alert("Welcome back! Authentication identity verified successfully.");
+                    
+                    if (currentActiveRole === "employer") {
+                        window.location.href = "employer-dashboard.html";
+                    } else {
+                        window.location.href = "employee-dashboard.html";
+                    }
+                })
+                .catch((error) => {
+                    alert("Authentication Failure: " + error.message);
+                });
         }
     </script>
 </body>
