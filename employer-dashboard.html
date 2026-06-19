@@ -1,191 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employer Workspace | JobInMinute</title>
-    
-    <!-- Enforce Workspace Verification Gate BEFORE layout rendering -->
     <script>
+        // STRICT SECURITY PIPELINE ACCESS CHECK
         if (localStorage.getItem("userRoleToken") !== "employer") {
             alert("Access Denied. Corporate credentials required.");
             window.location.href = "login.html";
         }
     </script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Workspace | JobInMinute</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <!-- TOP BAR SECTION -->
-    <div class="bg-slate-900 text-slate-300 text-[11px] py-2 border-b border-slate-800">
-        <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <span class="flex items-center gap-1.5">
-                    <i class="fa-solid fa-envelope text-purple-400"></i> website-support@jobinminute.com
-                </span>
-            </div>
-            <div class="flex items-center gap-4">
-                <a href="https://linkedin.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-linkedin text-sm"></i></a>
-                <a href="https://facebook.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-facebook text-sm"></i></a>
-                <a href="https://instagram.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-instagram text-sm"></i></a>
+    <div class="bg-slate-900 text-white text-[11px] py-2 px-4 shadow-inner">
+        <div class="container mx-auto max-w-6xl flex justify-between items-center">
+            <span class="flex items-center gap-2 text-slate-400">
+                <i class="fa-solid fa-envelope text-blue-400"></i> website-support@jobinminute.com
+            </span>
+            <div class="flex items-center gap-4 text-slate-400">
+                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
             </div>
         </div>
     </div>
 
-    <!-- Header Injection Node -->
-    <div id="header-node"></div>
-
-    <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
-        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm mb-6 space-y-4">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Corporate Portal</span>
-                    <h1 class="text-2xl font-black text-slate-900 mt-2">Incoming Applications Matrix</h1>
-                    <p class="text-xs text-slate-400">Review candidate resume pools and modulate corporate job listings status.</p>
+    <header class="bg-white border-b border-slate-100 py-4 shadow-sm relative z-40">
+        <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-purple-600 text-white p-2 rounded-xl">
+                    <i class="fa-solid fa-bolt text-lg"></i>
                 </div>
-                <div class="mt-3 md:mt-0">
-                    <!-- FIXED: Route points securely to employee-dashboard.html instead of workspace.html -->
-                    <a href="employee-dashboard.html" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl transition inline-block">
-                        <i class="fa-solid fa-user-tie mr-1.5 text-blue-500"></i> Go to Employee Dashboard
-                    </a>
+                <span class="font-black text-xl tracking-tight text-slate-900">JobInMinute</span>
+            </div>
+            
+            <nav class="flex items-center gap-8 text-sm font-bold text-slate-600">
+                <a href="index.html" class="hover:text-purple-600 transition">Home</a>
+                <a href="about.html" class="hover:text-purple-600 transition">About Us</a>
+                
+                <div class="relative">
+                    <button onclick="toggleDropdownMenu()" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-900 px-4 py-2 rounded-xl transition text-xs font-black">
+                        <i class="fa-solid fa-user-tie text-purple-600"></i>
+                        <span id="nav-profile-display-name">Loading Profile...</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                    </button>
+                    
+                    <div id="account-dropdown-card" class="absolute right-0 mt-2 w-64 bg-white border border-slate-100 rounded-2xl shadow-2xl p-4 hidden space-y-4">
+                        <div class="border-b border-slate-50 pb-3">
+                            <span class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Signed Corporate Account</span>
+                            <h4 id="dropdown-card-name" class="font-black text-xs text-slate-900">Corporate User</h4>
+                            <p id="dropdown-card-email" class="text-[11px] text-slate-400 truncate">corporate@domain.com</p>
+                        </div>
+                        <ul class="space-y-1 text-xs font-bold text-slate-600">
+                            <li>
+                                <a href="employer-dashboard.html" class="flex items-center gap-2.5 p-2 rounded-lg bg-purple-50 text-purple-700">
+                                    <i class="fa-solid fa-building-user text-sm"></i> Corporate Panel
+                                </a>
+                            </li>
+                            <li>
+                                <a href="employee-dashboard.html" class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-50 transition">
+                                    <i class="fa-solid fa-user text-sm text-slate-400"></i> Employee Workspace
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="border-t border-slate-50 pt-2">
+                            <button onclick="executeAccountDisconnect()" class="w-full flex items-center gap-2.5 p-2 rounded-lg text-red-600 hover:bg-red-50 transition text-xs font-bold">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i> Disconnect Account
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </nav>
+        </div>
+    </header>
 
-            <div class="relative max-w-xl">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
-                <input type="text" id="candidate-search-input" onkeyup="searchCandidatesAndPlatform()" placeholder="Search live candidates by name, target position..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-xs outline-none focus:border-purple-500 transition">
+    <main class="container mx-auto px-4 max-w-6xl flex-grow py-10 space-y-8">
+        
+        <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div>
+                <span class="bg-purple-100 text-purple-700 text-[10px] uppercase tracking-wider font-black px-2.5 py-1 rounded-md">Corporate Portal</span>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight mt-2">Incoming Applications Matrix</h1>
+                <p class="text-xs text-slate-500 mt-1">Review candidate resume pools and modulate corporate job listings status.</p>
             </div>
+            
+            <button onclick="toggleJobModal(true)" class="bg-purple-600 hover:bg-purple-700 text-white font-black text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl transition shadow-md shadow-purple-200 flex items-center gap-2">
+                <i class="fa-solid fa-plus"></i> Post A New Job
+            </button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 space-y-4" id="candidate-cards-list">
-                <h2 class="text-xs font-black uppercase tracking-wider text-slate-400 mb-2"><i class="fa-solid fa-users-gear text-purple-500 mr-2"></i> Received Applications</h2>
-
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-4 candidate-card">
-                    <div class="flex justify-between items-start">
+            
+            <div class="lg:col-span-2 space-y-4">
+                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-users-viewfinder"></i> Received Candidate Profiles
+                </h2>
+                
+                <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-6">
+                    <div class="flex justify-between items-start border-b border-slate-50 pb-4">
                         <div>
-                            <h3 class="font-bold text-sm text-slate-900 candidate-name">Soni Singh</h3>
-                            <p class="text-[11px] text-slate-400">Position: <span class="font-semibold text-slate-700 candidate-job">US IT Recruitment Lead</span></p>
+                            <h3 class="font-black text-sm text-slate-900">Soni Singh</h3>
+                            <p class="text-xs text-purple-600 font-bold mt-0.5">Position: <span class="text-slate-500">US IT Recruitment Lead</span></p>
                         </div>
-                        <select onchange="updateDecision(this)" class="bg-slate-50 border border-slate-200 text-xs font-bold p-2 rounded-xl outline-none text-slate-700 transition-all">
-                            <option value="pending">Awaiting Review</option>
-                            <option value="select" class="text-emerald-600 font-bold">Select Candidate</option>
-                            <option value="reject" class="text-rose-600 font-bold">Reject Application</option>
-                        </select>
+                        <span class="bg-amber-50 text-amber-700 border border-amber-200 rounded-lg px-3 py-1.5 font-bold text-[11px]">Awaiting Review</span>
                     </div>
-                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60 font-mono text-[11px] text-slate-600 max-h-24 overflow-y-auto leading-relaxed">
+                    <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
                         4 years of experience executing technical candidate sourcing workflows at Lucky Brilliant School. High core expertise across US IT recruitment clients, CTC evaluations, background verification loops (BGV).
-                    </div>
+                    </p>
                 </div>
             </div>
 
             <div class="space-y-4">
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-4">
-                    <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 flex items-center">
-                        <i class="fa-solid fa-folder-tree text-purple-500 mr-2"></i> Our Postings Status
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/60 flex justify-between items-center">
-                            <h4 class="text-xs font-bold text-slate-800">US IT Recruitment Lead</h4>
-                            <select onchange="toggleJob(this)" class="bg-white border text-[10px] font-bold p-1 rounded-lg outline-none">
-                                <option value="active">Active</option>
-                                <option value="closed">Closed</option>
-                            </select>
-                        </div>
+                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check"></i> Our Postings Status
+                </h2>
+                
+                <div id="live-postings-container" class="space-y-3">
+                    <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center">
+                        <span class="font-bold text-xs text-slate-800">US IT Recruitment Lead</span>
+                        <span class="bg-emerald-50 text-emerald-700 border border-emerald-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Active</span>
                     </div>
                 </div>
             </div>
+
         </div>
     </main>
 
-    <div id="footer-node"></div>
+    <div id="job-posting-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100 transform transition-all duration-300">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-black text-base text-slate-900 tracking-tight">
+                    <i class="fa-solid fa-bullhorn text-purple-500 mr-2"></i>Deploy Corporate Requirement
+                </h3>
+                <button onclick="toggleJobModal(false)" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <form id="job-posting-form" class="space-y-4" onsubmit="handleJobSubmission(event)">
+                <div>
+                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Job Designation Role Title *</label>
+                    <input type="text" id="modal-job-title" required placeholder="e.g. Senior Java Developer / US IT Recruiter" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-purple-500 transition">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Target Sector *</label>
+                    <select id="modal-job-sector" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-purple-500 transition">
+                        <option value="it">Information Technology (IT)</option>
+                        <option value="healthcare">Healthcare Operations</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Core Operational Description & Parameters *</label>
+                    <textarea id="modal-job-desc" required rows="4" placeholder="Outline specific tech stack targets, required background criteria, and baseline verification milestones..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-purple-500 transition"></textarea>
+                </div>
+                
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase py-3.5 rounded-xl transition tracking-wider shadow-md">
+                    Broadcast Opening Globally &rarr;
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-400 mt-12">
+        &copy; 2026 JobInMinute Executive Infrastructures. All rights reserved.
+    </footer>
 
     <script>
-        // Separate storage variables securely for your corporate operations
-        localStorage.setItem("userRoleToken", "employer");
-        localStorage.setItem("employerEmail", "shishirbharti51@gmail.com");
-        localStorage.setItem("employerName", "Shishir Bharti");
+        // DOM Profile Integration Handler
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentRole = localStorage.getItem("userRoleToken");
+            const corporateEmail = localStorage.getItem("employerEmail") || "shishirbharti51@gmail.com";
+            const corporateName = localStorage.getItem("employerName") || "Shishir Bharti";
 
-        function updateDecision(dropdown) {
-            if(dropdown.value === 'select') {
-                dropdown.className = "bg-emerald-50 border border-emerald-200 text-xs font-bold p-2 rounded-xl text-emerald-700 outline-none transition-all";
-                alert("Decision Updated: Candidate selection published to employee feed.");
-            } else if(dropdown.value === 'reject') {
-                dropdown.className = "bg-rose-50 border border-rose-200 text-xs font-bold p-2 rounded-xl text-rose-700 outline-none transition-all";
-                alert("Decision Updated: Application marked as rejected.");
-            } else {
-                dropdown.className = "bg-slate-50 border border-slate-200 text-xs font-bold p-2 rounded-xl text-slate-700 outline-none transition-all";
+            // Enforce profile visual parameters separation explicitly
+            document.getElementById('nav-profile-display-name').innerText = corporateName;
+            document.getElementById('dropdown-card-name').innerText = corporateName;
+            document.getElementById('dropdown-card-email').innerText = corporateEmail;
+        });
+
+        function toggleDropdownMenu() {
+            const card = document.getElementById('account-dropdown-card');
+            card.classList.toggle('hidden');
+        }
+
+        function toggleJobModal(show) {
+            const modal = document.getElementById('job-posting-modal');
+            if(show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+
+        // Handle dynamic live injection of posted requirements
+        function handleJobSubmission(e) {
+            e.preventDefault();
+            const titleValue = document.getElementById('modal-job-title').value.trim();
+            
+            const listingsContainer = document.getElementById('live-postings-container');
+            
+            // Generate clean UI nodes for newly created corporate requirements
+            const newListing = document.createElement('div');
+            newListing classList = "bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center animate-pulse";
+            newListing.style.animationIterationCount = "1";
+            newListing.style.animationDuration = "1s";
+            newListing.innerHTML = `<span class="font-bold text-xs text-slate-800">${titleValue}</span>` +
+                                   `<span class="bg-purple-50 text-purple-700 border border-purple-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Pending Review</span>`;
+            
+            listingsContainer.prepend(newListing);
+            
+            alert("Corporate Requirement has been submitted into the active index framework successfully!");
+            document.getElementById('job-posting-form').reset();
+            toggleJobModal(false);
+        }
+
+        function executeAccountDisconnect() {
+            localStorage.clear();
+            alert("Corporate Session Invalidated safely. Redirecting to access terminal...");
+            window.location.href = "login.html";
+        }
+
+        // Close dropdown when clicking into external coordinate segments
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('account-dropdown-card');
+            const button = document.querySelector('nav relative button');
+            if (dropdown && !dropdown.classList.contains('hidden') && !e.target.closest('nav')) {
+                dropdown.classList.add('hidden');
             }
-        }
-        
-        function toggleJob(dropdown) {
-            alert(`Job status switched to: ${dropdown.value.toUpperCase()}`);
-        }
-
-        function searchCandidatesAndPlatform() {
-            const query = document.getElementById('candidate-search-input').value.toLowerCase();
-            if (query === 'home' || query === 'about us') {
-                window.location.href = query === 'home' ? 'index.html' : 'about.html';
-                return;
-            }
-            document.querySelectorAll('.candidate-card').forEach(card => {
-                const name = card.querySelector('.candidate-name').innerText.toLowerCase();
-                const appliedJob = card.querySelector('.candidate-job').innerText.toLowerCase();
-                const textBody = card.innerText.toLowerCase();
-                card.style.display = (name.includes(query) || appliedJob.includes(query) || textBody.includes(query)) ? 'block' : 'none';
-            });
-        }
-
-        function setupDropdownInteractions() {
-            const menuBtn = document.getElementById('user-menu-button');
-            const menuDropdown = document.getElementById('logged-in-dropdown-menu');
-
-            if (menuBtn && menuDropdown) {
-                menuBtn.onclick = function(e) {
-                    e.stopPropagation();
-                    menuDropdown.classList.toggle('hidden');
-                };
-                document.addEventListener('click', function(e) {
-                    if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
-                        menuDropdown.classList.add('hidden');
-                    }
-                });
-            }
-        }
-
-        async function loadLayout() {
-            try {
-                const h = await fetch('header.html'); 
-                if(h.ok) {
-                    document.getElementById('header-node').innerHTML = await h.text();
-                    
-                    const cachedEmail = localStorage.getItem("employerEmail");
-                    const cachedName = localStorage.getItem("employerName");
-
-                    const loggedOutBtn = document.getElementById('logged-out-btn');
-                    const loggedInDropdown = document.getElementById('logged-in-dropdown');
-                    const headerDisplayName = document.getElementById('header-display-name');
-                    const popoverUserName = document.getElementById('popover-user-name');
-                    const popoverUserEmail = document.getElementById('popover-user-email');
-
-                    if (loggedOutBtn && loggedInDropdown) {
-                        loggedOutBtn.classList.add('hidden');
-                        loggedInDropdown.classList.remove('hidden');
-                        if(headerDisplayName) headerDisplayName.innerText = cachedName;
-                        if(popoverUserName) popoverUserName.innerText = cachedName;
-                        if(popoverUserEmail) popoverUserEmail.innerText = cachedEmail;
-                    }
-                    setupDropdownInteractions();
-                }
-                const f = await fetch('footer.html'); 
-                if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
-            } catch(err) {
-                console.error("Layout mounting fault:", err);
-            }
-        }
-        window.addEventListener('DOMContentLoaded', loadLayout);
+        });
     </script>
 </body>
 </html>
