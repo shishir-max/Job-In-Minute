@@ -103,11 +103,11 @@
             <!-- LEFT APPLICATIONS TRACKING TRACK -->
             <div class="lg:col-span-2 space-y-4">
                 <h2 class="font-black text-xs uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                    <i class="fa-solid fa-users-viewfinder"></i> Received Candidate Profiles
+                    <i class="fa-solid fa-users-viewfinder"></i> <span id="candidate-header-text">Received Candidate Profiles</span>
                 </h2>
                 
                 <div id="dynamic-candidates-container" class="space-y-4">
-                    <!-- Loaded dynamically via JavaScript based on who is logged in -->
+                    <!-- Loaded dynamically via JavaScript based on chosen filter -->
                 </div>
             </div>
 
@@ -165,17 +165,16 @@
     </footer>
 
     <script>
-        // System initialization initialization
+        let currentSelectedFilter = "all";
+
         document.addEventListener("DOMContentLoaded", function() {
             const corporateEmail = localStorage.getItem("employerEmail") || "corporate@domain.com";
             const corporateName = localStorage.getItem("employerName") || "Corporate User";
 
-            // Map data to header context elements
             document.getElementById('nav-profile-display-name').innerText = corporateName;
             document.getElementById('dropdown-card-name').innerText = corporateName;
             document.getElementById('dropdown-card-email').innerText = corporateEmail;
 
-            // Render live content based cleanly on current session
             renderDashboardDynamicContent(corporateEmail);
         });
 
@@ -191,60 +190,115 @@
             else modal.classList.add('hidden');
         }
 
-        // Dynamically segments applicants based on account verification
+        function selectJobFilter(title) {
+            currentSelectedFilter = title;
+            const corporateEmail = localStorage.getItem("employerEmail") || "corporate@domain.com";
+            renderDashboardDynamicContent(corporateEmail);
+        }
+
         function renderDashboardDynamicContent(email) {
             const candidatesContainer = document.getElementById('dynamic-candidates-container');
             const listingsContainer = document.getElementById('live-postings-container');
+            const headerText = document.getElementById('candidate-header-text');
             
             candidatesContainer.innerHTML = "";
             listingsContainer.innerHTML = "";
 
-            // Access unique storage arrays linked directly to this email session context
+            if (currentSelectedFilter === "all") {
+                headerText.innerText = "Received Candidate Profiles";
+            } else {
+                headerText.innerText = `Applications for: ${currentSelectedFilter}`;
+            }
+
             const storageKey = `jobs_${email}`;
             let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
 
-            // ONLY draw data if account criteria aligns with the targeted system registry
+            // 1. RENDER LEFT HAND SIDE (CANDIDATES MATRIX)
             if (email === "shishirbharti51@gmail.com") {
-                // Show default data ONLY for this deployment configuration profile
-                candidatesContainer.innerHTML = `
-                    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-6">
-                        <div class="flex justify-between items-start border-b border-slate-50 pb-4">
-                            <div>
-                                <h3 class="font-black text-sm text-slate-900">Soni Singh</h3>
-                                <p class="text-xs text-blue-600 font-bold mt-0.5">Position: <span class="text-slate-500">US IT Recruitment Lead</span></p>
+                if (currentSelectedFilter === "all" || currentSelectedFilter === "US IT Recruitment Lead") {
+                    candidatesContainer.innerHTML = `
+                        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-6">
+                            <div class="flex justify-between items-start border-b border-slate-50 pb-4">
+                                <div>
+                                    <h3 class="font-black text-sm text-slate-900">Soni Singh</h3>
+                                    <p class="text-xs text-blue-600 font-bold mt-0.5">Position: <span class="text-slate-500">US IT Recruitment Lead</span></p>
+                                </div>
+                                <span class="bg-amber-50 text-amber-700 border border-amber-200 rounded-lg px-3 py-1.5 font-bold text-[11px]">Awaiting Review</span>
                             </div>
-                            <span class="bg-amber-50 text-amber-700 border border-amber-200 rounded-lg px-3 py-1.5 font-bold text-[11px]">Awaiting Review</span>
-                        </div>
-                        <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
-                            4 years of experience executing technical candidate sourcing workflows at Lucky Brilliant School. High core expertise across US IT recruitment clients, CTC evaluations, background verification loops (BGV).
-                        </p>
-                    </div>`;
+                            <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                4 years of experience executing technical candidate sourcing workflows at Lucky Brilliant School. High core expertise across US IT recruitment clients, CTC evaluations, background verification loops (BGV).
+                            </p>
+                        </div>`;
+                } else {
+                    candidatesContainer.innerHTML = `
+                        <div class="bg-white rounded-2xl p-8 border border-slate-100 text-center text-slate-400 text-xs">
+                            <i class="fa-solid fa-user-slash text-2xl mb-2 text-slate-300 block"></i>
+                            No candidates have applied to this specific posting yet.
+                        </div>`;
+                }
 
+                // Append primary native template card to the right panel array
                 const defaultNode = document.createElement('div');
-                defaultNode.className = "bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center";
-                defaultNode.innerHTML = `<span class="font-bold text-xs text-slate-800">US IT Recruitment Lead</span>` +
-                                        `<span class="bg-emerald-50 text-emerald-700 border border-emerald-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Active</span>`;
+                defaultNode.className = `bg-white rounded-2xl p-4 border shadow-sm flex justify-between items-center transition cursor-pointer ${currentSelectedFilter === 'US IT Recruitment Lead' ? 'border-blue-500 bg-blue-50/30' : 'border-slate-100 hover:border-slate-300'}`;
+                defaultNode.setAttribute("onclick", "selectJobFilter('US IT Recruitment Lead')");
+                defaultNode.innerHTML = `<span class="font-bold text-xs text-slate-800 flex-grow">US IT Recruitment Lead</span>` +
+                                        `<div class="flex items-center gap-3" onclick="event.stopPropagation();">` +
+                                        `<span class="bg-emerald-50 text-emerald-700 border border-emerald-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Active</span>` +
+                                        `</div>`;
                 listingsContainer.appendChild(defaultNode);
             } else {
-                // Completely fresh interface screen for alternative employer entities
-                candidatesContainer.innerHTML = `
-                    <div class="bg-white rounded-2xl p-8 border border-slate-100 text-center text-slate-400 text-xs">
-                        <i class="fa-solid fa-folder-open text-2xl mb-2 text-slate-300 block"></i>
-                        No dynamic applications have hit your custom listings yet.
-                    </div>`;
+                // If customized user logs into workflow
+                if (registeredJobs.length > 0 && currentSelectedFilter !== "all") {
+                    candidatesContainer.innerHTML = `
+                        <div class="bg-white rounded-2xl p-8 border border-slate-100 text-center text-slate-400 text-xs">
+                            <i class="fa-solid fa-user-clock text-2xl mb-2 text-slate-300 block"></i>
+                            Requirement active! Awaiting candidate registry submissions for "${currentSelectedFilter}".
+                        </div>`;
+                } else {
+                    candidatesContainer.innerHTML = `
+                        <div class="bg-white rounded-2xl p-8 border border-slate-100 text-center text-slate-400 text-xs">
+                            <i class="fa-solid fa-folder-open text-2xl mb-2 text-slate-300 block"></i>
+                            Select an active listing card on the right to review target submissions.
+                        </div>`;
+                }
             }
 
-            // Append any dynamically created unique user requirements
-            registeredJobs.forEach(function(jobTitle) {
+            // 2. RENDER RIGHT HAND SIDE (DYNAMIC POSTINGS WITH DELETE/CLOSE SYSTEM)
+            registeredJobs.forEach(function(jobTitle, index) {
                 const node = document.createElement('div');
-                node.className = "bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex justify-between items-center";
-                node.innerHTML = `<span class="font-bold text-xs text-slate-800">${jobTitle}</span>` +
-                                 `<span class="bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Active</span>`;
+                node.className = `bg-white rounded-2xl p-4 border shadow-sm flex justify-between items-center transition cursor-pointer ${currentSelectedFilter === jobTitle ? 'border-blue-500 bg-blue-50/30' : 'border-slate-100 hover:border-slate-300'}`;
+                node.setAttribute("onclick", `selectJobFilter("${jobTitle}")`);
+                node.innerHTML = `
+                    <span class="font-bold text-xs text-slate-800 flex-grow truncate mr-2">${jobTitle}</span>
+                    <div class="flex items-center gap-3" onclick="event.stopPropagation();">
+                        <span class="bg-blue-50 text-blue-700 border border-blue-100 px-2 py-0.5 text-[9px] uppercase font-black rounded-md">Active</span>
+                        <button onclick="closeJobListing(${index})" class="text-slate-300 hover:text-red-500 transition p-1" title="Close Listing">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </div>`;
                 listingsContainer.prepend(node);
             });
         }
 
-        // Submitting new requirements cleanly into custom arrays
+        // REMOVE/CLOSE SPECIFIC JOB FROM LIFECYCLE
+        function closeJobListing(index) {
+            if (confirm("Are you sure you want to close and remove this job post?")) {
+                const corporateEmail = localStorage.getItem("employerEmail") || "corporate@domain.com";
+                const storageKey = `jobs_${corporateEmail}`;
+                let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
+                
+                // Remove item from array context
+                registeredJobs.splice(registeredJobs.length - 1 - index, 1);
+                localStorage.setItem(storageKey, JSON.stringify(registeredJobs));
+                
+                // Clear active filter context if the open job was destroyed
+                currentSelectedFilter = "all";
+                
+                alert("Job listing closed and safely extracted from server pipelines.");
+                renderDashboardDynamicContent(corporateEmail);
+            }
+        }
+
         function handleJobSubmission(e) {
             e.preventDefault();
             const titleValue = document.getElementById('modal-job-title').value.trim();
@@ -260,7 +314,6 @@
             document.getElementById('job-posting-form').reset();
             toggleJobModal(false);
             
-            // Re-render matching listings seamlessly
             renderDashboardDynamicContent(corporateEmail);
         }
 
