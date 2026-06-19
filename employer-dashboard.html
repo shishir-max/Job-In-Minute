@@ -237,17 +237,22 @@
                         </div>`;
                 }
 
-                // Append primary native template card to the right panel array
+                // Native initial static card structure layout configurations
                 const defaultNode = document.createElement('div');
-                defaultNode.className = `bg-white rounded-2xl p-4 border shadow-sm flex justify-between items-center transition cursor-pointer ${currentSelectedFilter === 'US IT Recruitment Lead' ? 'border-blue-500 bg-blue-50/30' : 'border-slate-100 hover:border-slate-300'}`;
+                defaultNode.className = `bg-white rounded-2xl p-4 border shadow-sm flex flex-col gap-3 transition cursor-pointer ${currentSelectedFilter === 'US IT Recruitment Lead' ? 'border-blue-500 bg-blue-50/30' : 'border-slate-100 hover:border-slate-300'}`;
                 defaultNode.setAttribute("onclick", "selectJobFilter('US IT Recruitment Lead')");
-                defaultNode.innerHTML = `<span class="font-bold text-xs text-slate-800 flex-grow">US IT Recruitment Lead</span>` +
-                                        `<div class="flex items-center gap-3" onclick="event.stopPropagation();">` +
-                                        `<span class="bg-emerald-50 text-emerald-700 border border-emerald-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Active</span>` +
-                                        `</div>`;
+                defaultNode.innerHTML = `
+                    <div class="flex justify-between items-center w-full">
+                        <span class="font-bold text-xs text-slate-800 truncate mr-2">US IT Recruitment Lead</span>
+                        <span class="bg-emerald-50 text-emerald-700 border border-emerald-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Active</span>
+                    </div>
+                    <div class="flex justify-end border-t border-slate-100/70 pt-2" onclick="event.stopPropagation();">
+                        <button onclick="deleteJobListing(-1)" class="text-[10px] font-bold text-slate-400 hover:text-red-500 transition flex items-center gap-1">
+                            <i class="fa-solid fa-trash-can text-[10px]"></i> Delete Job
+                        </button>
+                    </div>`;
                 listingsContainer.appendChild(defaultNode);
             } else {
-                // If customized user logs into workflow
                 if (registeredJobs.length > 0 && currentSelectedFilter !== "all") {
                     candidatesContainer.innerHTML = `
                         <div class="bg-white rounded-2xl p-8 border border-slate-100 text-center text-slate-400 text-xs">
@@ -263,38 +268,45 @@
                 }
             }
 
-            // 2. RENDER RIGHT HAND SIDE (DYNAMIC POSTINGS WITH DELETE/CLOSE SYSTEM)
+            // 2. RENDER DYNAMICALLY POSTED OPENINGS WITH SEPARATED ACTION ROW
             registeredJobs.forEach(function(jobTitle, index) {
                 const node = document.createElement('div');
-                node.className = `bg-white rounded-2xl p-4 border shadow-sm flex justify-between items-center transition cursor-pointer ${currentSelectedFilter === jobTitle ? 'border-blue-500 bg-blue-50/30' : 'border-slate-100 hover:border-slate-300'}`;
+                node.className = `bg-white rounded-2xl p-4 border shadow-sm flex flex-col gap-3 transition cursor-pointer ${currentSelectedFilter === jobTitle ? 'border-blue-500 bg-blue-50/30' : 'border-slate-100 hover:border-slate-300'}`;
                 node.setAttribute("onclick", `selectJobFilter("${jobTitle}")`);
                 node.innerHTML = `
-                    <span class="font-bold text-xs text-slate-800 flex-grow truncate mr-2">${jobTitle}</span>
-                    <div class="flex items-center gap-3" onclick="event.stopPropagation();">
+                    <div class="flex justify-between items-center w-full">
+                        <span class="font-bold text-xs text-slate-800 truncate mr-2">${jobTitle}</span>
                         <span class="bg-blue-50 text-blue-700 border border-blue-100 px-2 py-0.5 text-[9px] uppercase font-black rounded-md">Active</span>
-                        <button onclick="closeJobListing(${index})" class="text-slate-300 hover:text-red-500 transition p-1" title="Close Listing">
-                            <i class="fa-solid fa-trash-can text-xs"></i>
+                    </div>
+                    <div class="flex justify-end border-t border-slate-100/70 pt-2" onclick="event.stopPropagation();">
+                        <button onclick="deleteJobListing(${index})" class="text-[10px] font-bold text-slate-400 hover:text-red-500 transition flex items-center gap-1">
+                            <i class="fa-solid fa-trash-can text-[10px]"></i> Delete Job
                         </button>
                     </div>`;
                 listingsContainer.prepend(node);
             });
         }
 
-        // REMOVE/CLOSE SPECIFIC JOB FROM LIFECYCLE
-        function closeJobListing(index) {
-            if (confirm("Are you sure you want to close and remove this job post?")) {
+        // DESTRUCTION PIPELINE: REMOVE EXPLICIT LISTINGS
+        function deleteJobListing(index) {
+            if (confirm("Are you sure you want to completely delete this job post from your workspace?")) {
                 const corporateEmail = localStorage.getItem("employerEmail") || "corporate@domain.com";
-                const storageKey = `jobs_${corporateEmail}`;
-                let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
                 
-                // Remove item from array context
-                registeredJobs.splice(registeredJobs.length - 1 - index, 1);
-                localStorage.setItem(storageKey, JSON.stringify(registeredJobs));
+                if (index === -1) {
+                    // Turn off context flag if user tries to remove baseline profile target elements
+                    alert("System template item deleted successfully.");
+                    localStorage.setItem(`hide_default_${corporateEmail}`, "true");
+                } else {
+                    const storageKey = `jobs_${corporateEmail}`;
+                    let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
+                    
+                    // Pull specific position element layout out of stack
+                    registeredJobs.splice(registeredJobs.length - 1 - index, 1);
+                    localStorage.setItem(storageKey, JSON.stringify(registeredJobs));
+                }
                 
-                // Clear active filter context if the open job was destroyed
+                // Reset filtering matrices safely back to baseline data track
                 currentSelectedFilter = "all";
-                
-                alert("Job listing closed and safely extracted from server pipelines.");
                 renderDashboardDynamicContent(corporateEmail);
             }
         }
