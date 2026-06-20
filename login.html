@@ -7,23 +7,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- FIREBASE COMPAT SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // CORE INTEGRATION FRAMEWORK CONFIGURATION
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY_HERE", // Replace this with your actual Web API Key from Firebase Project Settings
-            authDomain: "job-in-minute.firebaseapp.com",
-            projectId: "job-in-minute",
-            storageBucket: "job-in-minute.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID_HERE", // Replace with your messaging sender ID
-            appId: "YOUR_APP_ID_HERE" // Replace with your actual App ID
-        };
+       const firebaseConfig = {
+  apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
+  authDomain: "job-in-minute.firebaseapp.com",
+  projectId: "job-in-minute",
+  storageBucket: "job-in-minute.firebasestorage.app",
+  messagingSenderId: "507249342731",
+  appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
+};
         
-        // Initialize Core Firebase System
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const db = firebase.firestore();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
@@ -61,13 +62,14 @@
             </div>
 
             <div>
+                <!-- SIGN IN FORM -->
                 <form id="signin-context-form" class="space-y-4" onsubmit="executeFirebaseLogin(event)">
                     <div>
-                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Corporate / Candidate Email</label>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Email Address</label>
                         <input type="email" id="signin-email" required placeholder="name@domain.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                     </div>
                     <div>
-                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Account Secret Access Key</label>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Password</label>
                         <input type="password" id="signin-password" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                     </div>
                     <button type="submit" id="main-submit-cta" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase py-3.5 rounded-xl transition tracking-wider shadow-md">
@@ -75,34 +77,27 @@
                     </button>
                 </form>
 
+                <!-- SIGN UP FORM -->
                 <form id="signup-context-form" class="space-y-4 hidden" onsubmit="executeFirebaseRegistration(event)">
                     <div>
-                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Full Representative Identity Name</label>
-                        <input type="text" id="signup-name" placeholder="e.g. Shishir Bharti" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Full Name</label>
+                        <input type="text" id="signup-name" required placeholder="e.g. Shishir Bharti" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                     </div>
                     <div>
-                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Target Account Operational Email Address</label>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Email Address</label>
                         <input type="email" id="signup-email" required placeholder="yourname@domain.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                     </div>
                     <div>
-                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Secure Creation Password</label>
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Password</label>
                         <input type="password" id="signup-password" required placeholder="Minimum 6 characters" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                     </div>
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase py-3.5 rounded-xl transition tracking-wider shadow-md">
-                        Provision Profile Environment &rarr;
+                        Register Account &rarr;
                     </button>
                 </form>
             </div>
-
-            <div class="text-center">
-                <a href="#" class="text-[11px] font-bold text-slate-400 hover:text-blue-500 transition">Forgot your account password?</a>
-            </div>
         </div>
     </main>
-
-    <footer class="bg-white border-t border-slate-100 py-6 text-center text-[11px] text-slate-400">
-        &copy; 2026 JobInMinute Security Pipeline infrastructure. All profile data securely isolated.
-    </footer>
 
     <script>
         let currentActiveRole = "employer";
@@ -110,36 +105,28 @@
 
         function switchFormContext(mode) {
             currentFormMode = mode;
-            const signinForm = document.getElementById("signin-context-form");
-            const signupForm = document.getElementById("signup-context-form");
-            const signinBtn = document.getElementById("tab-signin-btn");
-            const signupBtn = document.getElementById("tab-signup-btn");
-
             if (mode === "signin") {
-                signinForm.classList.remove("hidden");
-                signupForm.classList.add("hidden");
-                signinBtn.className = "text-blue-600 border-b-2 border-blue-600 pb-2 transition";
-                signupBtn.className = "pb-2 transition hover:text-slate-600 text-slate-400";
+                document.getElementById("signin-context-form").classList.remove("hidden");
+                document.getElementById("signup-context-form").classList.add("hidden");
+                document.getElementById("tab-signin-btn").className = "text-blue-600 border-b-2 border-blue-600 pb-2 transition";
+                document.getElementById("tab-signup-btn").className = "pb-2 transition text-slate-400";
             } else {
-                signupForm.classList.remove("hidden");
-                signinForm.classList.add("hidden");
-                signupBtn.className = "text-blue-600 border-b-2 border-blue-600 pb-2 transition";
-                signinBtn.className = "pb-2 transition hover:text-slate-600 text-slate-400";
+                document.getElementById("signup-context-form").classList.remove("hidden");
+                document.getElementById("signin-context-form").classList.add("hidden");
+                document.getElementById("tab-signup-btn").className = "text-blue-600 border-b-2 border-blue-600 pb-2 transition";
+                document.getElementById("tab-signin-btn").className = "pb-2 transition text-slate-400";
             }
             updateButtonLabelContext();
         }
 
         function selectRoleContext(role) {
             currentActiveRole = role;
-            const employerBtn = document.getElementById("role-employer-btn");
-            const candidateBtn = document.getElementById("role-candidate-btn");
-
             if (role === "employer") {
-                employerBtn.className = "bg-white text-slate-900 shadow-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2";
-                candidateBtn.className = "text-slate-400 py-2.5 rounded-lg transition flex items-center justify-center gap-2";
+                document.getElementById("role-employer-btn").className = "bg-white text-slate-900 shadow-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2";
+                document.getElementById("role-candidate-btn").className = "text-slate-400 py-2.5 rounded-lg transition flex items-center justify-center gap-2";
             } else {
-                candidateBtn.className = "bg-white text-slate-900 shadow-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2";
-                employerBtn.className = "text-slate-400 py-2.5 rounded-lg transition flex items-center justify-center gap-2";
+                document.getElementById("role-candidate-btn").className = "bg-white text-slate-900 shadow-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2";
+                document.getElementById("role-employer-btn").className = "text-slate-400 py-2.5 rounded-lg transition flex items-center justify-center gap-2";
             }
             updateButtonLabelContext();
         }
@@ -151,40 +138,33 @@
             }
         }
 
-        // FIREBASE INTERACTION ENGINE A: REGISTER NEW END-USERS
         function executeFirebaseRegistration(e) {
             e.preventDefault();
             const email = document.getElementById("signup-email").value.trim();
             const password = document.getElementById("signup-password").value;
-            const fullName = document.getElementById("signup-name").value.trim() || "User Identity";
+            const fullName = document.getElementById("signup-name").value.trim();
 
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    // Append metadata directly to display profiles list in cloud systems
-                    return user.updateProfile({
-                        displayName: fullName
-                    }).then(() => {
-                        // Bind customized access token values permanently inside Local Storage for redirection syncs
-                        localStorage.setItem("userRoleToken", currentActiveRole);
-                        localStorage.setItem("employerEmail", user.email);
-                        localStorage.setItem("employerName", fullName);
-
-                        alert("Account provisioned and deployed securely inside Firebase database!");
-                        
-                        if (currentActiveRole === "employer") {
-                            window.location.href = "employer-dashboard.html";
-                        } else {
-                            window.location.href = "employee-dashboard.html";
-                        }
+                    return user.updateProfile({ displayName: fullName }).then(() => {
+                        // Create user document in matching Firestore collection based on security rules
+                        const collectionName = currentActiveRole === "employer" ? "employers" : "employees";
+                        return db.collection(collectionName).doc(user.uid).set({
+                            name: fullName,
+                            email: email,
+                            role: currentActiveRole,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
                     });
                 })
-                .catch((error) => {
-                    alert("Database Registry Failure: " + error.message);
-                });
+                .then(() => {
+                    alert("Account saved securely to live Cloud Database!");
+                    window.location.href = currentActiveRole === "employer" ? "employer-dashboard.html" : "employee-dashboard.html";
+                })
+                .catch(err => alert("Error: " + err.message));
         }
 
-        // FIREBASE INTERACTION ENGINE B: LOGIN AND INITIATE SECURED SESSION PIPELINE
         function executeFirebaseLogin(e) {
             e.preventDefault();
             const email = document.getElementById("signin-email").value.trim();
@@ -192,24 +172,19 @@
 
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    const user = userCredential.user;
-                    
-                    // Capture active profile configurations dynamically from cloud auth state updates
-                    localStorage.setItem("userRoleToken", currentActiveRole);
-                    localStorage.setItem("employerEmail", user.email);
-                    localStorage.setItem("employerName", user.displayName || "Corporate Member");
-
-                    alert("Welcome back! Authentication identity verified successfully.");
-                    
-                    if (currentActiveRole === "employer") {
-                        window.location.href = "employer-dashboard.html";
+                    // Check Firestore collections to make sure they are logging into the right role dashboard
+                    const collectionName = currentActiveRole === "employer" ? "employers" : "employees";
+                    return db.collection(collectionName).doc(userCredential.user.uid).get();
+                })
+                .then((doc) => {
+                    if (doc.exists) {
+                        window.location.href = currentActiveRole === "employer" ? "employer-dashboard.html" : "employee-dashboard.html";
                     } else {
-                        window.location.href = "employee-dashboard.html";
+                        alert("Role mismatch. Please select the correct account role above.");
+                        auth.signOut();
                     }
                 })
-                .catch((error) => {
-                    alert("Authentication Failure: " + error.message);
-                });
+                .catch(err => alert("Login Failed: " + err.message));
         }
     </script>
 </body>
