@@ -7,25 +7,25 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- FIREBASE PLATFORM SYSTEMS COMPAT -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
-       const firebaseConfig = {
-  apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
-  authDomain: "job-in-minute.firebaseapp.com",
-  projectId: "job-in-minute",
-  storageBucket: "job-in-minute.firebasestorage.app",
-  messagingSenderId: "507249342731",
-  appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
-};
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY_HERE", 
+            authDomain: "job-in-minute.firebaseapp.com",
+            projectId: "job-in-minute",
+            storageBucket: "job-in-minute.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID_HERE", 
+            appId: "YOUR_APP_ID_HERE" 
+        };
         
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // GLOBAL VALIDATION CONSTANTS
         const PERSONAL_DOMAINS = ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "icloud.com", "aol.com", "zoho.com", "protonmail.com"];
         
         function isCorporateEmail(email) {
@@ -36,15 +36,36 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <header class="bg-white border-b border-slate-100 py-4 shadow-sm relative z-40">
-        <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
+    <!-- GLOBAL NAVIGATION ARCHITECTURE (TOP BAR) -->
+    <header class="bg-white border-b border-slate-100 shadow-sm relative z-40">
+        <!-- Social & Corporate Top Utility Line -->
+        <div class="bg-slate-900 text-white text-[11px] py-2">
+            <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <span class="text-slate-400"><i class="fa-solid fa-envelope text-blue-400 mr-1"></i> info@jobinminute.com</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="https://facebook.com" target="_blank" class="hover:text-blue-400 transition"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://instagram.com" target="_blank" class="hover:text-pink-400 transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://linkedin.com" target="_blank" class="hover:text-blue-500 transition"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Route Navigation Bar -->
+        <div class="container mx-auto px-4 max-w-6xl py-4 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <div class="bg-blue-600 text-white p-2 rounded-xl"><i class="fa-solid fa-bolt text-lg"></i></div>
                 <span class="font-black text-xl tracking-tight text-slate-900">JobInMinute</span>
             </div>
+            <nav class="flex items-center gap-6 text-xs font-bold text-slate-600">
+                <a href="index.html" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="about.html" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> About Us</a>
+            </nav>
         </div>
     </header>
 
+    <!-- CONTENT PORTAL REGISTRY CONTAINER -->
     <main class="flex-grow flex items-center justify-center px-4 py-12">
         <div class="bg-white border border-slate-100 rounded-3xl p-8 max-w-xl w-full shadow-2xl space-y-6">
             
@@ -63,6 +84,7 @@
             </div>
 
             <div>
+                <!-- SIGN IN FORM -->
                 <form id="signin-context-form" class="space-y-4" onsubmit="executeFirebaseLogin(event)">
                     <div>
                         <label id="signin-email-label" class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Business / Official Email ID</label>
@@ -77,21 +99,22 @@
                     </button>
                 </form>
 
+                <!-- EMPLOYEE SIGN-UP -->
                 <form id="signup-employee-form" class="space-y-4 hidden" onsubmit="executeEmployeeRegistration(event)">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Name *</label>
-                            <input type="text" id="emp-name" required placeholder="Alphanumeric Identity Name" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            <input type="text" id="emp-name" required placeholder="Full Name" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                         </div>
                         <div>
                             <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Phone No. *</label>
-                            <input type="tel" id="emp-phone" required pattern="[0-9]{10}" placeholder="Numeric 10-Digits Only" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            <input type="tel" id="emp-phone" required pattern="[0-9]{10}" placeholder="10-Digit Phone" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Personal Email ID *</label>
-                            <input type="email" id="emp-email" required placeholder="Must be a personal email identifier" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            <input type="email" id="emp-email" required placeholder="name@gmail.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                         </div>
                         <div>
                             <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Job Sector *</label>
@@ -105,7 +128,7 @@
                     </div>
                     <div>
                         <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Address (Optional)</label>
-                        <input type="text" id="emp-address" placeholder="Physical Address Location Structure" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                        <input type="text" id="emp-address" placeholder="Physical Home Address" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                     </div>
                     <div>
                         <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Password *</label>
@@ -114,6 +137,7 @@
                     <button type="submit" class="w-full bg-blue-600 text-white font-black text-xs uppercase py-3.5 rounded-xl transition shadow-md">Create Employee Account &rarr;</button>
                 </form>
 
+                <!-- EMPLOYER SIGN-UP -->
                 <form id="signup-employer-form" class="space-y-4 hidden" onsubmit="executeEmployerRegistration(event)">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -170,6 +194,9 @@
     </main>
 
     <script>
+        let currentActiveRole = "employer";
+        let currentFormMode = "signin";
+
         function switchFormContext(mode) {
             currentFormMode = mode;
             evalFormsVisibility();
@@ -293,9 +320,6 @@
                     .catch(err => alert(err.message));
             }
         }
-
-        let currentActiveRole = "employer";
-        let currentFormMode = "signin";
     </script>
 </body>
 </html>
