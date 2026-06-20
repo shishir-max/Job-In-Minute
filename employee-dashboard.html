@@ -13,14 +13,14 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
-    const firebaseConfig = {
-  apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
-  authDomain: "job-in-minute.firebaseapp.com",
-  projectId: "job-in-minute",
-  storageBucket: "job-in-minute.firebasestorage.app",
-  messagingSenderId: "507249342731",
-  appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
-};
+       const firebaseConfig = {
+          apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
+          authDomain: "job-in-minute.firebaseapp.com",
+          projectId: "job-in-minute",
+          storageBucket: "job-in-minute.firebasestorage.app",
+          messagingSenderId: "507249342731",
+          appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
+       };
         
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -29,7 +29,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <!-- GLOBAL NAVIGATION ARCHITECTURE (TOP BAR) -->
+    <!-- GLOBAL NAVIGATION ARCHITECTURE -->
     <header class="bg-white border-b border-slate-100 shadow-sm relative z-40">
         <div class="bg-slate-900 text-white text-[11px] py-2">
             <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
@@ -37,9 +37,9 @@
                     <span class="text-slate-400"><i class="fa-solid fa-envelope text-blue-400 mr-1"></i> info@jobinminute.com</span>
                 </div>
                 <div class="flex items-center gap-4">
-                    <a href="https://www.facebook.com/share/1BNyCNs5A1/" class="hover:text-blue-400 transition"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="https://www.instagram.com/kineticssource?utm_source=qr&igsh=MWRxMWMxZWIyaTM5cw=="  class="hover:text-pink-400 transition"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://linkedin.com/company/YOUR_COMPANY_LINKEDIN_NAME" class="hover:text-blue-500 transition"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" class="hover:text-blue-400 transition"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" class="hover:text-pink-400 transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-blue-500 transition"><i class="fa-brands fa-linkedin"></i></a>
                 </div>
             </div>
         </div>
@@ -56,7 +56,6 @@
                     <a href="about.html" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> About Us</a>
                 </nav>
 
-                <!-- User Menu Profile Widget Container -->
                 <div class="relative inline-block text-left">
                     <button type="button" onclick="toggleEmployeeMenuDropdown()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs py-2 px-4 rounded-xl transition flex items-center gap-2">
                         <span id="user-initials-badge">EM</span>
@@ -80,7 +79,7 @@
         </div>
     </header>
 
-    <!-- MAIN CORE PANEL METRICS CONTAINER -->
+    <!-- MAIN INTERFACE CORE HUB -->
     <main class="container mx-auto px-4 max-w-6xl flex-grow py-8 space-y-8">
         
         <!-- SEARCH FILTER SYSTEM ROW -->
@@ -134,7 +133,6 @@
                 <button type="button" onclick="closeProfileModalContext()" class="text-slate-400 hover:text-slate-600 transition text-sm"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <!-- FORM INPUT ENGINE FIELDS -->
             <form id="profile-edit-form" onsubmit="executeProfileUpdateData(event)" class="space-y-4 text-xs font-medium text-slate-600">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -177,14 +175,13 @@
         </div>
     </div>
 
-    <!-- CORE PANEL AUTOMATION SCRIPTS ENGINE -->
+    <!-- SCRIPTS CORE AUTOMATION ENGINE -->
     <script>
         let cachedVacanciesArray = [];
         let currentlyAuthenticatedUserUID = null;
         let globalUserProfileCachedObject = null;
-        let targetedUserCollectionName = "employees"; // Cross-compat fall-back reference string
+        let targetedUserCollectionName = "employees";
 
-        // Secure Session Gateway Pipeline Monitoring Routine
         auth.onAuthStateChanged(user => {
             if (user) {
                 currentlyAuthenticatedUserUID = user.uid;
@@ -208,13 +205,11 @@
 
         function openProfileModalContext() {
             if (!globalUserProfileCachedObject) return;
-            
             document.getElementById("modal-input-name").value = globalUserProfileCachedObject.name || "";
             document.getElementById("modal-input-phone").value = globalUserProfileCachedObject.phone || "";
             document.getElementById("modal-input-email").value = globalUserProfileCachedObject.email || "";
             document.getElementById("modal-input-sector").value = globalUserProfileCachedObject.jobSector || "it";
             document.getElementById("modal-input-address").value = globalUserProfileCachedObject.address || "";
-            
             document.getElementById("account-settings-modal").classList.remove("hidden");
             document.getElementById("employee-profile-dropdown").classList.add("hidden");
         }
@@ -223,7 +218,6 @@
             document.getElementById("account-settings-modal").classList.add("hidden");
         }
 
-        // DUAL-COLLECTION USER ROUTING SAFETIES (Fixes missing user dataset issues)
         function verifyAndFetchUserProfile(uid) {
             db.collection("employees").doc(uid).get()
                 .then(doc => {
@@ -231,7 +225,6 @@
                         targetedUserCollectionName = "employees";
                         applyLoadedProfileToDashboard(doc.data());
                     } else {
-                        // Check alternate generic user register pathway
                         return db.collection("users").doc(uid).get();
                     }
                 })
@@ -241,17 +234,16 @@
                             targetedUserCollectionName = "users";
                             applyLoadedProfileToDashboard(altDoc.data());
                         } else {
-                            alert("Profile System Mismatch: Account structural root document not found.");
+                            alert("Profile System Mismatch: Account root document not found.");
                             executeSignOutRoute();
                         }
                     }
                 })
-                .catch(err => alert("Profile System Synchronization Failure: " + err.message));
+                .catch(err => alert("Profile Synchronization Failure: " + err.message));
         }
 
         function applyLoadedProfileToDashboard(data) {
             globalUserProfileCachedObject = data;
-            
             document.getElementById("dropdown-user-name").innerText = data.name || "Employee Account";
             document.getElementById("dropdown-user-email").innerText = data.email || "Protected Account";
             
@@ -260,11 +252,9 @@
                 const initials = words.length > 1 ? (words[0][0] + words[words.length - 1][0]) : words[0][0];
                 document.getElementById("user-initials-badge").innerText = initials.toUpperCase();
             }
-
             syncMarketplaceFeedRegistry();
         }
 
-        // REAL-TIME DOCUMENT WRITE-BACK CONTROLLER (Saves changes back into Firestore)
         function executeProfileUpdateData(event) {
             event.preventDefault();
             if (!currentlyAuthenticatedUserUID) return;
@@ -280,24 +270,29 @@
                 .then(() => {
                     alert("Account Details Saved Successfully!");
                     closeProfileModalContext();
-                    // Live refresh the browser profile fields setup
                     globalUserProfileCachedObject = { ...globalUserProfileCachedObject, ...updatedPayload };
                     applyLoadedProfileToDashboard(globalUserProfileCachedObject);
                 })
                 .catch(err => alert("Database Modification Refused: " + err.message));
         }
 
+        // FIXED: Stripped down hardcoded strict status filters to prevent formatting mismatch
         function syncMarketplaceFeedRegistry() {
-            db.collection("jobs").where("status", "==", "ACTIVE").get()
+            db.collection("jobs").get()
                 .then(snapshot => {
                     cachedVacanciesArray = [];
+                    console.log(`Fetched ${snapshot.size} total job postings from Firestore.`);
+                    
                     snapshot.forEach(doc => {
-                        cachedVacanciesArray.push({ jobId: doc.id, ...doc.data() });
+                        const jobData = doc.data();
+                        console.log("Job Record Item Dump:", jobData);
+                        cachedVacanciesArray.push({ jobId: doc.id, ...jobData });
                     });
+                    
                     renderFilteredMarketplaceView(cachedVacanciesArray);
                     syncTrackedApplicationsPipeline();
                 })
-                .catch(err => console.error("Marketplace parsing loop failed: " + err.message));
+                .catch(err => console.error("Marketplace pulling failure: " + err.message));
         }
 
         function renderFilteredMarketplaceView(jobs) {
@@ -314,16 +309,16 @@
                 <div class="bg-white border border-slate-100 p-6 rounded-3xl shadow-sm space-y-4 hover:shadow-md transition">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h3 class="font-black text-sm text-slate-900">${job.jobTitle}</h3>
+                            <h3 class="font-black text-sm text-slate-900">${job.jobTitle || "Untitled Position"}</h3>
                             <span class="inline-block bg-slate-100 text-slate-500 uppercase font-black tracking-wider text-[9px] px-2 py-0.5 rounded mt-1">${job.sector || "General"}</span>
                         </div>
-                        <span class="bg-green-50 text-green-600 font-bold text-[9px] uppercase tracking-wider px-2 py-1 rounded-md">Active</span>
+                        <span class="bg-green-50 text-green-600 font-bold text-[9px] uppercase tracking-wider px-2 py-1 rounded-md">${job.status || "Active"}</span>
                     </div>
                     <div class="bg-slate-50 border border-dashed border-slate-200 rounded-xl p-3 text-xs text-slate-500 font-medium">
                         ${job.description || "No description requirements documentation provided."}
                     </div>
                     <div class="flex justify-end pt-1">
-                        <button type="button" onclick="executeApplicationSubmission('${job.jobId}', '${job.jobTitle}')" class="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs py-2 px-5 rounded-xl transition shadow-sm">
+                        <button type="button" onclick="executeApplicationSubmission('${job.jobId}', '${job.jobTitle || 'Job Application'}')" class="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs py-2 px-5 rounded-xl transition shadow-sm">
                             Apply Online
                         </button>
                     </div>
@@ -352,7 +347,7 @@
                 jobId: jobId,
                 jobTitle: jobTitle,
                 candidateUid: currentlyAuthenticatedUserUID,
-                userId: currentlyAuthenticatedUserUID, // Backwards compatible fallback property index
+                userId: currentlyAuthenticatedUserUID, 
                 candidateName: globalUserProfileCachedObject.name || "Anonymous Candidate",
                 status: "PENDING",
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -364,52 +359,48 @@
             .catch(err => alert("Submission Refusal: " + err.message));
         }
 
-        // COMPREHENSIVE MULTI-KEY PIPELINE QUERY (Solves missing applied jobs feedback lists)
+        // IMPROVED: Queries EVERYTHING under applications collection to confirm user records matching
         function syncTrackedApplicationsPipeline() {
             if (!currentlyAuthenticatedUserUID) return;
 
-            // Attempt to look for apps by 'candidateUid' tracking field index
-            db.collection("applications").where("candidateUid", "==", currentlyAuthenticatedUserUID).get()
+            db.collection("applications").get()
                 .then(snapshot => {
-                    if (!snapshot.empty) {
-                        renderTrackingListView(snapshot);
-                    } else {
-                        // FALLBACK: Query against alternative cross-platform structural identifier names
-                        return db.collection("applications").where("userId", "==", currentlyAuthenticatedUserUID).get();
+                    const container = document.getElementById("tracked-applications-container");
+                    console.log(`Fetched ${snapshot.size} total global submitted applications logs.`);
+                    
+                    let userApplications = [];
+
+                    snapshot.forEach(doc => {
+                        const app = doc.data();
+                        // Loose alignment fallback checks to link applied status back together
+                        if (app.candidateUid === currentlyAuthenticatedUserUID || 
+                            app.userId === currentlyAuthenticatedUserUID || 
+                            app.employeeId === currentlyAuthenticatedUserUID) {
+                            userApplications.push(app);
+                        }
+                    });
+
+                    if (userApplications.length === 0) {
+                        container.innerHTML = `
+                            <div class="bg-white border border-slate-100 p-6 rounded-3xl text-center text-xs font-bold text-slate-400 w-full">
+                                No submitted tracking files present.
+                            </div>`;
+                        return;
                     }
+
+                    container.innerHTML = userApplications.map(app => {
+                        let badgeClass = "bg-yellow-50 text-yellow-600";
+                        if (app.status === "SELECTED" || app.status === "Selected") badgeClass = "bg-green-50 text-green-600";
+                        if (app.status === "REJECTED" || app.status === "Rejected") badgeClass = "bg-red-50 text-red-600";
+
+                        return `
+                            <div class="bg-white border border-slate-100 p-4 rounded-2xl shadow-sm flex justify-between items-center gap-3">
+                                <span class="font-bold text-xs text-slate-800 truncate">${app.jobTitle || "Job Application"}</span>
+                                <span class="${badgeClass} font-black text-[9px] uppercase tracking-wider px-2 py-1 rounded-md shrink-0">${app.status || "PENDING"}</span>
+                            </div>`;
+                    }).join('');
                 })
-                .then(fallbackSnapshot => {
-                    if (fallbackSnapshot) {
-                        renderTrackingListView(fallbackSnapshot);
-                    }
-                })
-                .catch(err => console.error("Tracking filter break trace: " + err.message));
-        }
-
-        function renderTrackingListView(snapshot) {
-            const container = document.getElementById("tracked-applications-container");
-            if (!snapshot || snapshot.empty) {
-                container.innerHTML = `
-                    <div class="bg-white border border-slate-100 p-6 rounded-3xl text-center text-xs font-bold text-slate-400 w-full">
-                        No submitted tracking files present.
-                    </div>`;
-                return;
-            }
-
-            let trackingHtml = "";
-            snapshot.forEach(doc => {
-                const app = doc.data();
-                let badgeClass = "bg-yellow-50 text-yellow-600";
-                if (app.status === "SELECTED") badgeClass = "bg-green-50 text-green-600";
-                if (app.status === "REJECTED") badgeClass = "bg-red-50 text-red-600";
-
-                trackingHtml += `
-                    <div class="bg-white border border-slate-100 p-4 rounded-2xl shadow-sm flex justify-between items-center gap-3">
-                        <span class="font-bold text-xs text-slate-800 truncate">${app.jobTitle || "Job Application"}</span>
-                        <span class="${badgeClass} font-black text-[9px] uppercase tracking-wider px-2 py-1 rounded-md shrink-0">${app.status}</span>
-                    </div>`;
-            });
-            container.innerHTML = trackingHtml;
+                .catch(err => console.error("Tracking verification lookup failure: " + err.message));
         }
 
         function executeSignOutRoute() {
