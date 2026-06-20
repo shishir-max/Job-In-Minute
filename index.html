@@ -3,129 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | JobInMinute</title>
+    <title>JobInMinute | Connecting Technical Experts With Global Workspaces</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- FIREBASE PLATFORM ENGINE IDENTIFICATION -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+      const firebaseConfig = {
+  apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
+  authDomain: "job-in-minute.firebaseapp.com",
+  projectId: "job-in-minute",
+  storageBucket: "job-in-minute.firebasestorage.app",
+  messagingSenderId: "507249342731",
+  appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
+};
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+    </script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <!-- TOP BAR SECTION -->
-    <div class="bg-slate-900 text-slate-300 text-[11px] py-2 border-b border-slate-800">
-        <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <span class="flex items-center gap-1.5">
-                    <i class="fa-solid fa-envelope text-purple-400"></i> website-support@jobinminute.com
-                </span>
-            </div>
-            <div class="flex items-center gap-4">
-                <a href="https://linkedin.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-linkedin text-sm"></i></a>
-                <a href="https://facebook.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-facebook text-sm"></i></a>
-                <a href="https://instagram.com" target="_blank" class="hover:text-purple-400 transition"><i class="fa-brands fa-instagram text-sm"></i></a>
+    <!-- GLOBAL HEADER ARCHITECTURE NAVIGATION PANEL -->
+    <header class="bg-white border-b border-slate-100 shadow-sm relative z-40">
+        <!-- Top Info Line Utility Row -->
+        <div class="bg-slate-900 text-white text-[11px] py-2">
+            <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <span class="text-slate-400"><i class="fa-solid fa-envelope text-blue-400 mr-1"></i> website-support@jobinminute.com</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="https://facebook.com" target="_blank" class="hover:text-blue-400 transition"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://instagram.com" target="_blank" class="hover:text-pink-400 transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://linkedin.com" target="_blank" class="hover:text-blue-500 transition"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Header Injection Node -->
-    <div id="header-node"></div>
-
-    <!-- MAIN HERO CONTENT -->
-    <main class="flex-grow flex items-center justify-center py-16">
-        <div class="container mx-auto px-4 max-w-4xl text-center space-y-6">
-            <span class="text-xs font-bold uppercase tracking-widest text-purple-600 bg-purple-50 px-4 py-1.5 rounded-full">
-                Welcome to JobInMinute
-            </span>
-            <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none">
-                Connecting Technical Experts <br>With Global Workspaces.
-            </h1>
-            <p class="text-sm text-slate-500 max-w-xl mx-auto leading-relaxed">
-                Log in to access your direct workspace dashboard panel, configure job application matrices, or review active incoming candidates.
-            </p>
-            <div id="action-routing-zone" class="pt-4 flex justify-center gap-4">
-                <!-- Fallback actions when no active session is loaded yet -->
-                <a href="login.html" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-6 py-3 rounded-xl shadow-md transition">
-                    Access Portal Gate
-                </a>
+        
+        <!-- Interactive Navigation Routing Content -->
+        <div class="container mx-auto px-4 max-w-6xl py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-blue-600 text-white p-2 rounded-xl"><i class="fa-solid fa-bolt text-lg"></i></div>
+                <span class="font-black text-xl tracking-tight text-slate-900">JobInMinute</span>
             </div>
+            
+            <nav class="flex items-center gap-6 text-xs font-bold text-slate-600">
+                <a href="index.html" class="text-blue-600 font-black flex items-center gap-1"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="about.html" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> About Us</a>
+                
+                <!-- DYNAMIC PERSISTENT SESSION PORTAL CTA MODULE BUTTON -->
+                <a id="nav-dynamic-cta" href="login.html" class="bg-slate-950 hover:bg-slate-800 text-white text-xs font-bold py-2.5 px-5 rounded-full transition shadow-md">
+                    Sign In / Register
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MIDDLE CORE HERO LAYOUT CONTENT SECTION -->
+    <main class="flex-grow flex flex-col items-center justify-center text-center px-4 py-20 max-w-4xl mx-auto space-y-6">
+        <span class="text-[10px] uppercase font-black tracking-widest text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full">
+            Welcome to JobInMinute
+        </span>
+        
+        <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+            Connecting Technical Experts <br class="hidden md:block"> With Global Workspaces.
+        </h1>
+        
+        <p class="text-xs md:text-sm text-slate-500 max-w-xl font-medium leading-relaxed">
+            Log in to access your direct workspace dashboard panel, configure job application matrices, or review active incoming candidates instantly without manual latency.
+        </p>
+        
+        <div class="pt-4">
+            <a id="hero-dynamic-cta" href="login.html" class="bg-purple-600 hover:bg-purple-700 text-white font-black text-xs uppercase px-8 py-4 rounded-xl shadow-lg transition tracking-wider">
+                Access Portal Gate
+            </a>
         </div>
     </main>
 
-    <!-- Footer Injection Node -->
-    <div id="footer-node"></div>
+    <!-- FOOTER DESIGN -->
+    <footer class="bg-white border-t border-slate-100 py-6 text-center text-[11px] text-slate-400 font-medium">
+        <div class="container mx-auto px-4">
+            &copy; 2026 JobInMinute Executive Infrastructures. All rights reserved.
+        </div>
+    </footer>
 
+    <!-- GLITCH PROTECTION CORE SCRIPT ROUTER ENGINE -->
     <script>
-        function setupDropdownInteractions() {
-            const menuBtn = document.getElementById('user-menu-button');
-            const menuDropdown = document.getElementById('logged-in-dropdown-menu');
+        // Track underlying user instance profile status loops
+        auth.onAuthStateChanged(user => {
+            const navCta = document.getElementById("nav-dynamic-cta");
+            const heroCta = document.getElementById("hero-dynamic-cta");
 
-            if (menuBtn && menuDropdown) {
-                menuBtn.onclick = function(e) {
-                    e.stopPropagation();
-                    menuDropdown.classList.toggle('hidden');
-                };
-                document.addEventListener('click', function(e) {
-                    if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
-                        menuDropdown.classList.add('hidden');
+            if (user) {
+                // Determine user identity mapping to resolve exact dashboard targets
+                db.collection("employers").doc(user.uid).get().then(empDoc => {
+                    if (empDoc.exists) {
+                        setSessionActiveState("employer-dashboard.html");
+                    } else {
+                        setSessionActiveState("employee-dashboard.html");
                     }
+                }).catch(() => {
+                    // Fail-safe default link
+                    setSessionActiveState("login.html");
                 });
+            } else {
+                // Keep default landing gate redirects intact if unauthenticated
+                navCta.innerText = "Sign In / Register";
+                navCta.href = "login.html";
+                heroCta.innerText = "Access Portal Gate";
+                heroCta.href = "login.html";
             }
+        });
+
+        function setSessionActiveState(dashboardUrl) {
+            const navCta = document.getElementById("nav-dynamic-cta");
+            const heroCta = document.getElementById("hero-dynamic-cta");
+
+            // Update Header Navigation Link Look
+            navCta.innerHTML = `<i class="fa-solid fa-gauge-high mr-1"></i> Go to Dashboard`;
+            navCta.href = dashboardUrl;
+            navCta.className = "bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-5 rounded-full transition shadow-md flex items-center";
+
+            // Update Main Center Page Hero Action Trigger Button
+            heroCta.innerText = "Return to My Workspace →";
+            heroCta.href = dashboardUrl;
+            heroCta.className = "bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase px-8 py-4 rounded-xl shadow-lg transition tracking-wider inline-block";
         }
-
-        async function loadLayout() {
-            try {
-                const h = await fetch('header.html'); 
-                if(h.ok) {
-                    document.getElementById('header-node').innerHTML = await h.text();
-                    
-                    // Detect what session is actually active
-                    const currentRole = localStorage.getItem("userRoleToken");
-                    let cachedEmail = "";
-                    let cachedName = "";
-
-                    if (currentRole === "employer") {
-                        cachedEmail = localStorage.getItem("employerEmail") || "shishirbharti51@gmail.com";
-                        cachedName = localStorage.getItem("employerName") || "Shishir Bharti";
-                    } else if (currentRole === "employee") {
-                        cachedEmail = localStorage.getItem("employeeEmail") || "shishirbharti51@gmail.com";
-                        cachedName = localStorage.getItem("employeeName") || "Soni Singh";
-                    }
-
-                    const loggedOutBtn = document.getElementById('logged-out-btn');
-                    const loggedInDropdown = document.getElementById('logged-in-dropdown');
-                    const headerDisplayName = document.getElementById('header-display-name');
-                    const popoverUserName = document.getElementById('popover-user-name');
-                    const popoverUserEmail = document.getElementById('popover-user-email');
-                    const routingZone = document.getElementById('action-routing-zone');
-
-                    // If a valid session exists, immediately update the layout headers
-                    if (currentRole && loggedOutBtn && loggedInDropdown) {
-                        loggedOutBtn.classList.add('hidden');
-                        loggedInDropdown.classList.remove('hidden');
-                        if(headerDisplayName) headerDisplayName.innerText = cachedName;
-                        if(popoverUserName) popoverUserName.innerText = cachedName;
-                        if(popoverUserEmail) popoverUserEmail.innerText = cachedEmail;
-
-                        // Dynamically change the big button in the middle to point to the correct workspace dashboard
-                        if(routingZone) {
-                            // FIXED FILENAMES TO PREVENT 404 SYSTEM ROUTING ISSUES
-                            const destinationPage = currentRole === "employer" ? "employer-dashboard.html" : "employee-dashboard.html";
-                            const themeColor = currentRole === "employer" ? "bg-purple-600 hover:bg-purple-700" : "bg-blue-600 hover:bg-blue-700";
-                            routingZone.innerHTML = `
-                                <a href="${destinationPage}" class="${themeColor} text-white text-xs font-bold px-6 py-3 rounded-xl shadow-md transition">
-                                    Go directly to your ${currentRole === "employer" ? "Corporate Dashboard" : "Employee Workspace"} →
-                                </a>
-                            `;
-                        }
-                    }
-                    setupDropdownInteractions();
-                }
-
-                const f = await fetch('footer.html'); 
-                if(f.ok) document.getElementById('footer-node').innerHTML = await f.text();
-            } catch(err) {
-                console.error("Layout mounting context failure:", err);
-            }
-        }
-        window.addEventListener('DOMContentLoaded', loadLayout);
     </script>
 </body>
 </html>
