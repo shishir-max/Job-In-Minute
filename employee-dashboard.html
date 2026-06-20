@@ -13,7 +13,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
-      const firebaseConfig = {
+    const firebaseConfig = {
   apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
   authDomain: "job-in-minute.firebaseapp.com",
   projectId: "job-in-minute",
@@ -31,36 +31,25 @@
 
     <!-- GLOBAL NAVIGATION ARCHITECTURE (TOP BAR) -->
     <header class="bg-white border-b border-slate-100 shadow-sm relative z-40">
-        <!-- 1. Social & Corporate Top Utility Line -->
         <div class="bg-slate-900 text-white text-[11px] py-2">
             <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
                 <div class="flex items-center gap-4">
                     <span class="text-slate-400"><i class="fa-solid fa-envelope text-blue-400 mr-1"></i> info@jobinminute.com</span>
                 </div>
-                <!-- SOCIAL LINK UPDATE ZONE -->
                 <div class="flex items-center gap-4">
-                    <a href="https://www.facebook.com/share/1BNyCNs5A1/" target="_blank" class="hover:text-blue-400 transition">
-                        <i class="fa-brands fa-facebook"></i>
-                    </a>
-                    <a href="https://www.instagram.com/kineticssource?utm_source=qr&igsh=MWRxMWMxZWIyaTM5cw==" target="_blank" class="hover:text-pink-400 transition">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-                    <a href="PASTE_YOUR_LINKEDIN_URL_HERE" target="_blank" class="hover:text-blue-500 transition">
-                        <i class="fa-brands fa-linkedin"></i>
-                    </a>
+                    <a href="https://www.facebook.com/share/1BNyCNs5A1/" class="hover:text-blue-400 transition"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/kineticssource?utm_source=qr&igsh=MWRxMWMxZWIyaTM5cw=="  class="hover:text-pink-400 transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://linkedin.com/company/YOUR_COMPANY_LINKEDIN_NAME" class="hover:text-blue-500 transition"><i class="fa-brands fa-linkedin"></i></a>
                 </div>
             </div>
         </div>
         
-        <!-- 2. Main Route Navigation Bar -->
         <div class="container mx-auto px-4 max-w-6xl py-4 flex justify-between items-center">
-            <!-- Brand Identity -->
             <div class="flex items-center gap-2">
                 <div class="bg-blue-600 text-white p-2 rounded-xl"><i class="fa-solid fa-bolt text-lg"></i></div>
                 <span class="font-black text-xl tracking-tight text-slate-900">JobInMinute Employee Panel</span>
             </div>
             
-            <!-- Navigation Links & Account Dropdown Context -->
             <div class="flex items-center gap-6">
                 <nav class="flex items-center gap-6 text-xs font-bold text-slate-600">
                     <a href="index.html" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fa-solid fa-house"></i> Home</a>
@@ -74,7 +63,6 @@
                         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                     </button>
                     
-                    <!-- Dropdown Menu Panel -->
                     <div id="employee-profile-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl py-3 z-50 space-y-2">
                         <div class="px-4 py-2 border-b border-slate-50">
                             <p id="dropdown-user-name" class="font-black text-xs text-slate-800 uppercase tracking-tight">Loading...</p>
@@ -132,53 +120,60 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
 
-    <!-- INTERACTIVE DYNAMIC INTERFACE POPUP MODAL FOR ACCOUNT DETAILS -->
+    <!-- LIVE EDITABLE ACCOUNT DETAILS MODAL -->
     <div id="account-settings-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white border border-slate-100 rounded-3xl max-w-lg w-full shadow-2xl p-6 space-y-6">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <div class="flex items-center gap-2">
                     <div class="bg-blue-100 text-blue-600 p-2 rounded-lg"><i class="fa-solid fa-address-card"></i></div>
-                    <h3 class="font-black text-sm uppercase tracking-wider text-slate-900">Account Registry Details</h3>
+                    <h3 class="font-black text-sm uppercase tracking-wider text-slate-900">Modify Registry Details</h3>
                 </div>
                 <button type="button" onclick="closeProfileModalContext()" class="text-slate-400 hover:text-slate-600 transition text-sm"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <div class="space-y-4 text-xs font-medium text-slate-600">
-                <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+            <!-- FORM INPUT ENGINE FIELDS -->
+            <form id="profile-edit-form" onsubmit="executeProfileUpdateData(event)" class="space-y-4 text-xs font-medium text-slate-600">
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <span class="block text-[9px] font-black uppercase text-slate-400 tracking-wider mb-0.5">Full Name</span>
-                        <span id="modal-field-name" class="font-bold text-slate-800">-</span>
+                        <label class="block text-[9px] font-black uppercase text-slate-400 tracking-wider mb-1">Full Name</label>
+                        <input type="text" id="modal-input-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-bold text-slate-800 outline-none focus:border-blue-500">
                     </div>
                     <div>
-                        <span class="block text-[9px] font-black uppercase text-slate-400 tracking-wider mb-0.5">Phone Contact</span>
-                        <span id="modal-field-phone" class="font-bold text-slate-800">-</span>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <div>
-                        <span class="block text-[9px] font-black uppercase text-slate-400 tracking-wider mb-0.5">Primary Email Address</span>
-                        <span id="modal-field-email" class="font-bold text-slate-800 truncate block">-</span>
-                    </div>
-                    <div>
-                        <span class="block text-[9px] font-black uppercase text-slate-400 tracking-wider mb-0.5">Registered Job Sector</span>
-                        <span id="modal-field-sector" class="font-bold text-slate-800 uppercase">-</span>
+                        <label class="block text-[9px] font-black uppercase text-slate-400 tracking-wider mb-1">Phone Contact</label>
+                        <input type="text" id="modal-input-phone" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-bold text-slate-800 outline-none focus:border-blue-500">
                     </div>
                 </div>
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <span class="block text-[9px] font-black uppercase text-slate-400 tracking-wider mb-0.5">Physical Address Location</span>
-                    <span id="modal-field-address" class="font-bold text-slate-800 block">-</span>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[9px] font-black uppercase text-slate-400 tracking-wider mb-1">Email Address (Read-only)</label>
+                        <input type="email" id="modal-input-email" disabled class="w-full bg-slate-100 border border-slate-200 rounded-xl p-2.5 text-xs font-bold text-slate-400 outline-none cursor-not-allowed">
+                    </div>
+                    <div>
+                        <label class="block text-[9px] font-black uppercase text-slate-400 tracking-wider mb-1">Registered Sector</label>
+                        <select id="modal-input-sector" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-bold text-slate-800 outline-none focus:border-blue-500">
+                            <option value="it">Information Technology (IT)</option>
+                            <option value="healthcare">Healthcare Operations</option>
+                            <option value="education">Education</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
+                <div>
+                    <label class="block text-[9px] font-black uppercase text-slate-400 tracking-wider mb-1">Physical Address Location</label>
+                    <textarea id="modal-input-address" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-bold text-slate-800 outline-none focus:border-blue-500"></textarea>
+                </div>
 
-            <div class="flex justify-end pt-2">
-                <button type="button" onclick="closeProfileModalContext()" class="bg-slate-900 hover:bg-slate-800 text-white font-black text-[10px] uppercase tracking-wider py-2.5 px-6 rounded-xl transition shadow-md">
-                    Dismiss View
-                </button>
-            </div>
+                <div class="flex justify-end gap-3 pt-2 border-t border-slate-100 mt-4">
+                    <button type="button" onclick="closeProfileModalContext()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-black text-[10px] uppercase tracking-wider py-2.5 px-5 rounded-xl transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-black text-[10px] uppercase tracking-wider py-2.5 px-5 rounded-xl transition shadow-md">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -187,24 +182,22 @@
         let cachedVacanciesArray = [];
         let currentlyAuthenticatedUserUID = null;
         let globalUserProfileCachedObject = null;
+        let targetedUserCollectionName = "employees"; // Cross-compat fall-back reference string
 
         // Secure Session Gateway Pipeline Monitoring Routine
         auth.onAuthStateChanged(user => {
             if (user) {
                 currentlyAuthenticatedUserUID = user.uid;
-                loadEmployeeAuthenticatedProfile(user.uid);
+                verifyAndFetchUserProfile(user.uid);
             } else {
                 window.location.href = "index.html";
             }
         });
 
-        // Dropdown toggle execution
         function toggleEmployeeMenuDropdown() {
-            const dropdown = document.getElementById("employee-profile-dropdown");
-            dropdown.classList.toggle("hidden");
+            document.getElementById("employee-profile-dropdown").classList.toggle("hidden");
         }
 
-        // Global viewport window monitoring listener to hide dropdown safely
         window.addEventListener('click', function(e) {
             const dropdown = document.getElementById("employee-profile-dropdown");
             const button = dropdown ? dropdown.previousElementSibling : null;
@@ -213,15 +206,14 @@
             }
         });
 
-        // Modal Open logic 
         function openProfileModalContext() {
             if (!globalUserProfileCachedObject) return;
             
-            document.getElementById("modal-field-name").innerText = globalUserProfileCachedObject.name || "N/A";
-            document.getElementById("modal-field-phone").innerText = globalUserProfileCachedObject.phone || "N/A";
-            document.getElementById("modal-field-email").innerText = globalUserProfileCachedObject.email || "N/A";
-            document.getElementById("modal-field-sector").innerText = globalUserProfileCachedObject.jobSector || "General";
-            document.getElementById("modal-field-address").innerText = globalUserProfileCachedObject.address || "Not Provided";
+            document.getElementById("modal-input-name").value = globalUserProfileCachedObject.name || "";
+            document.getElementById("modal-input-phone").value = globalUserProfileCachedObject.phone || "";
+            document.getElementById("modal-input-email").value = globalUserProfileCachedObject.email || "";
+            document.getElementById("modal-input-sector").value = globalUserProfileCachedObject.jobSector || "it";
+            document.getElementById("modal-input-address").value = globalUserProfileCachedObject.address || "";
             
             document.getElementById("account-settings-modal").classList.remove("hidden");
             document.getElementById("employee-profile-dropdown").classList.add("hidden");
@@ -231,32 +223,70 @@
             document.getElementById("account-settings-modal").classList.add("hidden");
         }
 
-        // Extract credentials dataset metrics 
-        function loadEmployeeAuthenticatedProfile(uid) {
+        // DUAL-COLLECTION USER ROUTING SAFETIES (Fixes missing user dataset issues)
+        function verifyAndFetchUserProfile(uid) {
             db.collection("employees").doc(uid).get()
                 .then(doc => {
                     if (doc.exists) {
-                        globalUserProfileCachedObject = doc.data();
-                        
-                        document.getElementById("dropdown-user-name").innerText = globalUserProfileCachedObject.name || "Employee Account";
-                        document.getElementById("dropdown-user-email").innerText = globalUserProfileCachedObject.email || "Protected Domain";
-                        
-                        if (globalUserProfileCachedObject.name) {
-                            const words = globalUserProfileCachedObject.name.trim().split(" ");
-                            const initials = words.length > 1 ? (words[0][0] + words[words.length - 1][0]) : words[0][0];
-                            document.getElementById("user-initials-badge").innerText = initials.toUpperCase();
-                        }
-
-                        syncMarketplaceFeedRegistry();
+                        targetedUserCollectionName = "employees";
+                        applyLoadedProfileToDashboard(doc.data());
                     } else {
-                        alert("Profile Error: Security routing collision anomaly detected.");
-                        executeSignOutRoute();
+                        // Check alternate generic user register pathway
+                        return db.collection("users").doc(uid).get();
                     }
                 })
-                .catch(err => alert("Data Engine Synchronization Error: " + err.message));
+                .then(altDoc => {
+                    if (altDoc) {
+                        if (altDoc.exists) {
+                            targetedUserCollectionName = "users";
+                            applyLoadedProfileToDashboard(altDoc.data());
+                        } else {
+                            alert("Profile System Mismatch: Account structural root document not found.");
+                            executeSignOutRoute();
+                        }
+                    }
+                })
+                .catch(err => alert("Profile System Synchronization Failure: " + err.message));
         }
 
-        // Sync Data Marketplace Elements
+        function applyLoadedProfileToDashboard(data) {
+            globalUserProfileCachedObject = data;
+            
+            document.getElementById("dropdown-user-name").innerText = data.name || "Employee Account";
+            document.getElementById("dropdown-user-email").innerText = data.email || "Protected Account";
+            
+            if (data.name) {
+                const words = data.name.trim().split(" ");
+                const initials = words.length > 1 ? (words[0][0] + words[words.length - 1][0]) : words[0][0];
+                document.getElementById("user-initials-badge").innerText = initials.toUpperCase();
+            }
+
+            syncMarketplaceFeedRegistry();
+        }
+
+        // REAL-TIME DOCUMENT WRITE-BACK CONTROLLER (Saves changes back into Firestore)
+        function executeProfileUpdateData(event) {
+            event.preventDefault();
+            if (!currentlyAuthenticatedUserUID) return;
+
+            const updatedPayload = {
+                name: document.getElementById("modal-input-name").value,
+                phone: document.getElementById("modal-input-phone").value,
+                jobSector: document.getElementById("modal-input-sector").value,
+                address: document.getElementById("modal-input-address").value
+            };
+
+            db.collection(targetedUserCollectionName).doc(currentlyAuthenticatedUserUID).update(updatedPayload)
+                .then(() => {
+                    alert("Account Details Saved Successfully!");
+                    closeProfileModalContext();
+                    // Live refresh the browser profile fields setup
+                    globalUserProfileCachedObject = { ...globalUserProfileCachedObject, ...updatedPayload };
+                    applyLoadedProfileToDashboard(globalUserProfileCachedObject);
+                })
+                .catch(err => alert("Database Modification Refused: " + err.message));
+        }
+
         function syncMarketplaceFeedRegistry() {
             db.collection("jobs").where("status", "==", "ACTIVE").get()
                 .then(snapshot => {
@@ -264,15 +294,12 @@
                     snapshot.forEach(doc => {
                         cachedVacanciesArray.push({ jobId: doc.id, ...doc.data() });
                     });
-                    
-                    // FIXED: Renders initial full feed safely without running empty filters first!
                     renderFilteredMarketplaceView(cachedVacanciesArray);
                     syncTrackedApplicationsPipeline();
                 })
-                .catch(err => console.error("Database query processing failure: " + err.message));
+                .catch(err => console.error("Marketplace parsing loop failed: " + err.message));
         }
 
-        // Output customized view arrays down to interface pipelines
         function renderFilteredMarketplaceView(jobs) {
             const container = document.getElementById("marketplace-feed-container");
             if (jobs.length === 0) {
@@ -304,7 +331,6 @@
             `).join('');
         }
 
-        // Filter engine
         function runLocalSearchFilter() {
             const query = document.getElementById("vacancy-search-input").value.toLowerCase().trim();
             const sector = document.getElementById("vacancy-sector-select").value;
@@ -312,19 +338,13 @@
             const filtered = cachedVacanciesArray.filter(job => {
                 const titleLower = (job.jobTitle || "").toLowerCase();
                 const descLower = (job.description || "").toLowerCase();
-                
-                const matchQuery = titleLower.includes(query) || descLower.includes(query);
-                const matchSector = sector === "all" || job.sector === sector;
-                return matchQuery && matchSector;
+                return (titleLower.includes(query) || descLower.includes(query)) && (sector === "all" || job.sector === sector);
             });
-
             renderFilteredMarketplaceView(filtered);
         }
 
-        // Process application entries safely down to cloud databases
         function executeApplicationSubmission(jobId, jobTitle) {
             if (!currentlyAuthenticatedUserUID || !globalUserProfileCachedObject) return;
-
             const appRefId = `${currentlyAuthenticatedUserUID}_${jobId}`;
 
             db.collection("applications").doc(appRefId).set({
@@ -332,58 +352,70 @@
                 jobId: jobId,
                 jobTitle: jobTitle,
                 candidateUid: currentlyAuthenticatedUserUID,
-                candidateName: globalUserProfileCachedObject.name,
-                candidatePhone: globalUserProfileCachedObject.phone,
-                candidateEmail: globalUserProfileCachedObject.email,
-                candidateSector: globalUserProfileCachedObject.jobSector,
-                candidateAddress: globalUserProfileCachedObject.address,
+                userId: currentlyAuthenticatedUserUID, // Backwards compatible fallback property index
+                candidateName: globalUserProfileCachedObject.name || "Anonymous Candidate",
                 status: "PENDING",
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             })
             .then(() => {
-                alert("Application Transmitted Successfully: Your credentials are now under evaluation review.");
+                alert("Application Transmitted Successfully!");
                 syncTrackedApplicationsPipeline();
             })
-            .catch(err => alert("Submission Engine Refusal: " + err.message));
+            .catch(err => alert("Submission Refusal: " + err.message));
         }
 
-        // Refresh candidate tracking arrays on updates
+        // COMPREHENSIVE MULTI-KEY PIPELINE QUERY (Solves missing applied jobs feedback lists)
         function syncTrackedApplicationsPipeline() {
             if (!currentlyAuthenticatedUserUID) return;
 
+            // Attempt to look for apps by 'candidateUid' tracking field index
             db.collection("applications").where("candidateUid", "==", currentlyAuthenticatedUserUID).get()
                 .then(snapshot => {
-                    const container = document.getElementById("tracked-applications-container");
-                    if (snapshot.empty) {
-                        container.innerHTML = `
-                            <div class="bg-white border border-slate-100 p-6 rounded-3xl text-center text-xs font-bold text-slate-400 w-full">
-                                No submitted tracking files present.
-                            </div>`;
-                        return;
+                    if (!snapshot.empty) {
+                        renderTrackingListView(snapshot);
+                    } else {
+                        // FALLBACK: Query against alternative cross-platform structural identifier names
+                        return db.collection("applications").where("userId", "==", currentlyAuthenticatedUserUID).get();
                     }
-
-                    let trackingHtml = "";
-                    snapshot.forEach(doc => {
-                        const app = doc.data();
-                        let badgeClass = "bg-yellow-50 text-yellow-600";
-                        if (app.status === "SELECTED") badgeClass = "bg-green-50 text-green-600";
-                        if (app.status === "REJECTED") badgeClass = "bg-red-50 text-red-600";
-
-                        trackingHtml += `
-                            <div class="bg-white border border-slate-100 p-4 rounded-2xl shadow-sm flex justify-between items-center gap-3">
-                                <span class="font-bold text-xs text-slate-800 truncate">${app.jobTitle}</span>
-                                <span class="${badgeClass} font-black text-[9px] uppercase tracking-wider px-2 py-1 rounded-md shrink-0">${app.status}</span>
-                            </div>`;
-                    });
-                    container.innerHTML = trackingHtml;
                 })
-                .catch(err => console.error("Tracking error loop break: " + err.message));
+                .then(fallbackSnapshot => {
+                    if (fallbackSnapshot) {
+                        renderTrackingListView(fallbackSnapshot);
+                    }
+                })
+                .catch(err => console.error("Tracking filter break trace: " + err.message));
+        }
+
+        function renderTrackingListView(snapshot) {
+            const container = document.getElementById("tracked-applications-container");
+            if (!snapshot || snapshot.empty) {
+                container.innerHTML = `
+                    <div class="bg-white border border-slate-100 p-6 rounded-3xl text-center text-xs font-bold text-slate-400 w-full">
+                        No submitted tracking files present.
+                    </div>`;
+                return;
+            }
+
+            let trackingHtml = "";
+            snapshot.forEach(doc => {
+                const app = doc.data();
+                let badgeClass = "bg-yellow-50 text-yellow-600";
+                if (app.status === "SELECTED") badgeClass = "bg-green-50 text-green-600";
+                if (app.status === "REJECTED") badgeClass = "bg-red-50 text-red-600";
+
+                trackingHtml += `
+                    <div class="bg-white border border-slate-100 p-4 rounded-2xl shadow-sm flex justify-between items-center gap-3">
+                        <span class="font-bold text-xs text-slate-800 truncate">${app.jobTitle || "Job Application"}</span>
+                        <span class="${badgeClass} font-black text-[9px] uppercase tracking-wider px-2 py-1 rounded-md shrink-0">${app.status}</span>
+                    </div>`;
+            });
+            container.innerHTML = trackingHtml;
         }
 
         function executeSignOutRoute() {
             auth.signOut().then(() => {
                 window.location.href = "index.html";
-            }).catch(err => alert("Signout exception: " + err.message));
+            });
         }
     </script>
 </body>
