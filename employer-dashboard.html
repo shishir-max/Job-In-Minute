@@ -6,22 +6,20 @@
     <title>Employer Workspace | JobInMinute</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <!-- FIREBASE COMPAT SDKs -->
+    
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
         const firebaseConfig = {
-  apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
-  authDomain: "job-in-minute.firebaseapp.com",
-  projectId: "job-in-minute",
-  storageBucket: "job-in-minute.firebasestorage.app",
-  messagingSenderId: "507249342731",
-  appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
-};
-        
+            apiKey: "YOUR_API_KEY_HERE", 
+            authDomain: "job-in-minute.firebaseapp.com",
+            projectId: "job-in-minute",
+            storageBucket: "job-in-minute.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID_HERE",
+            appId: "YOUR_APP_ID_HERE"
+        };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
@@ -29,163 +27,168 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <header class="bg-white border-b border-slate-100 py-4 shadow-sm relative z-40">
+    <header class="bg-white border-b py-4 shadow-sm">
         <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="bg-blue-600 text-white p-2 rounded-xl">
-                    <i class="fa-solid fa-bolt text-lg"></i>
-                </div>
-                <span class="font-black text-xl tracking-tight text-slate-900">JobInMinute</span>
-            </div>
-            
-            <nav class="flex items-center gap-8 text-sm font-bold text-slate-600">
-                <div class="relative">
-                    <button onclick="toggleDropdownMenu(event)" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-900 px-4 py-2 rounded-xl transition text-xs font-black">
-                        <i class="fa-solid fa-user-tie text-blue-600"></i>
-                        <span id="nav-profile-display-name">Loading Profile...</span>
-                    </button>
-                    
-                    <div id="account-dropdown-card" class="absolute right-0 mt-2 w-64 bg-white border border-slate-100 rounded-2xl shadow-2xl p-4 hidden">
-                        <button onclick="executeAccountDisconnect()" class="w-full flex items-center gap-2.5 p-2 rounded-lg text-red-600 hover:bg-red-50 transition text-xs font-bold">
-                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Disconnect Account
-                        </button>
-                    </div>
-                </div>
-            </nav>
+            <span class="font-black text-xl text-slate-900">JobInMinute Corporate Portal</span>
+            <button onclick="auth.signOut().then(()=>window.location.href='login.html')" class="text-xs font-bold bg-slate-100 px-4 py-2 rounded-xl">Disconnect</button>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 max-w-6xl flex-grow py-10 space-y-8">
-        <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-black text-slate-900">Corporate Workspace</h1>
-                <p class="text-xs text-slate-500 mt-1">Live Database Connected Pipeline.</p>
-            </div>
-            <button onclick="toggleJobModal(true)" class="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase px-5 py-3.5 rounded-xl transition shadow-md">
-                <i class="fa-solid fa-plus"></i> Post A New Job
-            </button>
+    <main class="container mx-auto px-4 max-w-6xl py-8 space-y-6">
+        <div class="bg-white p-6 rounded-3xl border flex flex-col md:flex-row gap-4 justify-between items-center shadow-sm">
+            <input type="text" id="candidate-search" oninput="fetchApplications()" placeholder="Search candidates by name, qualification parameters..." class="bg-slate-50 border rounded-xl p-3 text-xs w-full md:max-w-md outline-none focus:border-blue-500">
+            <button onclick="toggleModal(true)" class="bg-blue-600 text-white font-bold text-xs uppercase px-5 py-3 rounded-xl shadow-sm w-full md:w-auto">+ Post New Requirement</button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-4">
-                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400">Applications</h2>
-                <div id="dynamic-candidates-container" class="space-y-4">
-                     <div class="bg-white rounded-2xl p-6 border text-slate-400 text-xs text-center">Select an active job posting card from the column map layout to view applicant strings.</div>
-                </div>
+                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400">Received Employee Applications</h2>
+                <div id="applications-root-box" class="space-y-4"></div>
             </div>
 
             <div class="space-y-4">
-                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400">Our Postings Status</h2>
-                <div id="live-postings-container" class="space-y-3"></div>
+                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400">Our Postings Registry</h2>
+                <div id="jobs-root-box" class="space-y-3"></div>
             </div>
         </div>
     </main>
 
-    <!-- POST JOB MODAL -->
-    <div id="job-posting-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="font-black text-base text-slate-900">Deploy Corporate Requirement</h3>
-                <button onclick="toggleJobModal(false)" class="text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+    <div id="job-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-black text-sm text-slate-900">Deploy Corporate Job</h3>
+                <button onclick="toggleModal(false)" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <form id="job-posting-form" class="space-y-4" onsubmit="handleJobSubmission(event)">
+            <form onsubmit="deployJobListing(event)" class="space-y-4">
                 <div>
-                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Job Designation Role Title *</label>
-                    <input type="text" id="modal-job-title" required class="w-full bg-slate-50 border rounded-xl p-3 text-xs outline-none focus:border-blue-500">
+                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Role Designation Title *</label>
+                    <input type="text" id="job-title" required class="w-full bg-slate-50 border rounded-xl p-3 text-xs outline-none focus:border-blue-500">
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Core Operational Description *</label>
-                    <textarea id="modal-job-desc" required rows="4" class="w-full bg-slate-50 border rounded-xl p-3 text-xs outline-none focus:border-blue-500"></textarea>
+                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Target Sector Requirement *</label>
+                    <select id="job-sector" required class="w-full bg-slate-50 border rounded-xl p-3 text-xs text-slate-500">
+                        <option value="it">IT</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="education">Education</option>
+                    </select>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold text-xs uppercase py-3.5 rounded-xl">Broadcast Opening Globally &rarr;</button>
+                <div>
+                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Job Description Core Text *</label>
+                    <textarea id="job-desc" required rows="4" class="w-full bg-slate-50 border rounded-xl p-3 text-xs outline-none focus:border-blue-500"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold text-xs uppercase py-3.5 rounded-xl">Broadcast &rarr;</button>
             </form>
         </div>
     </div>
 
     <script>
-        let currentUserUid = "";
+        let currentEmployerId = "";
 
-        auth.onAuthStateChanged(function(user) {
+        auth.onAuthStateChanged(user => {
             if (user) {
-                currentUserUid = user.uid;
-                document.getElementById('nav-profile-display-name').innerText = user.displayName || "Employer Account";
-                fetchLiveJobs();
+                currentEmployerId = user.uid;
+                fetchActiveJobs();
+                fetchApplications();
             } else {
                 window.location.href = "login.html";
             }
         });
 
-        function toggleDropdownMenu(e) {
-            e.stopPropagation();
-            document.getElementById('account-dropdown-card').classList.toggle('hidden');
+        function toggleModal(show) {
+            if(show) document.getElementById("job-modal").classList.remove("hidden");
+            else document.getElementById("job-modal").classList.add("hidden");
         }
 
-        function toggleJobModal(show) {
-            if(show) document.getElementById('job-posting-modal').classList.remove('hidden');
-            else document.getElementById('job-posting-modal').classList.add('hidden');
-        }
-
-        function handleJobSubmission(e) {
+        function deployJobListing(e) {
             e.preventDefault();
-            const title = document.getElementById('modal-job-title').value.trim();
-            const desc = document.getElementById('modal-job-desc').value.trim();
-
-            // SAVE DATA SECURELY TO THE FIRESTORE "jobs" COLLECTION MATCHING SECURITY RULES
             db.collection("jobs").add({
-                title: title,
-                description: desc,
-                employerId: currentUserUid,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                alert("Job saved to Cloud Database successfully!");
-                document.getElementById('job-posting-form').reset();
-                toggleJobModal(false);
-                fetchLiveJobs();
-            })
-            .catch(err => alert("Firestore Error: " + err.message));
+                title: document.getElementById("job-title").value.trim(),
+                sector: document.getElementById("job-sector").value,
+                description: document.getElementById("job-desc").value.trim(),
+                employerId: currentEmployerId,
+                status: "Active",
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                toggleModal(false);
+                fetchActiveJobs();
+            });
         }
 
-        function fetchLiveJobs() {
-            const listingsContainer = document.getElementById('live-postings-container');
-            listingsContainer.innerHTML = "";
-
-            db.collection("jobs").where("employerId", "==", currentUserUid).get()
-                .then((querySnapshot) => {
-                    if (querySnapshot.empty) {
-                        listingsContainer.innerHTML = `<div class='text-xs text-slate-400 text-center p-4'>No live jobs posted yet.</div>`;
-                        return;
-                    }
-                    querySnapshot.forEach((doc) => {
-                        const job = doc.data();
-                        const node = document.createElement('div');
-                        node.className = "bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex flex-col gap-3 cursor-pointer";
-                        node.innerHTML = `
-                            <div class="flex justify-between items-center w-full">
-                                <span class="font-bold text-xs text-slate-800">${job.title}</span>
-                                <span class="bg-blue-50 text-blue-700 px-2 py-0.5 text-[9px] uppercase font-black rounded-md">Live</span>
-                            </div>
-                            <div class="flex justify-end border-t pt-2">
-                                <button onclick="deleteJobListing('${doc.id}')" class="text-[10px] text-slate-400 hover:text-red-500 flex items-center gap-1">
-                                    <i class="fa-solid fa-trash-can"></i> Delete
-                                </button>
-                            </div>`;
-                        listingsContainer.appendChild(node);
-                    });
+        function fetchActiveJobs() {
+            const target = document.getElementById("jobs-root-box");
+            target.innerHTML = "";
+            db.collection("jobs").where("employerId", "==", currentEmployerId).get().then(snap => {
+                snap.forEach(doc => {
+                    const job = doc.data();
+                    const node = document.createElement("div");
+                    node.className = "bg-white p-4 rounded-2xl border shadow-sm space-y-3";
+                    node.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-xs text-slate-800">${job.title}</span>
+                            <span class="px-2 py-0.5 text-[9px] uppercase font-black rounded-md ${job.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}">${job.status}</span>
+                        </div>
+                        <div class="flex justify-between border-t pt-2">
+                            <button onclick="toggleJobStatus('${doc.id}', '${job.status}')" class="text-[10px] text-blue-600 font-bold">
+                                ${job.status === 'Active' ? 'Close Job' : 'Reopen Job'}
+                            </button>
+                            <button onclick="deleteJob('${doc.id}')" class="text-[10px] text-red-500 font-bold">Delete</button>
+                        </div>`;
+                    target.appendChild(node);
                 });
+            });
         }
 
-        function deleteJobListing(docId) {
-            if (confirm("Delete this posting from the cloud database permanently?")) {
-                db.collection("jobs").doc(docId).delete().then(() => {
-                    alert("Job deleted from production servers.");
-                    fetchLiveJobs();
-                });
+        function toggleJobStatus(id, currentStatus) {
+            const nextStatus = currentStatus === "Active" ? "Closed" : "Active";
+            db.collection("jobs").doc(id).update({ status: nextStatus }).then(() => fetchActiveJobs());
+        }
+
+        function deleteJob(id) {
+            if(confirm("Confirm system deletion processing?")) {
+                db.collection("jobs").doc(id).delete().then(() => fetchActiveJobs());
             }
         }
 
-        function executeAccountDisconnect() {
-            auth.signOut().then(() => window.location.href = "login.html");
+        function fetchApplications() {
+            const target = document.getElementById("applications-root-box");
+            const searchVal = document.getElementById("candidate-search").value.toLowerCase();
+            target.innerHTML = "";
+
+            db.collection("applications").where("employerId", "==", currentEmployerId).get().then(snap => {
+                snap.forEach(doc => {
+                    const app = doc.data();
+                    if(searchVal && !app.candidateName.toLowerCase().includes(searchVal)) return;
+
+                    const node = document.createElement("div");
+                    node.className = "bg-white border rounded-2xl p-4 shadow-sm space-y-3";
+                    node.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4 class="font-black text-xs text-slate-900">${app.candidateName}</h4>
+                                <p class="text-[10px] font-bold text-blue-600 mt-0.5">Applied For: ${app.jobTitle}</p>
+                            </div>
+                            <button onclick="document.getElementById('drop-${doc.id}').classList.toggle('hidden')" class="text-xs bg-slate-100 px-3 py-1.5 rounded-lg font-bold">View Application <i class="fa-solid fa-chevron-down ml-1"></i></button>
+                        </div>
+                        <div id="drop-${doc.id}" class="hidden bg-slate-50 p-4 rounded-xl border border-dashed space-y-4">
+                            <div class="text-xs text-slate-600 font-medium whitespace-pre-line bg-white p-3 rounded-xl border">${app.resumeData}</div>
+                            <div class="flex items-center justify-between border-t pt-3">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Current Decision: <strong class="text-slate-700">${app.status}</strong></span>
+                                <div class="flex gap-2">
+                                    <button onclick="updateDecision('${doc.id}', 'Selected')" class="bg-emerald-600 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg">Select Candidate</button>
+                                    <button onclick="updateDecision('${doc.id}', 'Rejected')" class="bg-red-600 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg">Reject Candidate</button>
+                                </div>
+                            </div>
+                        </div>`;
+                    target.appendChild(node);
+                });
+            });
+        }
+
+        function updateDecision(id, decision) {
+            db.collection("applications").doc(id).update({ status: decision }).then(() => {
+                alert(`Candidate record updated: ${decision}`);
+                fetchApplications();
+            });
         }
     </script>
 </body>
