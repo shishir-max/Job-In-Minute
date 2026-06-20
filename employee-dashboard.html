@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Workspace | JobInMinute</title>
+    <title>Employee Panel | JobInMinute</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -12,14 +12,15 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
-    const firebaseConfig = {
-  apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
-  authDomain: "job-in-minute.firebaseapp.com",
-  projectId: "job-in-minute",
-  storageBucket: "job-in-minute.firebasestorage.app",
-  messagingSenderId: "507249342731",
-  appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
-};
+       const firebaseConfig = {
+          apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
+          authDomain: "job-in-minute.firebaseapp.com",
+          projectId: "job-in-minute",
+          storageBucket: "job-in-minute.firebasestorage.app",
+          messagingSenderId: "507249342731",
+          appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
+       };
+        
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
@@ -27,21 +28,69 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <header class="bg-white border-b py-4 shadow-sm">
-        <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
-            <span class="font-black text-xl text-slate-900">JobInMinute Employee Panel</span>
-            <button onclick="auth.signOut().then(()=>window.location.href='login.html')" class="text-xs font-bold bg-slate-100 px-4 py-2 rounded-xl">Disconnect</button>
+    <header class="bg-white border-b border-slate-100 shadow-sm relative z-40">
+        <div class="bg-slate-900 text-white text-[11px] py-2">
+            <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <span class="text-slate-400"><i class="fa-solid fa-envelope text-blue-400 mr-1"></i> info@jobinminute.com</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="https://www.facebook.com/share/1BNyCNs5A1/" target="_blank" class="hover:text-blue-400 transition">
+                        <i class="fa-brands fa-facebook"></i>
+                    </a>
+                    <a href="https://www.instagram.com/kineticssource?utm_source=qr&igsh=MWRxMWMxZWIyaTM5cw==" target="_blank" class="hover:text-pink-400 transition">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="PASTE_YOUR_LINKEDIN_URL_HERE" target="_blank" class="hover:text-blue-500 transition">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container mx-auto px-4 max-w-6xl py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-blue-600 text-white p-2 rounded-xl"><i class="fa-solid fa-bolt text-lg"></i></div>
+                <span class="font-black text-xl tracking-tight text-slate-900">JobInMinute Employee Panel</span>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <nav class="flex items-center gap-6 text-xs font-bold text-slate-600">
+                    <a href="index.html" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fa-solid fa-house"></i> Home</a>
+                    <a href="about.html" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> About Us</a>
+                </nav>
+
+                <div class="relative inline-block text-left">
+                    <button onclick="toggleEmployeeMenuDropdown()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs py-2 px-4 rounded-xl transition flex items-center gap-2">
+                        <span id="user-initials-badge">EM</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                    </button>
+                    
+                    <div id="employee-profile-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl py-3 z-50 space-y-2">
+                        <div class="px-4 py-2 border-b border-slate-50">
+                            <p id="dropdown-user-name" class="font-black text-xs text-slate-800 uppercase tracking-tight">Loading...</p>
+                            <p id="dropdown-user-email" class="text-[10px] text-slate-400 truncate">loading@domain.com</p>
+                        </div>
+                        <a href="#" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 transition flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-slate-400"></i> Account Settings / Details
+                        </a>
+                        <button onclick="executeSignOutRoute()" class="w-full text-left block px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-50 transition flex items-center gap-2">
+                            <i class="fa-solid fa-right-from-bracket"></i> Disconnect Portal
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 max-w-6xl py-8 space-y-8">
+    <main class="container mx-auto px-4 max-w-6xl flex-grow py-8 space-y-8">
         
-        <div class="bg-white p-6 rounded-3xl border shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="md:col-span-2">
-                <input type="text" id="job-search" oninput="renderJobsMarketplace()" placeholder="Search active or closed vacancies by title keyword arrays..." class="w-full bg-slate-50 border rounded-xl p-3 text-xs outline-none focus:border-blue-500">
+        <div class="bg-white border border-slate-100 rounded-3xl p-4 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+            <div class="md:col-span-2 relative">
+                <input type="text" id="vacancy-search-input" oninput="runLocalSearchFilter()" placeholder="Search active or closed vacancies by title keyword arrays..." class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-3 pl-4 text-xs outline-none focus:border-blue-500 transition">
             </div>
             <div>
-                <select id="sector-filter" onchange="renderJobsMarketplace()" class="w-full bg-slate-50 border rounded-xl p-3 text-xs text-slate-500">
+                <select id="vacancy-sector-select" onchange="runLocalSearchFilter()" class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-3 text-xs outline-none focus:border-blue-500 text-slate-500 transition">
                     <option value="all">All Sectors Selection</option>
                     <option value="it">Information Technology (IT)</option>
                     <option value="healthcare">Healthcare Operations</option>
@@ -51,153 +100,213 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
             <div class="lg:col-span-2 space-y-4">
-                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400">Available Marketplace Positions</h2>
-                <div id="job-listings-target" class="space-y-4"></div>
+                <h2 class="text-xs font-black tracking-wider text-slate-400 uppercase">Available Marketplace Positions</h2>
+                <div id="marketplace-feed-container" class="space-y-4">
+                    <div class="bg-white border border-slate-100 p-6 rounded-3xl shadow-sm text-center text-xs font-bold text-slate-400 py-12">
+                        Querying database engine records...
+                    </div>
+                </div>
             </div>
 
             <div class="space-y-4">
-                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400">Our Applications Status Feedback</h2>
-                <div id="feedback-target-box" class="space-y-3"></div>
+                <h2 class="text-xs font-black tracking-wider text-slate-400 uppercase">Our Applications Status Feedback</h2>
+                <div id="tracked-applications-container" class="space-y-3">
+                    <div class="bg-white border border-slate-100 p-6 rounded-3xl shadow-sm text-center text-xs font-bold text-slate-400 py-8">
+                        Loading application milestones...
+                    </div>
+                </div>
             </div>
+
         </div>
     </main>
 
-    <div id="apply-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4">
-            <div class="flex justify-between items-center border-b pb-2">
-                <h3 id="modal-title-display" class="font-black text-sm text-slate-900">Apply Form Processing</h3>
-                <button onclick="toggleApplyModal(false)" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form onsubmit="commitApplicationSubmission(event)" class="space-y-4">
-                <input type="hidden" id="target-job-id">
-                <input type="hidden" id="target-employer-id">
-                <input type="hidden" id="target-job-title-str">
-                <div>
-                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Applicant Name Entry *</label>
-                    <input type="text" id="app-name-input" required class="w-full bg-slate-50 border rounded-xl p-3 text-xs">
-                </div>
-                <div>
-                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Paste Professional Experience Resume Data *</label>
-                    <textarea id="app-resume-input" required rows="6" placeholder="Directly input or paste profile history documentation structures here..." class="w-full bg-slate-50 border rounded-xl p-3 text-xs outline-none focus:border-blue-500"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold text-xs uppercase py-3.5 rounded-xl">Submit Application &rarr;</button>
-            </form>
-        </div>
-    </div>
-
     <script>
-        let candidateProfileId = "";
-        let candidateProfileName = "";
+        let cachedVacanciesArray = [];
+        let currentlyAuthenticatedUserUID = null;
 
+        // Secure Session Gateway Pipeline Monitoring Routine
         auth.onAuthStateChanged(user => {
             if (user) {
-                candidateProfileId = user.uid;
-                db.collection("employees").doc(user.uid).get().then(doc => {
-                    if(doc.exists) {
-                        candidateProfileName = doc.data().name;
-                        renderJobsMarketplace();
-                        renderFeedbackStream();
-                    }
-                });
+                currentlyAuthenticatedUserUID = user.uid;
+                loadEmployeeAuthenticatedProfile(user.uid);
             } else {
-                window.location.href = "login.html";
+                window.location.href = "index.html";
             }
         });
 
-        function renderJobsMarketplace() {
-            const container = document.getElementById("job-listings-target");
-            const filterSector = document.getElementById("sector-filter").value;
-            const search = document.getElementById("job-search").value.toLowerCase();
-            container.innerHTML = "";
+        // Toggle profile dropdown menu
+        function toggleEmployeeMenuDropdown() {
+            const dropdown = document.getElementById("employee-profile-dropdown");
+            dropdown.classList.toggle("hidden");
+        }
 
-            db.collection("jobs").get().then(snap => {
-                snap.forEach(doc => {
-                    const job = doc.data();
-                    if(filterSector !== "all" && job.sector !== filterSector) return;
-                    if(search && !job.title.toLowerCase().includes(search)) return;
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById("employee-profile-dropdown");
+            const button = dropdown ? dropdown.previousElementSibling : null;
+            if (dropdown && button && !dropdown.contains(e.target) && !button.contains(e.target)) {
+                dropdown.classList.add("hidden");
+            }
+        });
 
-                    const card = document.createElement("div");
-                    card.className = "bg-white p-6 rounded-2xl border shadow-sm space-y-4";
-                    card.innerHTML = `
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-black text-sm text-slate-900">${job.title}</h3>
-                                <span class="inline-block mt-1 text-[9px] uppercase tracking-wider bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded">${job.sector.toUpperCase()}</span>
-                            </div>
-                            <span class="px-2 py-1 rounded text-[10px] font-black uppercase ${job.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}">${job.status}</span>
+        // Extract credentials dataset metrics 
+        function loadEmployeeAuthenticatedProfile(uid) {
+            db.collection("employees").doc(uid).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        
+                        // Parse Display Attributes Safely
+                        document.getElementById("dropdown-user-name").innerText = data.name || "Employee Account";
+                        document.getElementById("dropdown-user-email").innerText = data.email || "Protected Domain";
+                        
+                        // Generate dynamic initial badge structures
+                        if (data.name) {
+                            const words = data.name.trim().split(" ");
+                            const initials = words.length > 1 ? (words[0][0] + words[words.length - 1][0]) : words[0][0];
+                            document.getElementById("user-initials-badge").innerText = initials.toUpperCase();
+                        }
+
+                        // Initialize content aggregation pipeline loops
+                        syncMarketplaceFeedRegistry();
+                    } else {
+                        alert("Profile Error: Security routing collision anomaly detected.");
+                        executeSignOutRoute();
+                    }
+                })
+                .catch(err => alert("Data Engine Synchronization Error: " + err.message));
+        }
+
+        // Sync Data Marketplace Elements
+        function syncMarketplaceFeedRegistry() {
+            db.collection("jobs").where("status", "==", "ACTIVE").get()
+                .then(snapshot => {
+                    cachedVacanciesArray = [];
+                    snapshot.forEach(doc => {
+                        cachedVacanciesArray.push({ jobId: doc.id, ...doc.data() });
+                    });
+                    renderFilteredMarketplaceView(cachedVacanciesArray);
+                    syncTrackedApplicationsPipeline();
+                })
+                .catch(err => console.error("Database query processing failure: " + err.message));
+        }
+
+        // Output customized view arrays down to interface pipelines
+        function renderFilteredMarketplaceView(jobs) {
+            const container = document.getElementById("marketplace-feed-container");
+            if (jobs.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white border border-slate-100 p-8 rounded-3xl shadow-sm text-center text-xs text-slate-400 font-bold">
+                        No positions matched your tracking filter queries currently.
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = jobs.map(job => `
+                <div class="bg-white border border-slate-100 p-6 rounded-3xl shadow-sm space-y-4 hover:shadow-md transition">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-black text-sm text-slate-900">${job.jobTitle}</h3>
+                            <span class="inline-block bg-slate-100 text-slate-500 uppercase font-black tracking-wider text-[9px] px-2 py-0.5 rounded mt-1">${job.sector || "General"}</span>
                         </div>
-                        <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-dashed">${job.description}</p>
-                        <div class="pt-2 border-t flex justify-end">
-                            ${job.status === 'Active' 
-                                ? `<button onclick="openApplicationModal('${doc.id}', '${job.employerId}', '${job.title}')" class="bg-blue-600 text-white font-black text-[11px] px-4 py-2 rounded-xl">Apply Online</button>`
-                                : `<button disabled class="bg-slate-200 text-slate-400 font-black text-[11px] px-4 py-2 rounded-xl cursor-not-allowed">Job Closed</button>`
-                            }
-                        </div>`;
-                    container.appendChild(card);
-                });
+                        <span class="bg-green-50 text-green-600 font-bold text-[9px] uppercase tracking-wider px-2 py-1 rounded-md">Active</span>
+                    </div>
+                    <div class="bg-slate-50 border border-dashed border-slate-200 rounded-xl p-3 text-xs text-slate-500 font-medium">
+                        ${job.description || "No description requirements documentation provided."}
+                    </div>
+                    <div class="flex justify-end pt-1">
+                        <button onclick="executeApplicationSubmission('${job.jobId}', '${job.jobTitle}')" class="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs py-2 px-5 rounded-xl transition shadow-sm">
+                            Apply Online
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter system engine
+        function runLocalSearchFilter() {
+            const query = document.getElementById("vacancy-search-input").value.toLowerCase().trim();
+            const sector = document.getElementById("vacancy-sector-select").value;
+
+            const filtered = cachedVacanciesArray.filter(job => {
+                const matchQuery = job.jobTitle.toLowerCase().includes(query) || (job.description && job.description.toLowerCase().includes(query));
+                const matchSector = sector === "all" || job.sector === sector;
+                return matchQuery && matchSector;
             });
+
+            renderFilteredMarketplaceView(filtered);
         }
 
-        function openApplicationModal(jobId, employerId, title) {
-            document.getElementById("target-job-id").value = jobId;
-            document.getElementById("target-employer-id").value = employerId;
-            document.getElementById("target-job-title-str").value = title;
-            document.getElementById("app-name-input").value = candidateProfileName;
-            document.getElementById("modal-title-display").innerText = `Apply for ${title}`;
-            toggleApplyModal(true);
+        // Process application entries safely down to cloud databases
+        function executeApplicationSubmission(jobId, jobTitle) {
+            if (!currentlyAuthenticatedUserUID) return;
+
+            db.collection("employees").doc(currentlyAuthenticatedUserUID).get()
+                .then(empDoc => {
+                    const empData = empDoc.data();
+                    const appRefId = `${currentlyAuthenticatedUserUID}_${jobId}`;
+
+                    return db.collection("applications").doc(appRefId).set({
+                        applicationId: appRefId,
+                        jobId: jobId,
+                        jobTitle: jobTitle,
+                        candidateUid: currentlyAuthenticatedUserUID,
+                        candidateName: empData.name,
+                        candidatePhone: empData.phone,
+                        candidateEmail: empData.email,
+                        candidateSector: empData.jobSector,
+                        candidateAddress: empData.address,
+                        status: "PENDING",
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    alert("Application Transmitted Successfully: Your credentials are now under evaluation registry context review.");
+                    syncTrackedApplicationsPipeline();
+                })
+                .catch(err => alert("Submission Engine Refusal: " + err.message));
         }
 
-        function toggleApplyModal(show) {
-            if(show) document.getElementById("apply-modal").classList.remove("hidden");
-            else document.getElementById("apply-modal").classList.add("hidden");
+        // Refresh candidate tracking arrays on updates
+        function syncTrackedApplicationsPipeline() {
+            if (!currentlyAuthenticatedUserUID) return;
+
+            db.collection("applications").where("candidateUid", "==", currentlyAuthenticatedUserUID).get()
+                .then(snapshot => {
+                    const container = document.getElementById("tracked-applications-container");
+                    if (snapshot.empty) {
+                        container.innerHTML = `
+                            <div class="bg-white border border-slate-100 p-6 rounded-3xl text-center text-xs font-bold text-slate-400">
+                                No submitted tracking files present.
+                            </div>`;
+                        return;
+                    }
+
+                    let trackingHtml = "";
+                    snapshot.forEach(doc => {
+                        const app = doc.data();
+                        let badgeClass = "bg-yellow-50 text-yellow-600";
+                        if (app.status === "SELECTED") badgeClass = "bg-green-50 text-green-600";
+                        if (app.status === "REJECTED") badgeClass = "bg-red-50 text-red-600";
+
+                        trackingHtml += `
+                            <div class="bg-white border border-slate-100 p-4 rounded-2xl shadow-sm flex justify-between items-center gap-3">
+                                <span class="font-bold text-xs text-slate-800 truncate">${app.jobTitle}</span>
+                                <span class="${badgeClass} font-black text-[9px] uppercase tracking-wider px-2 py-1 rounded-md shrink-0">${app.status}</span>
+                            </div>`;
+                    });
+                    container.innerHTML = trackingHtml;
+                })
+                .catch(err => console.error("Tracking synchronization fault array processing engine loop break: " + err.message));
         }
 
-        function commitApplicationSubmission(e) {
-            e.preventDefault();
-            db.collection("applications").add({
-                jobId: document.getElementById("target-job-id").value,
-                employerId: document.getElementById("target-employer-id").value,
-                jobTitle: document.getElementById("target-job-title-str").value,
-                candidateId: candidateProfileId,
-                candidateName: document.getElementById("app-name-input").value.trim(),
-                resumeData: document.getElementById("app-resume-input").value.trim(),
-                status: "Awaiting Review",
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                alert("Application tracking profile processed into pipeline!");
-                toggleApplyModal(false);
-                document.getElementById("app-resume-input").value = "";
-                renderFeedbackStream();
-            });
-        }
-
-        function renderFeedbackStream() {
-            const target = document.getElementById("feedback-target-box");
-            target.innerHTML = "";
-
-            db.collection("applications").where("candidateId", "==", candidateProfileId).get().then(snap => {
-                if(snap.empty) {
-                    target.innerHTML = `<div class="text-xs text-slate-400 text-center p-4">No active submissions logged.</div>`;
-                    return;
-                }
-                snap.forEach(doc => {
-                    const data = doc.data();
-                    const node = document.createElement("div");
-                    node.className = "bg-white p-4 rounded-2xl border shadow-sm flex flex-col gap-2";
-                    
-                    let badgeClass = "bg-amber-50 text-amber-700 border-amber-200";
-                    if(data.status === "Selected") badgeClass = "bg-emerald-50 text-emerald-700 border-emerald-200";
-                    if(data.status === "Rejected") badgeClass = "bg-red-50 text-red-700 border-red-200";
-
-                    node.innerHTML = `
-                        <div class="flex justify-between items-center w-full">
-                            <span class="font-bold text-xs text-slate-800 truncate mr-2">${data.jobTitle}</span>
-                            <span class="border px-2.5 py-1 text-[10px] font-black uppercase rounded-lg ${badgeClass}">${data.status}</span>
-                        </div>`;
-                    target.appendChild(node);
-                });
-            });
+        // Safe pipeline authentication clear routine
+        function executeSignOutRoute() {
+            auth.signOut().then(() => {
+                window.location.href = "index.html";
+            }).catch(err => alert("Signout routine processing exception: " + err.message));
         }
     </script>
 </body>
