@@ -37,9 +37,9 @@
                     <span class="text-slate-400"><i class="fa-solid fa-envelope text-blue-400 mr-1"></i> info@jobinminute.com</span>
                 </div>
                 <div class="flex items-center gap-4">
-                    <a href="https://www.facebook.com/share/1BNyCNs5A1/" class="hover:text-blue-400 transition"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="https://www.instagram.com/kineticssource?utm_source=qr&igsh=MWRxMWMxZWIyaTM5cw==" class="hover:text-pink-400 transition"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://linkedin.com/company/YOUR_COMPANY_LINKEDIN_NAME" class="hover:text-blue-500 transition"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" class="hover:text-blue-400 transition"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" class="hover:text-pink-400 transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-blue-500 transition"><i class="fa-brands fa-linkedin"></i></a>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                     <div id="employee-profile-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl py-3 z-50 space-y-2">
                         <div class="px-4 py-2 border-b border-slate-50">
                             <p id="dropdown-user-name" class="font-black text-xs text-slate-800 uppercase tracking-tight">Loading...</p>
-                            <p id="dropdown-user-email" class="text-[10px] text-slate-400 truncate">loading@domain.com</p>
+                            <a id="dropdown-user-email" href="#" class="text-[10px] text-blue-600 hover:underline truncate block">loading@domain.com</a>
                         </div>
                         <button type="button" onclick="openProfileModalContext()" class="w-full text-left block px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 transition flex items-center gap-2">
                             <i class="fa-solid fa-sliders text-slate-400"></i> Account Settings / Details
@@ -121,6 +121,43 @@
             </div>
         </div>
     </main>
+
+    <!-- INTERACTIVE RESUME UPLOAD / APPLICATION MODAL -->
+    <div id="resume-submission-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white border border-slate-100 rounded-3xl max-w-xl w-full shadow-2xl p-6 space-y-5">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="bg-blue-100 text-blue-600 p-2 rounded-lg"><i class="fa-solid fa-file-arrow-up"></i></div>
+                    <div>
+                        <h3 class="font-black text-sm uppercase tracking-wider text-slate-900">Complete Job Application</h3>
+                        <p id="resume-modal-job-title" class="text-[11px] text-slate-400 font-medium mt-0.5">Applying for: Untitled Position</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeResumeModalContext()" class="text-slate-400 hover:text-slate-600 transition text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form id="resume-submission-form" onsubmit="processFinalApplicationSubmit(event)" class="space-y-4 text-xs font-medium text-slate-600">
+                <div>
+                    <label class="block text-[10px] font-black uppercase text-slate-400 tracking-wider mb-1.5">Paste Resume Text or Professional Profile Details</label>
+                    <textarea id="modal-resume-text" rows="6" required placeholder="Paste your complete resume details here, including skills, educational summary, work experience, and cover notes..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-800 outline-none focus:border-blue-500 placeholder:text-slate-300 placeholder:font-normal"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black uppercase text-slate-400 tracking-wider mb-1.5">Portfolio or Document Drive Link (Optional)</label>
+                    <input type="url" id="modal-resume-link" placeholder="https://drive.google.com/your-resume-link" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-bold text-slate-800 outline-none focus:border-blue-500 placeholder:text-slate-300 placeholder:font-normal">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-2 border-t border-slate-100 mt-4">
+                    <button type="button" onclick="closeResumeModalContext()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-black text-[10px] uppercase tracking-wider py-2.5 px-5 rounded-xl transition">
+                        Back
+                    </button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-black text-[10px] uppercase tracking-wider py-2.5 px-5 rounded-xl transition shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Transmit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- LIVE EDITABLE ACCOUNT DETAILS MODAL -->
     <div id="account-settings-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -182,6 +219,10 @@
         let globalUserProfileCachedObject = null;
         let targetedUserCollectionName = "employees";
 
+        // Global variables to temporarily track targeted job details during staging
+        let selectedJobIdForSubmission = null;
+        let selectedJobTitleForSubmission = null;
+
         auth.onAuthStateChanged(user => {
             if (user) {
                 currentlyAuthenticatedUserUID = user.uid;
@@ -218,6 +259,19 @@
             document.getElementById("account-settings-modal").classList.add("hidden");
         }
 
+        // Resume Modal Controller Triggers
+        function openResumeModalContext(jobId, jobTitle) {
+            selectedJobIdForSubmission = jobId;
+            selectedJobTitleForSubmission = jobTitle;
+            document.getElementById("resume-modal-job-title").innerText = `Applying for: ${jobTitle}`;
+            document.getElementById("resume-submission-form").reset();
+            document.getElementById("resume-submission-modal").classList.remove("hidden");
+        }
+
+        function closeResumeModalContext() {
+            document.getElementById("resume-submission-modal").classList.add("hidden");
+        }
+
         function verifyAndFetchUserProfile(uid) {
             db.collection("employees").doc(uid).get()
                 .then(doc => {
@@ -245,7 +299,15 @@
         function applyLoadedProfileToDashboard(data) {
             globalUserProfileCachedObject = data;
             document.getElementById("dropdown-user-name").innerText = data.name || "Employee Account";
-            document.getElementById("dropdown-user-email").innerText = data.email || "Protected Account";
+            
+            const emailElement = document.getElementById("dropdown-user-email");
+            if (data.email) {
+                emailElement.innerText = data.email;
+                emailElement.href = `mailto:${data.email}`;
+            } else {
+                emailElement.innerText = "Protected Account";
+                emailElement.href = "#";
+            }
             
             if (data.name) {
                 const words = data.name.trim().split(" ");
@@ -276,19 +338,13 @@
                 .catch(err => alert("Database Modification Refused: " + err.message));
         }
 
-        // FIXED: Stripped down hardcoded strict status filters to prevent formatting mismatch
         function syncMarketplaceFeedRegistry() {
             db.collection("jobs").get()
                 .then(snapshot => {
                     cachedVacanciesArray = [];
-                    console.log(`Fetched ${snapshot.size} total job postings from Firestore.`);
-                    
                     snapshot.forEach(doc => {
-                        const jobData = doc.data();
-                        console.log("Job Record Item Dump:", jobData);
-                        cachedVacanciesArray.push({ jobId: doc.id, ...jobData });
+                        cachedVacanciesArray.push({ jobId: doc.id, ...doc.data() });
                     });
-                    
                     renderFilteredMarketplaceView(cachedVacanciesArray);
                     syncTrackedApplicationsPipeline();
                 })
@@ -318,7 +374,7 @@
                         ${job.description || "No description requirements documentation provided."}
                     </div>
                     <div class="flex justify-end pt-1">
-                        <button type="button" onclick="executeApplicationSubmission('${job.jobId}', '${job.jobTitle || 'Job Application'}')" class="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs py-2 px-5 rounded-xl transition shadow-sm">
+                        <button type="button" onclick="openResumeModalContext('${job.jobId}', '${job.jobTitle || 'Job Application'}')" class="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs py-2 px-5 rounded-xl transition shadow-sm">
                             Apply Online
                         </button>
                     </div>
@@ -338,41 +394,49 @@
             renderFilteredMarketplaceView(filtered);
         }
 
-        function executeApplicationSubmission(jobId, jobTitle) {
-            if (!currentlyAuthenticatedUserUID || !globalUserProfileCachedObject) return;
-            const appRefId = `${currentlyAuthenticatedUserUID}_${jobId}`;
+        // DYNAMIC RESUME ATTACHMENT CONTROLLER (Saves complete information profile to Firestore)
+        function processFinalApplicationSubmit(event) {
+            event.preventDefault();
+            if (!currentlyAuthenticatedUserUID || !globalUserProfileCachedObject || !selectedJobIdForSubmission) return;
+
+            const appRefId = `${currentlyAuthenticatedUserUID}_${selectedJobIdForSubmission}`;
+            
+            const resumeTextPayload = document.getElementById("modal-resume-text").value;
+            const resumeLinkPayload = document.getElementById("modal-resume-link").value;
 
             db.collection("applications").doc(appRefId).set({
                 applicationId: appRefId,
-                jobId: jobId,
-                jobTitle: jobTitle,
+                jobId: selectedJobIdForSubmission,
+                jobTitle: selectedJobTitleForSubmission,
                 candidateUid: currentlyAuthenticatedUserUID,
                 userId: currentlyAuthenticatedUserUID, 
                 candidateName: globalUserProfileCachedObject.name || "Anonymous Candidate",
+                candidatePhone: globalUserProfileCachedObject.phone || "N/A",
+                candidateEmail: globalUserProfileCachedObject.email || "N/A",
+                candidateAddress: globalUserProfileCachedObject.address || "N/A",
+                employeeResumeText: resumeTextPayload,
+                employeeResumeUrl: resumeLinkPayload || "",
                 status: "PENDING",
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             })
             .then(() => {
-                alert("Application Transmitted Successfully!");
+                alert("Application Transmitted Successfully with your Resume attached!");
+                closeResumeModalContext();
                 syncTrackedApplicationsPipeline();
             })
-            .catch(err => alert("Submission Refusal: " + err.message));
+            .catch(err => alert("Submission Refusal Anomaly: " + err.message));
         }
 
-        // IMPROVED: Queries EVERYTHING under applications collection to confirm user records matching
         function syncTrackedApplicationsPipeline() {
             if (!currentlyAuthenticatedUserUID) return;
 
             db.collection("applications").get()
                 .then(snapshot => {
                     const container = document.getElementById("tracked-applications-container");
-                    console.log(`Fetched ${snapshot.size} total global submitted applications logs.`);
-                    
                     let userApplications = [];
 
                     snapshot.forEach(doc => {
                         const app = doc.data();
-                        // Loose alignment fallback checks to link applied status back together
                         if (app.candidateUid === currentlyAuthenticatedUserUID || 
                             app.userId === currentlyAuthenticatedUserUID || 
                             app.employeeId === currentlyAuthenticatedUserUID) {
