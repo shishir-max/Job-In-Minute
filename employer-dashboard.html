@@ -7,44 +7,27 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+    <!-- FIREBASE COMPAT SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // ENGINE IDENTITY MATRIX ALIGNMENT BLOCK
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY_HERE", // Match this exactly with the config key used in login.html
-            authDomain: "job-in-minute.firebaseapp.com",
-            projectId: "job-in-minute",
-            storageBucket: "job-in-minute.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID_HERE",
-            appId: "YOUR_APP_ID_HERE"
-        };
+   const firebaseConfig = {
+  apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
+  authDomain: "job-in-minute.firebaseapp.com",
+  projectId: "job-in-minute",
+  storageBucket: "job-in-minute.firebasestorage.app",
+  messagingSenderId: "507249342731",
+  appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
+};
         
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-
-        // STRICT ACCOUNT LAYER ROADBLOCK GATEKEEPER
-        if (localStorage.getItem("userRoleToken") !== "employer") {
-            alert("Access Denied. Corporate workspace verification metrics missing.");
-            window.location.href = "login.html";
-        }
+        const db = firebase.firestore();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
-
-    <div class="bg-slate-900 text-white text-[11px] py-2 px-4 shadow-inner">
-        <div class="container mx-auto max-w-6xl flex justify-between items-center">
-            <span class="flex items-center gap-2 text-slate-400">
-                <i class="fa-solid fa-envelope text-blue-400"></i> website-support@jobinminute.com
-            </span>
-            <div class="flex items-center gap-4 text-slate-400">
-                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-linkedin-in"></i></a>
-                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
-            </div>
-        </div>
-    </div>
 
     <header class="bg-white border-b border-slate-100 py-4 shadow-sm relative z-40">
         <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
@@ -56,39 +39,16 @@
             </div>
             
             <nav class="flex items-center gap-8 text-sm font-bold text-slate-600">
-                <a href="index.html" class="hover:text-blue-600 transition">Home</a>
-                <a href="about.html" class="hover:text-blue-600 transition">About Us</a>
-                
                 <div class="relative">
                     <button onclick="toggleDropdownMenu(event)" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-900 px-4 py-2 rounded-xl transition text-xs font-black">
                         <i class="fa-solid fa-user-tie text-blue-600"></i>
-                        <span id="nav-profile-display-name">Loading Profile Registry...</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                        <span id="nav-profile-display-name">Loading Profile...</span>
                     </button>
                     
-                    <div id="account-dropdown-card" class="absolute right-0 mt-2 w-64 bg-white border border-slate-100 rounded-2xl shadow-2xl p-4 hidden space-y-4">
-                        <div class="border-b border-slate-50 pb-3">
-                            <span class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Signed Corporate Account</span>
-                            <h4 id="dropdown-card-name" class="font-black text-xs text-slate-900">Corporate User</h4>
-                            <p id="dropdown-card-email" class="text-[11px] text-slate-400 truncate">corporate@domain.com</p>
-                        </div>
-                        <ul class="space-y-1 text-xs font-bold text-slate-600">
-                            <li>
-                                <a href="employer-dashboard.html" class="flex items-center gap-2.5 p-2 rounded-lg bg-blue-50 text-blue-700">
-                                    <i class="fa-solid fa-building-user text-sm"></i> Corporate Panel
-                                </a>
-                            </li>
-                            <li>
-                                <a href="employee-dashboard.html" class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-50 transition">
-                                    <i class="fa-solid fa-user text-sm text-slate-400"></i> Employee Workspace
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="border-t border-slate-50 pt-2">
-                            <button onclick="executeAccountDisconnect()" class="w-full flex items-center gap-2.5 p-2 rounded-lg text-red-600 hover:bg-red-50 transition text-xs font-bold">
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i> Disconnect Account
-                            </button>
-                        </div>
+                    <div id="account-dropdown-card" class="absolute right-0 mt-2 w-64 bg-white border border-slate-100 rounded-2xl shadow-2xl p-4 hidden">
+                        <button onclick="executeAccountDisconnect()" class="w-full flex items-center gap-2.5 p-2 rounded-lg text-red-600 hover:bg-red-50 transition text-xs font-bold">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Disconnect Account
+                        </button>
                     </div>
                 </div>
             </nav>
@@ -96,256 +56,137 @@
     </header>
 
     <main class="container mx-auto px-4 max-w-6xl flex-grow py-10 space-y-8">
-        
-        <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl flex justify-between items-center">
             <div>
-                <span class="bg-blue-100 text-blue-700 text-[10px] uppercase tracking-wider font-black px-2.5 py-1 rounded-md">Corporate Portal</span>
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight mt-2">Incoming Applications Matrix</h1>
-                <p class="text-xs text-slate-500 mt-1">Review candidate resume pools and modulate corporate job listings status dynamically.</p>
+                <h1 class="text-2xl font-black text-slate-900">Corporate Workspace</h1>
+                <p class="text-xs text-slate-500 mt-1">Live Database Connected Pipeline.</p>
             </div>
-            
-            <button onclick="toggleJobModal(true)" class="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl transition shadow-md shadow-blue-200 flex items-center gap-2">
+            <button onclick="toggleJobModal(true)" class="bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase px-5 py-3.5 rounded-xl transition shadow-md">
                 <i class="fa-solid fa-plus"></i> Post A New Job
             </button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
             <div class="lg:col-span-2 space-y-4">
-                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                    <i class="fa-solid fa-users-viewfinder"></i> <span id="candidate-header-text">Received Candidate Profiles</span>
-                </h2>
-                
+                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400">Applications</h2>
                 <div id="dynamic-candidates-container" class="space-y-4">
-                    </div>
+                     <div class="bg-white rounded-2xl p-6 border text-slate-400 text-xs text-center">Select an active job posting card from the column map layout to view applicant strings.</div>
+                </div>
             </div>
 
             <div class="space-y-4">
-                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                    <i class="fa-solid fa-list-check"></i> Our Postings Status
-                </h2>
-                
-                <div id="live-postings-container" class="space-y-3">
-                    </div>
+                <h2 class="font-black text-xs uppercase tracking-wider text-slate-400">Our Postings Status</h2>
+                <div id="live-postings-container" class="space-y-3"></div>
             </div>
-
         </div>
     </main>
 
+    <!-- POST JOB MODAL -->
     <div id="job-posting-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100 transform transition-all duration-300">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-black text-base text-slate-900 tracking-tight">
-                    <i class="fa-solid fa-bullhorn text-blue-500 mr-2"></i>Deploy Corporate Requirement
-                </h3>
-                <button onclick="toggleJobModal(false)" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-black text-base text-slate-900">Deploy Corporate Requirement</h3>
+                <button onclick="toggleJobModal(false)" class="text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            
             <form id="job-posting-form" class="space-y-4" onsubmit="handleJobSubmission(event)">
                 <div>
-                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Job Designation Role Title *</label>
-                    <input type="text" id="modal-job-title" required placeholder="e.g. Senior Java Developer / Web Architecture Engineer" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Job Designation Role Title *</label>
+                    <input type="text" id="modal-job-title" required class="w-full bg-slate-50 border rounded-xl p-3 text-xs outline-none focus:border-blue-500">
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Target Sector *</label>
-                    <select id="modal-job-sector" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
-                        <option value="it">Information Technology (IT)</option>
-                        <option value="healthcare">Healthcare Operations</option>
-                    </select>
+                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Core Operational Description *</label>
+                    <textarea id="modal-job-desc" required rows="4" class="w-full bg-slate-50 border rounded-xl p-3 text-xs outline-none focus:border-blue-500"></textarea>
                 </div>
-                <div>
-                    <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Core Operational Description & Parameters *</label>
-                    <textarea id="modal-job-desc" required rows="4" placeholder="Outline specific tech stack targets, required background criteria..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition"></textarea>
-                </div>
-                
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase py-3.5 rounded-xl transition tracking-wider shadow-md">
-                    Broadcast Opening Globally &rarr;
-                </button>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold text-xs uppercase py-3.5 rounded-xl">Broadcast Opening Globally &rarr;</button>
             </form>
         </div>
     </div>
 
-    <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-400 mt-12">
-        &copy; 2026 JobInMinute Executive Infrastructures. All rights reserved.
-    </footer>
-
     <script>
-        let currentSelectedFilter = "all";
-        let activeUserEmail = "";
+        let currentUserUid = "";
 
-        // FIREBASE STATE LISTENER WATCH ENGINE
         auth.onAuthStateChanged(function(user) {
             if (user) {
-                // Read authenticated cloud fields directly to eliminate cache desyncs
-                activeUserEmail = user.email;
-                const corporateName = user.displayName || "Corporate Member";
-
-                document.getElementById('nav-profile-display-name').innerText = corporateName;
-                document.getElementById('dropdown-card-name').innerText = corporateName;
-                document.getElementById('dropdown-card-email').innerText = activeUserEmail;
-
-                renderDashboardDynamicContent(activeUserEmail);
+                currentUserUid = user.uid;
+                document.getElementById('nav-profile-display-name').innerText = user.displayName || "Employer Account";
+                fetchLiveJobs();
             } else {
-                // Push back to terminal gateway if authentication tokens crumble
                 window.location.href = "login.html";
             }
         });
 
         function toggleDropdownMenu(e) {
             e.stopPropagation();
-            const card = document.getElementById('account-dropdown-card');
-            card.classList.toggle('hidden');
+            document.getElementById('account-dropdown-card').classList.toggle('hidden');
         }
 
         function toggleJobModal(show) {
-            const modal = document.getElementById('job-posting-modal');
-            if(show) modal.classList.remove('hidden');
-            else modal.classList.add('hidden');
-        }
-
-        function selectJobFilter(title) {
-            currentSelectedFilter = title;
-            renderDashboardDynamicContent(activeUserEmail);
-        }
-
-        function renderDashboardDynamicContent(email) {
-            const candidatesContainer = document.getElementById('dynamic-candidates-container');
-            const listingsContainer = document.getElementById('live-postings-container');
-            const headerText = document.getElementById('candidate-header-text');
-            
-            candidatesContainer.innerHTML = "";
-            listingsContainer.innerHTML = "";
-
-            if (currentSelectedFilter === "all") {
-                headerText.innerText = "Received Candidate Profiles";
-            } else {
-                headerText.innerText = `Applications for: ${currentSelectedFilter}`;
-            }
-
-            const storageKey = `jobs_${email}`;
-            let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const isDefaultHidden = localStorage.getItem(`hide_default_${email}`) === "true";
-
-            // 1. DYNAMIC APPLICANT POOL SEGMENT RENDERING LOOPS
-            if (email === "shishirbharti51@gmail.com" && !isDefaultHidden) {
-                if (currentSelectedFilter === "all" || currentSelectedFilter === "US IT Recruitment Lead") {
-                    candidatesContainer.innerHTML = `
-                        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-6">
-                            <div class="flex justify-between items-start border-b border-slate-50 pb-4">
-                                <div>
-                                    <h3 class="font-black text-sm text-slate-900">Soni Singh</h3>
-                                    <p class="text-xs text-blue-600 font-bold mt-0.5">Position: <span class="text-slate-500">US IT Recruitment Lead</span></p>
-                                </div>
-                                <span class="bg-amber-50 text-amber-700 border border-amber-200 rounded-lg px-3 py-1.5 font-bold text-[11px]">Awaiting Review</span>
-                            </div>
-                            <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
-                                4 years of experience executing technical candidate sourcing workflows at Lucky Brilliant School. High core expertise across US IT recruitment clients, CTC evaluations, background verification loops (BGV).
-                            </p>
-                        </div>`;
-                } else {
-                    candidatesContainer.innerHTML = `
-                        <div class="bg-white rounded-2xl p-8 border border-slate-100 text-center text-slate-400 text-xs">
-                            <i class="fa-solid fa-user-slash text-2xl mb-2 text-slate-300 block"></i>
-                            No candidates have applied to this specific posting yet.
-                        </div>`;
-                }
-
-                // Render out template card node metrics
-                const defaultNode = document.createElement('div');
-                defaultNode.className = `bg-white rounded-2xl p-4 border shadow-sm flex flex-col gap-3 transition cursor-pointer ${currentSelectedFilter === 'US IT Recruitment Lead' ? 'border-blue-500 bg-blue-50/30' : 'border-slate-100 hover:border-slate-300'}`;
-                defaultNode.setAttribute("onclick", "selectJobFilter('US IT Recruitment Lead')");
-                defaultNode.innerHTML = `
-                    <div class="flex justify-between items-center w-full">
-                        <span class="font-bold text-xs text-slate-800 truncate mr-2">US IT Recruitment Lead</span>
-                        <span class="bg-emerald-50 text-emerald-700 border border-emerald-100 px-2.5 py-1 text-[10px] uppercase font-black rounded-md">Active</span>
-                    </div>
-                    <div class="flex justify-end border-t border-slate-100/70 pt-2" onclick="event.stopPropagation();">
-                        <button onclick="deleteJobListing(-1)" class="text-[10px] font-bold text-slate-400 hover:text-red-500 transition flex items-center gap-1">
-                            <i class="fa-solid fa-trash-can text-[10px]"></i> Delete Job
-                        </button>
-                    </div>`;
-                listingsContainer.appendChild(defaultNode);
-            } else {
-                if (registeredJobs.length > 0 && currentSelectedFilter !== "all") {
-                    candidatesContainer.innerHTML = `
-                        <div class="bg-white rounded-2xl p-8 border border-slate-100 text-center text-slate-400 text-xs">
-                            <i class="fa-solid fa-user-clock text-2xl mb-2 text-slate-300 block"></i>
-                            Requirement active! Awaiting candidate registry submissions for "${currentSelectedFilter}".
-                        </div>`;
-                } else {
-                    candidatesContainer.innerHTML = `
-                        <div class="bg-white rounded-2xl p-8 border border-slate-100 text-center text-slate-400 text-xs">
-                            <i class="fa-solid fa-folder-open text-2xl mb-2 text-slate-300 block"></i>
-                            Select an active listing card on the right to review target submissions.
-                        </div>`;
-                }
-            }
-
-            // 2. RENDER THE REST OF DYNAMIC OWNED LISTINGS FROM REGISTERED ACCOUNT
-            registeredJobs.forEach(function(jobTitle, index) {
-                const node = document.createElement('div');
-                node.className = `bg-white rounded-2xl p-4 border shadow-sm flex flex-col gap-3 transition cursor-pointer ${currentSelectedFilter === jobTitle ? 'border-blue-500 bg-blue-50/30' : 'border-slate-100 hover:border-slate-300'}`;
-                node.setAttribute("onclick", `selectJobFilter("${jobTitle}")`);
-                node.innerHTML = `
-                    <div class="flex justify-between items-center w-full">
-                        <span class="font-bold text-xs text-slate-800 truncate mr-2">${jobTitle}</span>
-                        <span class="bg-blue-50 text-blue-700 border border-blue-100 px-2 py-0.5 text-[9px] uppercase font-black rounded-md">Active</span>
-                    </div>
-                    <div class="flex justify-end border-t border-slate-100/70 pt-2" onclick="event.stopPropagation();">
-                        <button onclick="deleteJobListing(${index})" class="text-[10px] font-bold text-slate-400 hover:text-red-500 transition flex items-center gap-1">
-                            <i class="fa-solid fa-trash-can text-[10px]"></i> Delete Job
-                        </button>
-                    </div>`;
-                listingsContainer.prepend(node);
-            });
-        }
-
-        function deleteJobListing(index) {
-            if (confirm("Are you sure you want to completely delete this job post from your workspace?")) {
-                if (index === -1) {
-                    localStorage.setItem(`hide_default_${activeUserEmail}`, "true");
-                } else {
-                    const storageKey = `jobs_${activeUserEmail}`;
-                    let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
-                    registeredJobs.splice(registeredJobs.length - 1 - index, 1);
-                    localStorage.setItem(storageKey, JSON.stringify(registeredJobs));
-                }
-                currentSelectedFilter = "all";
-                renderDashboardDynamicContent(activeUserEmail);
-            }
+            if(show) document.getElementById('job-posting-modal').classList.remove('hidden');
+            else document.getElementById('job-posting-modal').classList.add('hidden');
         }
 
         function handleJobSubmission(e) {
             e.preventDefault();
-            const titleValue = document.getElementById('modal-job-title').value.trim();
-            const storageKey = `jobs_${activeUserEmail}`;
-            
-            let registeredJobs = JSON.parse(localStorage.getItem(storageKey)) || [];
-            registeredJobs.push(titleValue);
-            localStorage.setItem(storageKey, JSON.stringify(registeredJobs));
-            
-            alert("Corporate Opening broadcast successfully into active data context!");
-            
-            document.getElementById('job-posting-form').reset();
-            toggleJobModal(false);
-            
-            renderDashboardDynamicContent(activeUserEmail);
+            const title = document.getElementById('modal-job-title').value.trim();
+            const desc = document.getElementById('modal-job-desc').value.trim();
+
+            // SAVE DATA SECURELY TO THE FIRESTORE "jobs" COLLECTION MATCHING SECURITY RULES
+            db.collection("jobs").add({
+                title: title,
+                description: desc,
+                employerId: currentUserUid,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                alert("Job saved to Cloud Database successfully!");
+                document.getElementById('job-posting-form').reset();
+                toggleJobModal(false);
+                fetchLiveJobs();
+            })
+            .catch(err => alert("Firestore Error: " + err.message));
+        }
+
+        function fetchLiveJobs() {
+            const listingsContainer = document.getElementById('live-postings-container');
+            listingsContainer.innerHTML = "";
+
+            db.collection("jobs").where("employerId", "==", currentUserUid).get()
+                .then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        listingsContainer.innerHTML = `<div class='text-xs text-slate-400 text-center p-4'>No live jobs posted yet.</div>`;
+                        return;
+                    }
+                    querySnapshot.forEach((doc) => {
+                        const job = doc.data();
+                        const node = document.createElement('div');
+                        node.className = "bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex flex-col gap-3 cursor-pointer";
+                        node.innerHTML = `
+                            <div class="flex justify-between items-center w-full">
+                                <span class="font-bold text-xs text-slate-800">${job.title}</span>
+                                <span class="bg-blue-50 text-blue-700 px-2 py-0.5 text-[9px] uppercase font-black rounded-md">Live</span>
+                            </div>
+                            <div class="flex justify-end border-t pt-2">
+                                <button onclick="deleteJobListing('${doc.id}')" class="text-[10px] text-slate-400 hover:text-red-500 flex items-center gap-1">
+                                    <i class="fa-solid fa-trash-can"></i> Delete
+                                </button>
+                            </div>`;
+                        listingsContainer.appendChild(node);
+                    });
+                });
+        }
+
+        function deleteJobListing(docId) {
+            if (confirm("Delete this posting from the cloud database permanently?")) {
+                db.collection("jobs").doc(docId).delete().then(() => {
+                    alert("Job deleted from production servers.");
+                    fetchLiveJobs();
+                });
+            }
         }
 
         function executeAccountDisconnect() {
-            auth.signOut().then(() => {
-                localStorage.clear();
-                alert("Session terminated securely via Firebase Auth.");
-                window.location.href = "login.html";
-            });
+            auth.signOut().then(() => window.location.href = "login.html");
         }
-
-        window.addEventListener('click', function() {
-            const dropdown = document.getElementById('account-dropdown-card');
-            if (dropdown && !dropdown.classList.contains('hidden')) {
-                dropdown.classList.add('hidden');
-            }
-        });
     </script>
 </body>
 </html>
