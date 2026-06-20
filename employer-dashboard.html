@@ -12,7 +12,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
-       const firebaseConfig = {
+    const firebaseConfig = {
   apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
   authDomain: "job-in-minute.firebaseapp.com",
   projectId: "job-in-minute",
@@ -27,14 +27,55 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <header class="bg-white border-b py-4 shadow-sm">
-        <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
-            <span class="font-black text-xl text-slate-900">JobInMinute Corporate Portal</span>
-            <button onclick="auth.signOut().then(()=>window.location.href='login.html')" class="text-xs font-bold bg-slate-100 px-4 py-2 rounded-xl">Disconnect</button>
+    <!-- GLOBAL NAVIGATION ARCHITECTURE (WITH METADATA LINKS & PROFILE DROPDOWN) -->
+    <header class="bg-white border-b border-slate-100 shadow-sm relative z-40">
+        <!-- Social & Identity Utility Info Bar Line -->
+        <div class="bg-slate-900 text-white text-[11px] py-2">
+            <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <span class="text-slate-400"><i class="fa-solid fa-envelope text-blue-400 mr-1"></i> info@jobinminute.com</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="https://facebook.com" target="_blank" class="hover:text-blue-400 transition"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://instagram.com" target="_blank" class="hover:text-pink-400 transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://linkedin.com" target="_blank" class="hover:text-blue-500 transition"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Dashboard Header Routing Actions Layout -->
+        <div class="container mx-auto px-4 max-w-6xl py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-blue-600 text-white p-2 rounded-xl"><i class="fa-solid fa-bolt text-lg"></i></div>
+                <span class="font-black text-xl tracking-tight text-slate-900">JobInMinute Corporate Portal</span>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <nav class="flex items-center gap-6 text-xs font-bold text-slate-600 mr-4">
+                    <a href="index.html" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fa-solid fa-house"></i> Home</a>
+                    <a href="about.html" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> About Us</a>
+                </nav>
+                
+                <!-- DYNAMIC PROFILE ACTIONS ACCORDION CONTAINER DROPDOWN -->
+                <div class="relative inline-block text-left">
+                    <button onclick="toggleProfileDropdown()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-black py-2 px-4 rounded-xl flex items-center gap-2 transition outline-none">
+                        <i class="fa-solid fa-building-shield text-blue-600"></i> <span id="dropdown-org-name">Loading Corp Profile...</span> <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </button>
+                    <div id="profile-dropdown-menu" class="hidden absolute right-0 mt-2 w-64 bg-white border border-slate-100 rounded-2xl shadow-xl py-3 z-50 text-xs text-slate-700">
+                        <div class="px-4 py-2 border-b border-slate-50 mb-2">
+                            <p class="font-black text-slate-900" id="menu-user-name">---</p>
+                            <p class="text-[10px] text-slate-400 font-medium" id="menu-user-mail">---</p>
+                        </div>
+                        <button onclick="openProfileEditModal()" class="w-full text-left px-4 py-2.5 hover:bg-slate-50 transition font-bold flex items-center gap-2"><i class="fa-solid fa-sliders text-slate-400"></i> Account Settings / Details</button>
+                        <hr class="my-1 border-slate-50">
+                        <button onclick="auth.signOut().then(()=>window.location.href='login.html')" class="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-600 transition font-bold flex items-center gap-2"><i class="fa-solid fa-arrow-right-from-bracket"></i> Disconnect Portal</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 max-w-6xl py-8 space-y-6">
+    <main class="container mx-auto px-4 max-w-6xl py-8 space-y-6 flex-grow">
         <div class="bg-white p-6 rounded-3xl border flex flex-col md:flex-row gap-4 justify-between items-center shadow-sm">
             <input type="text" id="candidate-search" oninput="fetchApplications()" placeholder="Search candidates by name, qualification parameters..." class="bg-slate-50 border rounded-xl p-3 text-xs w-full md:max-w-md outline-none focus:border-blue-500">
             <button onclick="toggleModal(true)" class="bg-blue-600 text-white font-bold text-xs uppercase px-5 py-3 rounded-xl shadow-sm w-full md:w-auto">+ Post New Requirement</button>
@@ -45,7 +86,6 @@
                 <h2 class="font-black text-xs uppercase tracking-wider text-slate-400">Received Employee Applications</h2>
                 <div id="applications-root-box" class="space-y-4"></div>
             </div>
-
             <div class="space-y-4">
                 <h2 class="font-black text-xs uppercase tracking-wider text-slate-400">Our Postings Registry</h2>
                 <div id="jobs-root-box" class="space-y-3"></div>
@@ -53,13 +93,15 @@
         </div>
     </main>
 
+    <!-- JOB REGISTRY MANAGEMENT MODAL (POSTING & EDITING INTERACTION) -->
     <div id="job-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4">
             <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="font-black text-sm text-slate-900">Deploy Corporate Job</h3>
+                <h3 id="modal-job-headline" class="font-black text-sm text-slate-900">Deploy Corporate Job</h3>
                 <button onclick="toggleModal(false)" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <form onsubmit="deployJobListing(event)" class="space-y-4">
+            <form id="job-submission-form" onsubmit="deployJobListing(event)" class="space-y-4">
+                <input type="hidden" id="edit-target-job-id">
                 <div>
                     <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Role Designation Title *</label>
                     <input type="text" id="job-title" required class="w-full bg-slate-50 border rounded-xl p-3 text-xs outline-none focus:border-blue-500">
@@ -76,7 +118,36 @@
                     <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Job Description Core Text *</label>
                     <textarea id="job-desc" required rows="4" class="w-full bg-slate-50 border rounded-xl p-3 text-xs outline-none focus:border-blue-500"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold text-xs uppercase py-3.5 rounded-xl">Broadcast &rarr;</button>
+                <button type="submit" id="job-modal-cta-btn" class="w-full bg-blue-600 text-white font-bold text-xs uppercase py-3.5 rounded-xl">Broadcast &rarr;</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CORPORATE ACCOUNT EDIT PREFERENCES MODAL -->
+    <div id="profile-edit-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-black text-sm text-slate-900">Update Profile Details</h3>
+                <button onclick="toggleProfileModal(false)" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="commitProfileUpdates(event)" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Representative Name</label>
+                    <input type="text" id="edit-corp-name" class="w-full bg-slate-50 border rounded-xl p-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Contact Phone No.</label>
+                    <input type="text" id="edit-corp-phone" class="w-full bg-slate-50 border rounded-xl p-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Organisation Name</label>
+                    <input type="text" id="edit-corp-org" class="w-full bg-slate-50 border rounded-xl p-3 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Organisation Address</label>
+                    <input type="text" id="edit-corp-addr" class="w-full bg-slate-50 border rounded-xl p-3 text-xs">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold text-xs uppercase py-3.5 rounded-xl">Save Parameters</button>
             </form>
         </div>
     </div>
@@ -87,6 +158,20 @@
         auth.onAuthStateChanged(user => {
             if (user) {
                 currentEmployerId = user.uid;
+                db.collection("employers").doc(user.uid).get().then(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.getElementById("dropdown-org-name").innerText = data.organisationName;
+                        document.getElementById("menu-user-name").innerText = data.name;
+                        document.getElementById("menu-user-mail").innerText = data.email;
+                        
+                        // Hydrate edit inputs
+                        document.getElementById("edit-corp-name").value = data.name;
+                        document.getElementById("edit-corp-phone").value = data.phone;
+                        document.getElementById("edit-corp-org").value = data.organisationName;
+                        document.getElementById("edit-corp-addr").value = data.organisationAddress;
+                    }
+                });
                 fetchActiveJobs();
                 fetchApplications();
             } else {
@@ -94,24 +179,79 @@
             }
         });
 
+        function toggleProfileDropdown() {
+            document.getElementById("profile-dropdown-menu").classList.toggle("hidden");
+        }
+
+        function toggleProfileModal(show) {
+            if(show) document.getElementById("profile-edit-modal").classList.remove("hidden");
+            else document.getElementById("profile-edit-modal").classList.add("hidden");
+        }
+
+        function openProfileEditModal() {
+            toggleProfileDropdown();
+            toggleProfileModal(true);
+        }
+
+        function commitProfileUpdates(e) {
+            e.preventDefault();
+            db.collection("employers").doc(currentEmployerId).update({
+                name: document.getElementById("edit-corp-name").value.trim(),
+                phone: document.getElementById("edit-corp-phone").value.trim(),
+                organisationName: document.getElementById("edit-corp-org").value.trim(),
+                organisationAddress: document.getElementById("edit-corp-addr").value.trim()
+            }).then(() => {
+                alert("Account architecture synchronized successfully.");
+                window.location.reload();
+            });
+        }
+
         function toggleModal(show) {
-            if(show) document.getElementById("job-modal").classList.remove("hidden");
-            else document.getElementById("job-modal").classList.add("hidden");
+            if(!show) {
+                document.getElementById("job-modal").classList.add("hidden");
+                document.getElementById("edit-target-job-id").value = "";
+                document.getElementById("job-submission-form").reset();
+                document.getElementById("modal-job-headline").innerText = "Deploy Corporate Job";
+                document.getElementById("job-modal-cta-btn").innerText = "Broadcast →";
+            } else {
+                document.getElementById("job-modal").classList.remove("hidden");
+            }
         }
 
         function deployJobListing(e) {
             e.preventDefault();
-            db.collection("jobs").add({
+            const jobId = document.getElementById("edit-target-job-id").value;
+            const payload = {
                 title: document.getElementById("job-title").value.trim(),
                 sector: document.getElementById("job-sector").value,
                 description: document.getElementById("job-desc").value.trim(),
                 employerId: currentEmployerId,
                 status: "Active",
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                toggleModal(false);
-                fetchActiveJobs();
-            });
+            };
+
+            if(jobId) {
+                // Perform Edit Operation Updates
+                db.collection("jobs").doc(jobId).update({
+                    title: payload.title,
+                    sector: payload.sector,
+                    description: payload.description
+                }).then(() => { toggleModal(false); fetchActiveJobs(); });
+            } else {
+                // New Document Addition
+                db.collection("jobs").add(payload).then(() => { toggleModal(false); fetchActiveJobs(); });
+            }
+        }
+
+        function openEditJobForm(id, title, sector, desc) {
+            document.getElementById("edit-target-job-id").value = id;
+            document.getElementById("job-title").value = title;
+            document.getElementById("job-sector").value = sector;
+            document.getElementById("job-desc").value = desc;
+            
+            document.getElementById("modal-job-headline").innerText = "Modify Open Listing Requirements";
+            document.getElementById("job-modal-cta-btn").innerText = "Push Modifications";
+            toggleModal(true);
         }
 
         function fetchActiveJobs() {
@@ -127,10 +267,11 @@
                             <span class="font-bold text-xs text-slate-800">${job.title}</span>
                             <span class="px-2 py-0.5 text-[9px] uppercase font-black rounded-md ${job.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}">${job.status}</span>
                         </div>
-                        <div class="flex justify-between border-t pt-2">
+                        <div class="flex justify-between border-t pt-2 gap-2">
                             <button onclick="toggleJobStatus('${doc.id}', '${job.status}')" class="text-[10px] text-blue-600 font-bold">
                                 ${job.status === 'Active' ? 'Close Job' : 'Reopen Job'}
                             </button>
+                            <button onclick="openEditJobForm('${doc.id}', \`${job.title}\`, '${job.sector}', \`${job.description}\`)" class="text-[10px] text-amber-600 font-bold"><i class="fa-solid fa-pen-to-square"></i> Edit Layout</button>
                             <button onclick="deleteJob('${doc.id}')" class="text-[10px] text-red-500 font-bold">Delete</button>
                         </div>`;
                     target.appendChild(node);
