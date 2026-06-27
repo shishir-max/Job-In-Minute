@@ -13,67 +13,23 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
-       const firebaseConfig = {
-  apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
-  authDomain: "job-in-minute.firebaseapp.com",
-  projectId: "job-in-minute",
-  storageBucket: "job-in-minute.firebasestorage.app",
-  messagingSenderId: "507249342731",
-  appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsgjVxoK6eJuWl-ofbL1VLEHXld13_wV0",
+            authDomain: "job-in-minute.firebaseapp.com",
+            projectId: "job-in-minute",
+            storageBucket: "job-in-minute.firebasestorage.app",
+            messagingSenderId: "507249342731",
+            appId: "1:507249342731:web:0db15814ee9c454c8f0a0e"
+        };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
-<div id="global-header-container"></div>
-    <script>
-        fetch('header.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('global-header-container').innerHTML = data;
-                // This triggers your login dashboard buttons once the header loads
-                if (typeof runAuthSessionRoutines === 'function') {
-                    runAuthSessionRoutines();
-                }
-            })
-            .catch(error => console.error('Error loading header:', error));
-    </script>
-    <!-- GLOBAL HEADER ARCHITECTURE NAVIGATION PANEL -->
-    
-        <!-- Top Info Line Utility Row -->
-        <div class="bg-slate-900 text-white text-[11px] py-2">
-            <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
-                <div class="flex items-center gap-4">
-                    <span class="text-slate-400"><i class="fa-solid fa-envelope text-blue-400 mr-1"></i> website-support@jobinminute.com</span>
-                </div>
-                <div class="flex items-center gap-4">
-                    <a href="https://www.facebook.com/share/1BNyCNs5A1/" target="_blank" class="hover:text-blue-400 transition"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="https://www.instagram.com/kineticssource?utm_source=qr&igsh=MWRxMWMxZWIyaTM5cw==" target="_blank" class="hover:text-pink-400 transition"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://linkedin.com" target="_blank" class="hover:text-blue-500 transition"><i class="fa-brands fa-linkedin"></i></a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Interactive Navigation Routing Content -->
-        <div class="container mx-auto px-4 max-w-6xl py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="bg-blue-600 text-white p-2 rounded-xl"><i class="fa-solid fa-bolt text-lg"></i></div>
-                <span class="font-black text-xl tracking-tight text-slate-900">JobInMinute</span>
-            </div>
-            
-            <nav class="flex items-center gap-6 text-xs font-bold text-slate-600">
-                <a href="index.html" class="text-blue-600 font-black flex items-center gap-1"><i class="fa-solid fa-house"></i> Home</a>
-                <a href="about.html" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> About Us</a>
-                
-                <!-- DYNAMIC PERSISTENT SESSION PORTAL CTA MODULE BUTTON -->
-                <a id="nav-dynamic-cta" href="login.html" class="bg-slate-950 hover:bg-slate-800 text-white text-xs font-bold py-2.5 px-5 rounded-full transition shadow-md">
-                    Sign In / Register
-                </a>
-            </nav>
-        </div>
-    </header>
+
+    <!-- GLOBAL HEADER ARCHITECTURE NAVIGATION CONTAINER -->
+    <div id="global-header-container"></div>
 
     <!-- MIDDLE CORE HERO LAYOUT CONTENT SECTION -->
     <main class="flex-grow flex flex-col items-center justify-center text-center px-4 py-20 max-w-4xl mx-auto space-y-6">
@@ -105,46 +61,61 @@
 
     <!-- GLITCH PROTECTION CORE SCRIPT ROUTER ENGINE -->
     <script>
-        // Track underlying user instance profile status loops
-        auth.onAuthStateChanged(user => {
-            const navCta = document.getElementById("nav-dynamic-cta");
-            const heroCta = document.getElementById("hero-dynamic-cta");
+        function runAuthSessionRoutines() {
+            auth.onAuthStateChanged(user => {
+                // Check for either the dynamic nav ID or the default logged-out button structure
+                const navCta = document.getElementById("nav-dynamic-cta") || document.getElementById("logged-out-btn");
+                const heroCta = document.getElementById("hero-dynamic-cta");
 
-            if (user) {
-                // Determine user identity mapping to resolve exact dashboard targets
-                db.collection("employers").doc(user.uid).get().then(empDoc => {
-                    if (empDoc.exists) {
-                        setSessionActiveState("employer-dashboard.html");
-                    } else {
-                        setSessionActiveState("employee-dashboard.html");
+                if (user) {
+                    db.collection("employers").doc(user.uid).get().then(empDoc => {
+                        if (empDoc.exists) {
+                            setSessionActiveState("employer-dashboard.html", navCta, heroCta);
+                        } else {
+                            setSessionActiveState("employee-dashboard.html", navCta, heroCta);
+                        }
+                    }).catch(() => {
+                        setSessionActiveState("login.html", navCta, heroCta);
+                    });
+                } else {
+                    if (navCta) {
+                        navCta.innerText = "Sign In / Register";
+                        navCta.href = "login.html";
                     }
-                }).catch(() => {
-                    // Fail-safe default link
-                    setSessionActiveState("login.html");
-                });
-            } else {
-                // Keep default landing gate redirects intact if unauthenticated
-                navCta.innerText = "Sign In / Register";
-                navCta.href = "login.html";
-                heroCta.innerText = "Access Portal Gate";
-                heroCta.href = "login.html";
-            }
-        });
-
-        function setSessionActiveState(dashboardUrl) {
-            const navCta = document.getElementById("nav-dynamic-cta");
-            const heroCta = document.getElementById("hero-dynamic-cta");
-
-            // Update Header Navigation Link Look
-            navCta.innerHTML = `<i class="fa-solid fa-gauge-high mr-1"></i> Go to Dashboard`;
-            navCta.href = dashboardUrl;
-            navCta.className = "bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-5 rounded-full transition shadow-md flex items-center";
-
-            // Update Main Center Page Hero Action Trigger Button
-            heroCta.innerText = "Return to My Workspace →";
-            heroCta.href = dashboardUrl;
-            heroCta.className = "bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase px-8 py-4 rounded-xl shadow-lg transition tracking-wider inline-block";
+                    if (heroCta) {
+                        heroCta.innerText = "Access Portal Gate";
+                        heroCta.href = "login.html";
+                    }
+                }
+            });
         }
+
+        function setSessionActiveState(dashboardUrl, navCta, heroCta) {
+            if (navCta) {
+                navCta.innerHTML = `<i class="fa-solid fa-gauge-high mr-1"></i> Go to Dashboard`;
+                navCta.href = dashboardUrl;
+                navCta.className = "bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-5 rounded-full transition shadow-md flex items-center";
+            }
+
+            if (heroCta) {
+                heroCta.innerText = "Return to My Workspace →";
+                heroCta.href = dashboardUrl;
+                heroCta.className = "bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase px-8 py-4 rounded-xl shadow-lg transition tracking-wider inline-block";
+            }
+        }
+
+        // Dynamically fetch and slide in the master layout template file
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('global-header-container').innerHTML = data;
+                // Safely initialize session buttons once elements are rendered in the DOM
+                runAuthSessionRoutines();
+            })
+            .catch(error => {
+                console.error('Error loading header template:', error);
+                runAuthSessionRoutines();
+            });
     </script>
 </body>
 </html>
