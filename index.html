@@ -27,7 +27,19 @@
     </script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
-
+<div id="global-header-container"></div>
+    <script>
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('global-header-container').innerHTML = data;
+                // This triggers your login dashboard buttons once the header loads
+                if (typeof runAuthSessionRoutines === 'function') {
+                    runAuthSessionRoutines();
+                }
+            })
+            .catch(error => console.error('Error loading header:', error));
+    </script>
     <!-- GLOBAL HEADER ARCHITECTURE NAVIGATION PANEL -->
     <header class="bg-white border-b border-slate-100 shadow-sm relative z-40">
         <!-- Top Info Line Utility Row -->
