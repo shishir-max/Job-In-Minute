@@ -2,17 +2,13 @@
     <div class="container mx-auto px-4 py-4 max-w-6xl flex justify-between items-center">
         <!-- Logo Branding -->
         <a href="index.html" class="flex items-center gap-2 group">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
-                <i class="fa-solid fa-bolt text-sm"></i>
-            </div>
             
-            <!-- WORKING LIVE LOGO IMAGE -->
-            <img src="https://i.postimg.cc/9F7K7M80/My-Job-in-minute-Logo.jpg" alt="JobInMinute Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';" class="h-6 w-auto object-contain max-w-[150px]">
+            <!-- Logo Image -->
+            <img src="https://i.postimg.cc/GhFzRBTY/My-Job-in-minute-Logo.jpg" alt="JobInMinute Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';" class="h-8 w-auto object-contain max-w-[150px]">
             
-            <!-- Fallback Text -->
+            <!-- Fallback Text (only shows if image fails to load) -->
             <span style="display:none;" class="text-base font-black tracking-tight text-slate-900">JobIn<span class="text-purple-600">Minute</span></span>
         </a>
-
         <!-- Navigation Links -->
         <div class="flex items-center gap-6">
             <a href="index.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition">Home</a>
@@ -20,7 +16,6 @@
             
             <!-- Default Unified Action Link -->
             <a href="login.html" id="logged-out-btn" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Sign In / Register</a>
-
             <!-- User Menu Dropdown Structure -->
             <div id="logged-in-dropdown" class="relative hidden">
                 <button id="user-menu-button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 transition">
@@ -28,7 +23,6 @@
                     <span id="header-display-name">Profile Session</span>
                     <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                 </button>
-
                 <div id="logged-in-dropdown-menu" class="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 hidden z-50">
                     <div class="px-4 py-2 border-b border-slate-50 mb-1">
                         <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Signed Account</p>
