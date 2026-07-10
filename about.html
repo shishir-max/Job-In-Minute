@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-white">
 
 <!-- Top Utility Bar -->
 <div class="bg-slate-900 text-white text-xs">
@@ -36,4 +36,140 @@
             <a href="about.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition">About Us</a>
             <a href="login.html" id="logged-out-btn" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Sign In / Register</a>
             <div id="logged-in-dropdown" class="relative hidden">
-                <button id="user-menu-button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 px-3 py-1.5
+                <button id="user-menu-button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 transition">
+                    <div class="w-5 h-5 rounded-md bg-purple-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-user"></i></div>
+                    <span id="header-display-name">Profile Session</span>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                </button>
+                <div id="logged-in-dropdown-menu" class="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 hidden z-50">
+                    <div class="px-4 py-2 border-b border-slate-50 mb-1">
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Signed Account</p>
+                        <p id="popover-user-name" class="text-xs font-black text-slate-800 truncate">Loading Account...</p>
+                        <p id="popover-user-email" class="text-[10px] text-slate-400 truncate">loading@jobinminute.com</p>
+                    </div>
+                    <a href="employer.html" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-chart-pie text-purple-500 w-4"></i> Corporate Panel
+                    </a>
+                    <a href="workspace.html" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-user-tie text-blue-500 w-4"></i> Employee Workspace
+                    </a>
+                    <hr class="border-slate-50 my-1">
+                    <button onclick="localStorage.clear(); window.location.href='index.html';" class="w-full flex items-center gap-2 px-4 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50/50 transition text-left">
+                        <i class="fa-solid fa-arrow-right-from-bracket w-4"></i> Disconnect Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Hero Banner -->
+<div class="relative">
+    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=80" alt="Modern workplace" onerror="this.style.display='none';" class="w-full h-64 md:h-80 object-cover">
+    <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-purple-900/60 flex items-center">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <h1 class="text-3xl md:text-4xl font-black text-white mb-2">About JobInMinute</h1>
+            <p class="text-sm md:text-base text-slate-200 max-w-xl">Connecting technical experts with global workspaces — a sister concern, powered by Kinetics Source Technologies Pvt. Ltd.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<main class="container mx-auto px-4 max-w-5xl py-12 space-y-16">
+
+    <!-- Introduction -->
+    <section class="text-center max-w-3xl mx-auto space-y-4">
+        <h2 class="text-2xl font-black text-slate-900">Who We Are</h2>
+        <p class="text-sm text-slate-600 leading-relaxed">
+            <strong>JobInMinute</strong> is a sister concern and is proudly powered by <strong>Kinetics Source Technologies Pvt. Ltd.</strong>, a company built on the mission of connecting technical talent with the right opportunities, quickly and reliably. We bring together job seekers and employers on one platform, removing the friction typically involved in hiring and job hunting.
+        </p>
+    </section>
+
+    <!-- Two Column: Employee & Employer -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <!-- For Employees -->
+        <div class="bg-slate-50 rounded-2xl p-8 space-y-4 border border-slate-100">
+            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80" alt="Professional applying for jobs" onerror="this.style.display='none';" class="w-full h-40 object-cover rounded-xl mb-2">
+            <div class="w-10 h-10 rounded-lg bg-purple-600 text-white flex items-center justify-center">
+                <i class="fa-solid fa-user-tie"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">For Job Seekers</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                Looking for your next opportunity? Create your profile, upload your resume, and apply to relevant job openings in just a few clicks. Track your applications, get discovered by employers actively hiring, and take the next step in your career — all in one place, completely free for candidates.
+            </p>
+            <a href="login.html" class="inline-block text-xs font-bold text-purple-600 hover:text-purple-800 transition">Get Started as a Job Seeker →</a>
+        </div>
+
+        <!-- For Employers -->
+        <div class="bg-slate-50 rounded-2xl p-8 space-y-4 border border-slate-100">
+            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&q=80" alt="Employer reviewing candidates" onerror="this.style.display='none';" class="w-full h-40 object-cover rounded-xl mb-2">
+            <div class="w-10 h-10 rounded-lg bg-sky-600 text-white flex items-center justify-center">
+                <i class="fa-solid fa-building"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">For Employers</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                Hiring made simple. Post your job openings and get discovered by qualified candidates actively looking for work. Browse profiles, review resumes, and connect directly with potential hires — at no cost. Whether you need one role filled or are building an entire team, JobInMinute helps you find the right people, fast.
+            </p>
+            <a href="login.html" class="inline-block text-xs font-bold text-sky-600 hover:text-sky-800 transition">Post a Job as an Employer →</a>
+        </div>
+
+    </section>
+
+    <!-- Enterprise Services -->
+    <section class="border-t border-slate-100 pt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+            <h4 class="font-bold text-slate-900 uppercase tracking-wide text-xs mb-3 text-sky-600">Enterprise Services</h4>
+            <ul class="space-y-2 text-sm text-slate-600">
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Offshore Engineering Sourcing</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Contractual Staff Augmentation</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-500"></i> Background Validation Routing</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-bold text-slate-900 uppercase tracking-wide text-xs mb-3 text-sky-600">Pricing Framework</h4>
+            <p class="text-sm text-slate-600 leading-relaxed">Dynamic engagement models optimized per staffing tier. Contact our operations team directly for custom enterprise layouts and volume hiring solutions.</p>
+        </div>
+    </section>
+
+    <!-- Contact Info -->
+    <section class="bg-slate-900 rounded-2xl p-8 md:p-10 text-center space-y-4">
+        <h3 class="text-xl font-black text-white">Get in Touch</h3>
+        <p class="text-sm text-slate-300 max-w-xl mx-auto">Have questions about JobInMinute or Kinetics Source Technologies? Reach out to the right team below.</p>
+        <div class="flex flex-col md:flex-row justify-center gap-6 pt-2">
+            <a href="mailto:support@jobinminute.com" class="flex items-center justify-center gap-2 text-sm font-semibold text-purple-300 hover:text-purple-200 transition">
+                <i class="fa-solid fa-envelope"></i> support@jobinminute.com
+                <span class="text-slate-500 text-xs font-normal">(JobInMinute Support)</span>
+            </a>
+            <a href="mailto:supportservices@kineticssourcetechnologies.com" class="flex items-center justify-center gap-2 text-sm font-semibold text-sky-300 hover:text-sky-200 transition">
+                <i class="fa-solid fa-envelope"></i> supportservices@kineticssourcetechnologies.com
+                <span class="text-slate-500 text-xs font-normal">(Kinetics Source Technologies)</span>
+            </a>
+        </div>
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-slate-900 text-slate-300 text-xs py-8">
+    <div class="container mx-auto px-4 max-w-6xl">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+            <div class="flex items-center gap-3 font-semibold">
+                <a href="terms.html" class="hover:text-purple-300 transition">Terms of Services</a>
+                <span class="text-slate-500">●</span>
+                <a href="privacy.html" class="hover:text-purple-300 transition">Privacy Policy</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <img src="https://via.placeholder.com/60x24?text=ISO" alt="ISO Certified" class="h-6 object-contain opacity-80">
+                <img src="https://via.placeholder.com/60x24?text=MSME" alt="MSME Registered" class="h-6 object-contain opacity-80">
+            </div>
+        </div>
+        <hr class="border-slate-700 mb-4">
+        <p class="text-center text-slate-400">
+            © 2025–Present Kinetics Source Technologies Pvt. Ltd. All Rights Reserved. Our brands include Job In Minute.
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>
