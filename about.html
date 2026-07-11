@@ -171,5 +171,16 @@
     </div>
 </footer>
 
+    <script>
+        fetch('header.html').then(res => res.text()).then(data => {
+            document.getElementById('global-header-container').innerHTML = data;
+            document.dispatchEvent(new Event("headerLoaded"));   <!-- NEW LINE -->
+        });
+        fetch('footer.html').then(res => res.text()).then(data => {
+            document.getElementById('global-footer-container').innerHTML = data;
+        });
+    </script>
+
+    <script type="module" src="auth-ui.js"></script> 
 </body>
 </html>
