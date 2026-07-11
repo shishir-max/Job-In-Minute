@@ -61,9 +61,32 @@ async function initAuthUI() {
     });
 }
 
+function setupDropdownToggle() {
+    const menuButton = document.getElementById("user-menu-button");
+    const dropdownMenu = document.getElementById("logged-in-dropdown-menu");
+
+    if (!menuButton || !dropdownMenu) return;
+
+    menuButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle("hidden");
+    });
+
+    // Close the dropdown if the user clicks anywhere else on the page
+    document.addEventListener("click", (e) => {
+        if (!dropdownMenu.contains(e.target) && !menuButton.contains(e.target)) {
+            dropdownMenu.classList.add("hidden");
+        }
+    });
+}
+
 // Wait for the header to actually be present in the DOM before wiring anything up
 if (document.getElementById("logged-out-btn")) {
     initAuthUI();
+    setupDropdownToggle();
 } else {
-    document.addEventListener("headerLoaded", initAuthUI);
+    document.addEventListener("headerLoaded", () => {
+        initAuthUI();
+        setupDropdownToggle();
+    });
 }
