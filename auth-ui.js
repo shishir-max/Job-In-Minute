@@ -1,6 +1,6 @@
 // auth-ui.js - Shared header session display, built on existing firebase.js
 import { auth, db } from "./firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 function updateHeaderUI(user, role, profileData) {
@@ -10,7 +10,7 @@ function updateHeaderUI(user, role, profileData) {
     const popoverName = document.getElementById("popover-user-name");
     const popoverEmail = document.getElementById("popover-user-email");
 
-    if (!loggedOutBtn || !loggedInDropdown) return; // header not present on this page
+    if (!loggedOutBtn || !loggedInDropdown) return;
 
     if (user) {
         loggedOutBtn.classList.add("hidden");
@@ -21,14 +21,16 @@ function updateHeaderUI(user, role, profileData) {
         if (popoverName) popoverName.innerText = nameToShow;
         if (popoverEmail) popoverEmail.innerText = user.email;
 
-        const corporateLink = loggedInDropdown.querySelector('a[href*="employer-dashboard.html"], a[href*="employer.html"]');
-        const workspaceLink = loggedInDropdown.querySelector('a[href*="employee-dashboard.html"], a[href*="workspace.html"]');
+        const corporateLink = loggedInDropdown.querySelector('a[href*="employer-dashboard.html"]');
+        const workspaceLink = loggedInDropdown.querySelector('a[href*="employee-dashboard.html"]');
 
-        if (role === "employer" && corporateLink) {
-            corporateLink.href = "employer-dashboard.html";
-        }
-        if (role === "employee" && workspaceLink) {
-            workspaceLink.href = "employee-dashboard.html";
+        // Show only the link relevant to this user's actual role
+        if (role === "employer") {
+            if (corporateLink) corporateLink.classList.remove("hidden");
+            if (workspaceLink) workspaceLink.classList.add("hidden");
+        } else if (role === "employee") {
+            if (workspaceLink) workspaceLink.classList.remove("hidden");
+            if (corporateLink) corporateLink.classList.add("hidden");
         }
 
     } else {
@@ -72,7 +74,6 @@ function setupDropdownToggle() {
         dropdownMenu.classList.toggle("hidden");
     });
 
-    // Close the dropdown if the user clicks anywhere else on the page
     document.addEventListener("click", (e) => {
         if (!dropdownMenu.contains(e.target) && !menuButton.contains(e.target)) {
             dropdownMenu.classList.add("hidden");
@@ -80,13 +81,31 @@ function setupDropdownToggle() {
     });
 }
 
+function setupSignOut() {
+    const disconnectBtn = document.getElementById("disconnect-account-btn");
+    if (!disconnectBtn) return;
+
+    disconnectBtn.addEventListener("click", () => {
+        signOut(auth)
+            .then(() => {
+                localStorage.clear();
+                window.location.href = "index.html";
+            })
+            .catch((err) => {
+                alert("Sign out failed: " + err.message);
+            });
+    });
+}
+
 // Wait for the header to actually be present in the DOM before wiring anything up
 if (document.getElementById("logged-out-btn")) {
     initAuthUI();
     setupDropdownToggle();
+    setupSignOut();
 } else {
     document.addEventListener("headerLoaded", () => {
         initAuthUI();
         setupDropdownToggle();
+        setupSignOut();
     });
 }
