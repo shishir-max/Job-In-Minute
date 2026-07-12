@@ -48,3 +48,57 @@ async function initAuthUI() {
                 updateHeaderUI(user, "employer", employerSnap.data());
             } else if (employeeSnap.exists()) {
                 updateHeaderUI(user, "employee", employeeSnap.data());
+            } else {
+                updateHeaderUI(user, null, null);
+            }
+        } else {
+            updateHeaderUI(null, null, null);
+        }
+    });
+}
+
+function setupDropdownToggle() {
+    const menuButton = document.getElementById("user-menu-button");
+    const dropdownMenu = document.getElementById("logged-in-dropdown-menu");
+
+    if (!menuButton || !dropdownMenu) return;
+
+    menuButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle("hidden");
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!dropdownMenu.contains(e.target) && !menuButton.contains(e.target)) {
+            dropdownMenu.classList.add("hidden");
+        }
+    });
+}
+
+function setupSignOut() {
+    const disconnectBtn = document.getElementById("disconnect-account-btn");
+    if (!disconnectBtn) return;
+
+    disconnectBtn.addEventListener("click", () => {
+        signOut(auth)
+            .then(() => {
+                localStorage.clear();
+                window.location.href = "index.html";
+            })
+            .catch((err) => {
+                alert("Sign out failed: " + err.message);
+            });
+    });
+}
+
+if (document.getElementById("logged-out-btn")) {
+    initAuthUI();
+    setupDropdownToggle();
+    setupSignOut();
+} else {
+    document.addEventListener("headerLoaded", () => {
+        initAuthUI();
+        setupDropdownToggle();
+        setupSignOut();
+    });
+}
