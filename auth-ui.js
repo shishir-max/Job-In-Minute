@@ -23,7 +23,7 @@ function updateHeaderUI(user, role, profileData) {
 
         const settingsLink = loggedInDropdown.querySelector('a[href*="dashboard.html"], a[href*="account-settings.html"]');
         if (settingsLink && role) {
-            settingsLink.href = role === "employer" ? "employer-dashboard.html" : "employee-dashboard.html";
+            settingsLink.href = role === "employer" ? "employer-dashboard.html?openSettings=true" : "employee-dashboard.html?openSettings=true";
         }
 
     } else {
