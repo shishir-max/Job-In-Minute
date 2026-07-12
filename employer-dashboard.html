@@ -27,9 +27,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <!-- GLOBAL NAVIGATION ARCHITECTURE (WITH METADATA LINKS & PROFILE DROPDOWN) -->
     <header class="bg-white border-b border-slate-100 shadow-sm relative z-40">
-        <!-- Social & Identity Utility Info Bar Line -->
         <div class="bg-slate-900 text-white text-[11px] py-2">
             <div class="container mx-auto px-4 max-w-6xl flex justify-between items-center">
                 <div class="flex items-center gap-4">
@@ -43,7 +41,6 @@
             </div>
         </div>
         
-        <!-- Main Dashboard Header Routing Actions Layout -->
         <div class="container mx-auto px-4 max-w-6xl py-4 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <div class="bg-blue-600 text-white p-2 rounded-xl"><i class="fa-solid fa-bolt text-lg"></i></div>
@@ -56,7 +53,6 @@
                     <a href="about.html" class="hover:text-blue-600 transition flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> About Us</a>
                 </nav>
                 
-                <!-- DYNAMIC PROFILE ACTIONS ACCORDION CONTAINER DROPDOWN -->
                 <div class="relative inline-block text-left">
                     <button onclick="toggleProfileDropdown()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-black py-2 px-4 rounded-xl flex items-center gap-2 transition outline-none">
                         <i class="fa-solid fa-building-shield text-blue-600"></i> <span id="dropdown-org-name">Loading Corp Profile...</span> <i class="fa-solid fa-chevron-down text-[10px]"></i>
@@ -93,7 +89,6 @@
         </div>
     </main>
 
-    <!-- JOB REGISTRY MANAGEMENT MODAL (POSTING & EDITING INTERACTION) -->
     <div id="job-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4">
             <div class="flex justify-between items-center border-b pb-2">
@@ -123,7 +118,6 @@
         </div>
     </div>
 
-    <!-- CORPORATE ACCOUNT EDIT PREFERENCES MODAL -->
     <div id="profile-edit-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-2">
@@ -165,7 +159,6 @@
                         document.getElementById("menu-user-name").innerText = data.name;
                         document.getElementById("menu-user-mail").innerText = data.email;
                         
-                        // Hydrate edit inputs
                         document.getElementById("edit-corp-name").value = data.name;
                         document.getElementById("edit-corp-phone").value = data.phone;
                         document.getElementById("edit-corp-org").value = data.organisationName;
@@ -174,6 +167,12 @@
                 });
                 fetchActiveJobs();
                 fetchApplications();
+
+                // Auto-open settings popup if arrived via ?openSettings=true
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get("openSettings") === "true") {
+                    toggleProfileModal(true);
+                }
             } else {
                 window.location.href = "login.html";
             }
@@ -231,14 +230,12 @@
             };
 
             if(jobId) {
-                // Perform Edit Operation Updates
                 db.collection("jobs").doc(jobId).update({
                     title: payload.title,
                     sector: payload.sector,
                     description: payload.description
                 }).then(() => { toggleModal(false); fetchActiveJobs(); });
             } else {
-                // New Document Addition
                 db.collection("jobs").add(payload).then(() => { toggleModal(false); fetchActiveJobs(); });
             }
         }
