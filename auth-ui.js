@@ -16,14 +16,13 @@ function updateHeaderUI(user, role, profileData) {
         loggedOutBtn.classList.add("hidden");
         loggedInDropdown.classList.remove("hidden");
 
-        const nameToShow = profileData?.fullName || profileData?.executiveName || profileData?.name || "My Account";
+        const nameToShow = profileData?.name || "My Account";
         if (displayName) displayName.innerText = nameToShow;
         if (popoverName) popoverName.innerText = nameToShow;
         if (popoverEmail) popoverEmail.innerText = user.email;
 
-        // Point "Account Settings" to the user's actual dashboard, where the working edit popup lives
-        const settingsLink = loggedInDropdown.querySelector('a[href*="account-settings.html"]');
-        if (settingsLink) {
+        const settingsLink = loggedInDropdown.querySelector('a[href*="dashboard.html"], a[href*="account-settings.html"]');
+        if (settingsLink && role) {
             settingsLink.href = role === "employer" ? "employer-dashboard.html" : "employee-dashboard.html";
         }
 
@@ -36,8 +35,8 @@ function updateHeaderUI(user, role, profileData) {
 async function initAuthUI() {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            const employerRef = doc(db, "profiles_employer", user.uid);
-            const employeeRef = doc(db, "profiles_employee", user.uid);
+            const employerRef = doc(db, "employers", user.uid);
+            const employeeRef = doc(db, "employees", user.uid);
 
             const [employerSnap, employeeSnap] = await Promise.all([
                 getDoc(employerRef),
