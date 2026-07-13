@@ -84,6 +84,7 @@
             </div>
             <div class="space-y-4">
                 <h2 class="font-black text-xs uppercase tracking-wider text-slate-400">Our Postings Registry</h2>
+                <p class="text-[10px] text-slate-400 font-medium -mt-2">Jobs can be edited within 24 hours of posting, and automatically expire after 7 days.</p>
                 <div id="jobs-root-box" class="space-y-3"></div>
             </div>
         </div>
@@ -148,6 +149,8 @@
 
     <script>
         let currentEmployerId = "";
+        const EDIT_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours
+        const EXPIRY_WINDOW_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -167,12 +170,6 @@
                 });
                 fetchActiveJobs();
                 fetchApplications();
-
-                // Auto-open settings popup if arrived via ?openSettings=true
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get("openSettings") === "true") {
-                    toggleProfileModal(true);
-                }
             } else {
                 window.location.href = "login.html";
             }
@@ -230,6 +227,7 @@
             };
 
             if(jobId) {
+                // Editing keeps the original post timestamp - only content fields update
                 db.collection("jobs").doc(jobId).update({
                     title: payload.title,
                     sector: payload.sector,
@@ -259,16 +257,46 @@
                     const job = doc.data();
                     const node = document.createElement("div");
                     node.className = "bg-white p-4 rounded-2xl border shadow-sm space-y-3";
+
+                    // Calculate posting age from Firestore timestamp
+                    const postedDate = job.timestamp && job.timestamp.toDate ? job.timestamp.toDate() : null;
+                    const now = new Date();
+                    const ageMs = postedDate ? (now - postedDate) : 0;
+
+                    const isExpired = postedDate ? (ageMs > EXPIRY_WINDOW_MS) : false;
+                    const isEditable = postedDate ? (ageMs <= EDIT_WINDOW_MS) : true;
+
+                    let statusLabel = job.status;
+                    let statusClass = job.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700';
+                    if (isExpired) {
+                        statusLabel = "Expired";
+                        statusClass = "bg-slate-100 text-slate-500";
+                    }
+
+                    let editButtonHtml = '';
+                    if (isEditable && !isExpired) {
+                        editButtonHtml = `<button onclick="openEditJobForm('${doc.id}', \`${job.title}\`, '${job.sector}', \`${job.description}\`)" class="text-[10px] text-amber-600 font-bold"><i class="fa-solid fa-pen-to-square"></i> Edit Layout</button>`;
+                    } else {
+                        editButtonHtml = `<span class="text-[10px] text-slate-300 font-bold" title="Edit window (24 hours) has closed"><i class="fa-solid fa-lock"></i> Locked</span>`;
+                    }
+
+                    let toggleButtonHtml = '';
+                    if (!isExpired) {
+                        toggleButtonHtml = `<button onclick="toggleJobStatus('${doc.id}', '${job.status}')" class="text-[10px] text-blue-600 font-bold">
+                                ${job.status === 'Active' ? 'Close Job' : 'Reopen Job'}
+                            </button>`;
+                    } else {
+                        toggleButtonHtml = `<span class="text-[10px] text-slate-300 font-bold">Expired</span>`;
+                    }
+
                     node.innerHTML = `
                         <div class="flex justify-between items-center">
                             <span class="font-bold text-xs text-slate-800">${job.title}</span>
-                            <span class="px-2 py-0.5 text-[9px] uppercase font-black rounded-md ${job.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}">${job.status}</span>
+                            <span class="px-2 py-0.5 text-[9px] uppercase font-black rounded-md ${statusClass}">${statusLabel}</span>
                         </div>
                         <div class="flex justify-between border-t pt-2 gap-2">
-                            <button onclick="toggleJobStatus('${doc.id}', '${job.status}')" class="text-[10px] text-blue-600 font-bold">
-                                ${job.status === 'Active' ? 'Close Job' : 'Reopen Job'}
-                            </button>
-                            <button onclick="openEditJobForm('${doc.id}', \`${job.title}\`, '${job.sector}', \`${job.description}\`)" class="text-[10px] text-amber-600 font-bold"><i class="fa-solid fa-pen-to-square"></i> Edit Layout</button>
+                            ${toggleButtonHtml}
+                            ${editButtonHtml}
                             <button onclick="deleteJob('${doc.id}')" class="text-[10px] text-red-500 font-bold">Delete</button>
                         </div>`;
                     target.appendChild(node);
