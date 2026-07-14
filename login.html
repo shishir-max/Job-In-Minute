@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- FIREBASE PLATFORM SYSTEMS COMPAT -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -36,207 +35,238 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <!-- GLOBAL NAVIGATION ARCHITECTURE (TOP BAR) -->
-   <!-- Top Utility Bar -->
-<div class="bg-slate-900 text-white text-xs">
-    <div class="container mx-auto px-4 py-2 max-w-6xl flex justify-between items-center">
-        <div class="w-24"></div>
-        <a href="mailto:support@jobinminute.com" class="flex items-center gap-2 font-semibold hover:text-purple-300 transition">
-            <i class="fa-solid fa-envelope"></i> support@jobinminute.com
-        </a>
-        <div class="flex items-center gap-4 text-base">
-            <a href="https://www.facebook.com/share/1BNyCNs5A1/" target="_blank" rel="noopener" class="hover:opacity-80 transition" style="color:#1877F2;"><i class="fa-brands fa-facebook"></i></a>
-            <a href="https://www.instagram.com/kineticssource?utm_source=qr&igsh=MWRxMWMxZWIyaTM5cw==" target="_blank" rel="noopener" class="hover:opacity-80 transition" style="color:#0A66C2;"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="#" target="_blank" rel="noopener" class="hover:opacity-80 transition" style="color:#E4405F;"><i class="fa-brands fa-instagram"></i></a>
+    <!-- Top Utility Bar -->
+    <div class="bg-slate-900 text-white text-xs">
+        <div class="container mx-auto px-4 py-2 max-w-6xl flex justify-between items-center">
+            <div class="w-24"></div>
+            <a href="mailto:support@jobinminute.com" class="flex items-center gap-2 font-semibold hover:text-purple-300 transition">
+                <i class="fa-solid fa-envelope"></i> support@jobinminute.com
+            </a>
+            <div class="flex items-center gap-4 text-base">
+                <a href="https://www.facebook.com/share/1BNyCNs5A1/" target="_blank" rel="noopener" class="hover:opacity-80 transition" style="color:#1877F2;"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.instagram.com/kineticssource?utm_source=qr&igsh=MWRxMWMxZWIyaTM5cw==" target="_blank" rel="noopener" class="hover:opacity-80 transition" style="color:#0A66C2;"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" target="_blank" rel="noopener" class="hover:opacity-80 transition" style="color:#E4405F;"><i class="fa-brands fa-instagram"></i></a>
+            </div>
         </div>
     </div>
-</div>
-  <!-- Header -->
-<header class="bg-white border-b border-slate-100 sticky top-0 z-40 shadow-sm">
-    <div class="container mx-auto px-4 py-4 max-w-6xl flex justify-between items-center">
-        <a href="index.html" class="flex items-center gap-2 group">
-            <img src="https://i.postimg.cc/GhFzRBTY/My-Job-in-minute-Logo.jpg" alt="JobInMinute Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';" class="h-32 w-auto object-contain max-w-[340px] -my-8">
-            <span style="display:none;" class="text-base font-black tracking-tight text-slate-900">JobIn<span class="text-purple-600">Minute</span></span>
-        </a>
-        <div class="flex items-center gap-6">
-            <a href="index.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition">Home</a>
-            <a href="about.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition">About Us</a>
-            <a href="login.html" id="logged-out-btn" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Sign In / Register</a>
-            <div id="logged-in-dropdown" class="relative hidden">
-                <button id="user-menu-button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 transition">
-                    <div class="w-5 h-5 rounded-md bg-purple-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-user"></i></div>
-                    <span id="header-display-name">Profile Session</span>
-                    <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
-                </button>
-                <div id="logged-in-dropdown-menu" class="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 hidden z-50">
-                    <div class="px-4 py-2 border-b border-slate-50 mb-1">
-                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Signed Account</p>
-                        <p id="popover-user-name" class="text-xs font-black text-slate-800 truncate">Loading Account...</p>
-                        <p id="popover-user-email" class="text-[10px] text-slate-400 truncate">loading@jobinminute.com</p>
-                    </div>
-                    <a href="employer.html" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
-                        <i class="fa-solid fa-chart-pie text-purple-500 w-4"></i> Corporate Panel
-                    </a>
-                    <a href="workspace.html" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
-                        <i class="fa-solid fa-user-tie text-blue-500 w-4"></i> Employee Workspace
-                    </a>
-                    <hr class="border-slate-50 my-1">
-                    <button onclick="localStorage.clear(); window.location.href='index.html';" class="w-full flex items-center gap-2 px-4 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50/50 transition text-left">
-                        <i class="fa-solid fa-arrow-right-from-bracket w-4"></i> Disconnect Account
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-100 sticky top-0 z-40 shadow-sm">
+        <div class="container mx-auto px-4 py-4 max-w-6xl flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <img src="https://i.postimg.cc/GhFzRBTY/My-Job-in-minute-Logo.jpg" alt="JobInMinute Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';" class="h-32 w-auto object-contain max-w-[340px] -my-8">
+                <span style="display:none;" class="text-base font-black tracking-tight text-slate-900">JobIn<span class="text-purple-600">Minute</span></span>
+            </a>
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition">Home</a>
+                <a href="about.html" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition">About Us</a>
+                <a href="login.html" id="logged-out-btn" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Sign In / Register</a>
+                <div id="logged-in-dropdown" class="relative hidden">
+                    <button id="user-menu-button" class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 transition">
+                        <div class="w-5 h-5 rounded-md bg-purple-600 text-white flex items-center justify-center text-[10px]"><i class="fa-solid fa-user"></i></div>
+                        <span id="header-display-name">Profile Session</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                     </button>
+                    <div id="logged-in-dropdown-menu" class="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 hidden z-50">
+                        <div class="px-4 py-2 border-b border-slate-50 mb-1">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Signed Account</p>
+                            <p id="popover-user-name" class="text-xs font-black text-slate-800 truncate">Loading Account...</p>
+                            <p id="popover-user-email" class="text-[10px] text-slate-400 truncate">loading@jobinminute.com</p>
+                        </div>
+                        <a href="employer-dashboard.html" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-chart-pie text-purple-500 w-4"></i> Corporate Panel
+                        </a>
+                        <a href="employee-dashboard.html" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-user-tie text-blue-500 w-4"></i> Employee Workspace
+                        </a>
+                        <hr class="border-slate-50 my-1">
+                        <button onclick="auth.signOut().then(() => { localStorage.clear(); window.location.href='index.html'; });" class="w-full flex items-center gap-2 px-4 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50/50 transition text-left">
+                            <i class="fa-solid fa-arrow-right-from-bracket w-4"></i> Disconnect Account
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</header>      
+    </header>
 
     <!-- CONTENT PORTAL REGISTRY CONTAINER -->
     <main class="flex-grow flex items-center justify-center px-4 py-12">
-        <div class="bg-white border border-slate-100 rounded-3xl p-8 max-w-xl w-full shadow-2xl space-y-6">
+        <div class="max-w-5xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+
+            <!-- Glossy side panel -->
+            <div class="relative hidden lg:block">
+                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1000&q=80" alt="Professional workspace" onerror="this.style.display='none';" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-900/90 to-slate-900/80"></div>
+                <div class="relative z-10 h-full flex flex-col justify-center px-10 py-12 text-white space-y-6">
+                    <div class="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center">
+                        <i class="fa-solid fa-bolt text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-black leading-snug">Your next opportunity is one login away.</h2>
+                    <p class="text-sm text-slate-300 leading-relaxed">Whether you're hiring top technical talent or looking for your next role, JobInMinute connects the right people, fast.</p>
+                    <div class="space-y-3 pt-2">
+                        <div class="flex items-center gap-3 text-xs font-semibold text-slate-200">
+                            <i class="fa-solid fa-circle-check text-purple-300"></i> Free for job seekers, always
+                        </div>
+                        <div class="flex items-center gap-3 text-xs font-semibold text-slate-200">
+                            <i class="fa-solid fa-circle-check text-purple-300"></i> Post jobs and find candidates at no cost
+                        </div>
+                        <div class="flex items-center gap-3 text-xs font-semibold text-slate-200">
+                            <i class="fa-solid fa-circle-check text-purple-300"></i> Direct dashboard access, no delays
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form panel -->
+            <div class="p-8 md:p-10 space-y-6">
             
-            <div class="flex border-b border-slate-100 pb-2 justify-center gap-6 text-sm font-bold text-slate-400">
-                <button id="tab-signin-btn" onclick="switchFormContext('signin')" class="text-blue-600 border-b-2 border-blue-600 pb-2 transition">Sign In</button>
-                <button id="tab-signup-btn" onclick="switchFormContext('signup')" class="pb-2 transition text-slate-400">Create Account</button>
-            </div>
+                <div class="flex border-b border-slate-100 pb-2 justify-center gap-6 text-sm font-bold text-slate-400">
+                    <button id="tab-signin-btn" onclick="switchFormContext('signin')" class="text-blue-600 border-b-2 border-blue-600 pb-2 transition">Sign In</button>
+                    <button id="tab-signup-btn" onclick="switchFormContext('signup')" class="pb-2 transition text-slate-400">Create Account</button>
+                </div>
 
-            <div class="grid grid-cols-2 gap-3 bg-slate-100 p-1.5 rounded-xl text-xs font-black">
-                <button id="role-employer-btn" onclick="selectRoleContext('employer')" class="bg-white text-slate-900 shadow-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-building"></i> Employer Accounts
-                </button>
-                <button id="role-candidate-btn" onclick="selectRoleContext('candidate')" class="text-slate-400 py-2.5 rounded-lg transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-user"></i> Employee Accounts
-                </button>
-            </div>
-
-            <div>
-                <!-- SIGN IN FORM -->
-                <form id="signin-context-form" class="space-y-4" onsubmit="executeFirebaseLogin(event)">
-                    <div>
-                        <label id="signin-email-label" class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Business / Official Email ID</label>
-                        <input type="email" id="signin-email" required placeholder="name@domain.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Access Password</label>
-                        <input type="password" id="signin-password" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
-                    </div>
-                    <button type="submit" id="main-submit-cta" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase py-3.5 rounded-xl transition tracking-wider shadow-md">
-                        Access Dashboard &rarr;
+                <div class="grid grid-cols-2 gap-3 bg-slate-100 p-1.5 rounded-xl text-xs font-black">
+                    <button id="role-employer-btn" onclick="selectRoleContext('employer')" class="bg-white text-slate-900 shadow-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-building"></i> Employer Accounts
                     </button>
-                </form>
+                    <button id="role-candidate-btn" onclick="selectRoleContext('candidate')" class="text-slate-400 py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-user"></i> Employee Accounts
+                    </button>
+                </div>
 
-                <!-- EMPLOYEE SIGN-UP -->
-                <form id="signup-employee-form" class="space-y-4 hidden" onsubmit="executeEmployeeRegistration(event)">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <!-- SIGN IN FORM -->
+                    <form id="signin-context-form" class="space-y-4" onsubmit="executeFirebaseLogin(event)">
                         <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Name *</label>
-                            <input type="text" id="emp-name" required placeholder="Full Name" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            <label id="signin-email-label" class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Business / Official Email ID</label>
+                            <input type="email" id="signin-email" required placeholder="name@domain.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                         </div>
                         <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Phone No. *</label>
-                            <input type="tel" id="emp-phone" required pattern="[0-9]{10}" placeholder="10-Digit Phone" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            <label class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-1">Access Password</label>
+                            <input type="password" id="signin-password" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                         </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Personal Email ID *</label>
-                            <input type="email" id="emp-email" required placeholder="name@gmail.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Job Sector *</label>
-                            <select id="emp-sector" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition text-slate-500">
-                                <option value="">Select Domain...</option>
-                                <option value="it">Information Technology (IT)</option>
-                                <option value="healthcare">Healthcare Operations</option>
-                                <option value="education">Education</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Address (Optional)</label>
-                        <input type="text" id="emp-address" placeholder="Physical Home Address" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Password *</label>
-                        <input type="password" id="emp-password" required minlength="6" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-black text-xs uppercase py-3.5 rounded-xl transition shadow-md">Create Employee Account &rarr;</button>
-                </form>
+                        <button type="submit" id="main-submit-cta" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase py-3.5 rounded-xl transition tracking-wider shadow-md">
+                            Access Dashboard &rarr;
+                        </button>
+                    </form>
 
-                <!-- EMPLOYER SIGN-UP -->
-                <form id="signup-employer-form" class="space-y-4 hidden" onsubmit="executeEmployerRegistration(event)">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Name *</label>
-                            <input type="text" id="corp-name" required placeholder="Official Full Name" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                    <!-- EMPLOYEE SIGN-UP -->
+                    <form id="signup-employee-form" class="space-y-4 hidden" onsubmit="executeEmployeeRegistration(event)">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Name *</label>
+                                <input type="text" id="emp-name" required placeholder="Full Name" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Phone No. *</label>
+                                <input type="tel" id="emp-phone" required pattern="[0-9]{10}" placeholder="10-Digit Phone" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Personal Email ID *</label>
+                                <input type="email" id="emp-email" required placeholder="name@gmail.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Job Sector *</label>
+                                <select id="emp-sector" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition text-slate-500">
+                                    <option value="">Select Domain...</option>
+                                    <option value="it">Information Technology (IT)</option>
+                                    <option value="healthcare">Healthcare Operations</option>
+                                    <option value="education">Education</option>
+                                </select>
+                            </div>
                         </div>
                         <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Phone No. *</label>
-                            <input type="tel" id="corp-phone" required pattern="[0-9]{10}" placeholder="10 Digits Only" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Business/Official Email ID *</label>
-                            <input type="email" id="corp-email" required placeholder="corporate@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Address (Optional)</label>
+                            <input type="text" id="emp-address" placeholder="Physical Home Address" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                         </div>
                         <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Organisation Name *</label>
-                            <input type="text" id="corp-orgname" required placeholder="Registered Organization Entity" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Password *</label>
+                            <input type="password" id="emp-password" required minlength="6" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                         </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button type="submit" class="w-full bg-blue-600 text-white font-black text-xs uppercase py-3.5 rounded-xl transition shadow-md">Create Employee Account &rarr;</button>
+                    </form>
+
+                    <!-- EMPLOYER SIGN-UP -->
+                    <form id="signup-employer-form" class="space-y-4 hidden" onsubmit="executeEmployerRegistration(event)">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Name *</label>
+                                <input type="text" id="corp-name" required placeholder="Official Full Name" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Phone No. *</label>
+                                <input type="tel" id="corp-phone" required pattern="[0-9]{10}" placeholder="10 Digits Only" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Business/Official Email ID *</label>
+                                <input type="email" id="corp-email" required placeholder="corporate@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Organisation Name *</label>
+                                <input type="text" id="corp-orgname" required placeholder="Registered Organization Entity" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Organisation Website *</label>
+                                <input type="url" id="corp-website" required placeholder="https://domain.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Job Post Sector (Optional)</label>
+                                <input type="text" id="corp-sector" placeholder="Primary Sector Target" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            </div>
+                        </div>
                         <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Organisation Website *</label>
-                            <input type="url" id="corp-website" required placeholder="https://domain.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Organisation Address *</label>
+                            <input type="text" id="corp-address" required placeholder="Corporate Headquarters Location" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                         </div>
                         <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Job Post Sector (Optional)</label>
-                            <input type="text" id="corp-sector" placeholder="Primary Sector Target" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">GST Reg No / Business Document Number (Optional)</label>
+                            <input type="text" id="corp-gst" placeholder="Alphanumeric Identification Registry" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
                         </div>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Organisation Address *</label>
-                        <input type="text" id="corp-address" required placeholder="Corporate Headquarters Location" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">GST Reg No / Business Document Number (Optional)</label>
-                        <input type="text" id="corp-gst" placeholder="Alphanumeric Identification Registry" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Password *</label>
-                        <input type="password" id="corp-password" required minlength="6" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-black text-xs uppercase py-3.5 rounded-xl transition shadow-md">Create Employer Account &rarr;</button>
-                </form>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Password *</label>
+                            <input type="password" id="corp-password" required minlength="6" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-blue-500 transition">
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 text-white font-black text-xs uppercase py-3.5 rounded-xl transition shadow-md">Create Employer Account &rarr;</button>
+                    </form>
+                </div>
+
+                <div class="text-center pt-2 border-t border-slate-100">
+                    <button type="button" onclick="triggerForgotPasswordPipeline()" class="text-[11px] font-bold text-slate-400 hover:text-blue-500 transition">
+                        <i class="fa-solid fa-key mr-1"></i> Forgot Password? Click here to reset
+                    </button>
+                </div>
             </div>
 
-            <div class="text-center pt-2 border-t border-slate-100">
-                <button type="button" onclick="triggerForgotPasswordPipeline()" class="text-[11px] font-bold text-slate-400 hover:text-blue-500 transition">
-                    <i class="fa-solid fa-key mr-1"></i> Forgot Password? Click here to reset
-                </button>
-            </div>
         </div>
     </main>
-<!-- Footer -->
-<footer class="bg-slate-900 text-slate-300 text-xs py-8">
-    <div class="container mx-auto px-4 max-w-6xl">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
-            <div class="flex items-center gap-3 font-semibold">
-                <a href="terms.html" class="hover:text-purple-300 transition">Terms of Services</a>
-                <span class="text-slate-500">●</span>
-                <a href="privacy.html" class="hover:text-purple-300 transition">Privacy Policy</a>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-300 text-xs py-8">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+                <div class="flex items-center gap-3 font-semibold">
+                    <a href="terms.html" class="hover:text-purple-300 transition">Terms of Services</a>
+                    <span class="text-slate-500">●</span>
+                    <a href="privacy.html" class="hover:text-purple-300 transition">Privacy Policy</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <img src="https://via.placeholder.com/60x24?text=ISO" alt="ISO Certified" class="h-6 object-contain opacity-80">
+                    <img src="https://via.placeholder.com/60x24?text=MSME" alt="MSME Registered" class="h-6 object-contain opacity-80">
+                </div>
             </div>
-            <div class="flex items-center gap-3">
-                <img src="https://via.placeholder.com/60x24?text=ISO" alt="ISO Certified" class="h-6 object-contain opacity-80">
-                <img src="https://via.placeholder.com/60x24?text=MSME" alt="MSME Registered" class="h-6 object-contain opacity-80">
-            </div>
+            <hr class="border-slate-700 mb-4">
+            <p class="text-center text-slate-400">
+                © 2025–Present Kinetics Source Technologies Pvt. Ltd. All Rights Reserved. Our brands include Job In Minute.
+            </p>
         </div>
-        <hr class="border-slate-700 mb-4">
-        <p class="text-center text-slate-400">
-            © 2025–Present Kinetics Source Technologies Pvt. Ltd. All Rights Reserved. Our brands include Job In Minute.
-        </p>
-    </div>
-</footer>
+    </footer>
+
     <script>
         let currentActiveRole = "employer";
         let currentFormMode = "signin";
