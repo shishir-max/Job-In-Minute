@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | JobInMinute</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-white">
+
+    <div id="global-header-container"></div>
+
+    <!-- Hero Banner -->
+    <div class="relative">
+        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1600&q=80" alt="Data privacy and security" onerror="this.style.display='none';" class="w-full h-40 md:h-48 object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-purple-900/85 to-slate-900/70 flex items-center">
+            <div class="container mx-auto px-4 max-w-6xl">
+                <p class="text-[10px] uppercase font-black tracking-widest text-purple-200 mb-1">Legal</p>
+                <h1 class="text-xl md:text-2xl font-black text-white">Privacy Policy</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Content -->
+    <main class="container mx-auto px-4 py-12 max-w-4xl">
+        <p class="text-xs text-slate-400 mb-8">Last updated: July 2026</p>
+
+        <div class="space-y-8 text-sm text-slate-700 leading-relaxed">
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">1. Introduction</h2>
+                <p>Kinetics Source Technologies Pvt. Ltd. ("we," "us," or "our") operates JobInMinute. This Privacy Policy explains how we collect, use, and protect information when you use our Platform.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">2. Information We Collect</h2>
+                <p>We may collect the following information:</p>
+                <ul class="list-disc pl-6 mt-2 space-y-1">
+                    <li>Account details such as name, email address, and phone number</li>
+                    <li>Employer details such as organisation name, business email, and job sector</li>
+                    <li>Resume, work experience, and application data submitted by candidates</li>
+                    <li>Usage data such as pages visited and interactions on the Platform</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">3. How We Use Your Information</h2>
+                <p>We use collected information to operate and improve the Platform, match candidates with relevant job listings, communicate with you regarding your account or applications, and comply with legal obligations.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">4. Data Sharing</h2>
+                <p>Employer and candidate profile information may be shared with the other party as part of the job application process. We do not sell your personal information to third parties. We may share data with service providers (such as Firebase/Google Cloud, which hosts our database) solely to operate the Platform.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">5. Data Security</h2>
+                <p>We use reasonable technical and organisational measures to protect your data. However, no method of transmission or storage is 100% secure, and we cannot guarantee absolute security.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">6. Your Rights</h2>
+                <p>You may request access to, correction of, or deletion of your personal data by contacting us at the email below. You may also close your account at any time.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">7. Cookies</h2>
+                <p>The Platform may use cookies or similar technologies to improve your browsing experience and remember your session/login state.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">8. Changes to This Policy</h2>
+                <p>We may update this Privacy Policy from time to time. Continued use of the Platform after changes constitutes acceptance of the updated policy.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">9. Contact Us</h2>
+                <p>For privacy-related questions, contact us at <a href="mailto:support@jobinminute.com" class="text-purple-600 font-semibold">support@jobinminute.com</a>.</p>
+            </section>
+
+        </div>
+    </main>
+
+    <div id="global-footer-container"></div>
+
+    <script>
+        fetch('header.html').then(res => res.text()).then(data => {
+            document.getElementById('global-header-container').innerHTML = data;
+            document.dispatchEvent(new Event("headerLoaded"));
+        });
+        fetch('footer.html').then(res => res.text()).then(data => {
+            document.getElementById('global-footer-container').innerHTML = data;
+        });
+    </script>
+
+    <script type="module" src="auth-ui.js"></script>
+
+</body>
+</html>
 
