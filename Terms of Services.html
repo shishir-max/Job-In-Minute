@@ -1,1 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service | JobInMinute</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-white">
+
+    <div id="global-header-container"></div>
+
+    <!-- Hero Banner -->
+    <div class="relative">
+        <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600&q=80" alt="Legal documents" onerror="this.style.display='none';" class="w-full h-40 md:h-48 object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/85 to-slate-800/70 flex items-center">
+            <div class="container mx-auto px-4 max-w-6xl">
+                <p class="text-[10px] uppercase font-black tracking-widest text-slate-300 mb-1">Legal</p>
+                <h1 class="text-xl md:text-2xl font-black text-white">Terms of Service</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Content -->
+    <main class="container mx-auto px-4 py-12 max-w-4xl">
+        <p class="text-xs text-slate-400 mb-8">Last updated: July 2026</p>
+
+        <div class="space-y-8 text-sm text-slate-700 leading-relaxed">
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">1. Acceptance of Terms</h2>
+                <p>By accessing or using JobInMinute ("the Platform," "we," "us," or "our"), operated by Kinetics Source Technologies Pvt. Ltd., you agree to be bound by these Terms of Service. If you do not agree with any part of these terms, please do not use the Platform.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">2. Description of Service</h2>
+                <p>JobInMinute is a job platform connecting employers seeking talent with job seekers ("employees" or "candidates"). We provide tools for posting job listings, managing applications, and facilitating communication between employers and candidates.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">3. User Accounts</h2>
+                <p>You must provide accurate and complete information when creating an account. You are responsible for maintaining the confidentiality of your login credentials and for all activity that occurs under your account.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">4. Employer & Employee Responsibilities</h2>
+                <p>Employers are solely responsible for the accuracy of job listings, compliance with applicable labor laws, and the hiring decisions they make. Candidates are responsible for the accuracy of their profile and application information. JobInMinute does not verify the accuracy of information submitted by any user.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">5. Job Postings and Expiry</h2>
+                <p>Job postings may be edited by the employer within 24 hours of being posted, and automatically expire and become inactive 7 days after posting. Employers are responsible for reposting or renewing listings as needed.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">6. Platform Security and User Risk</h2>
+                <p>We take reasonable measures to keep the Platform secure and to protect user accounts, personal information, job postings, and applications submitted through JobInMinute. However, no online platform can guarantee complete security, and use of the Platform is undertaken at the user's own risk.</p>
+                <p class="mt-2">This applies to, without limitation: the security of your account credentials, the confidentiality and accuracy of personal or professional information you provide, the content of job postings made by employers, and applications and resumes submitted by candidates. Users are responsible for safeguarding their own login credentials and for exercising reasonable judgment when sharing personal information or engaging with other users through the Platform.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">7. Future Changes to Pricing and Services</h2>
+                <p>JobInMinute is currently offered free of charge to both job seekers and employers. We reserve the right to introduce paid plans, premium features, subscription tiers, or commission-based pricing on services facilitated through the Platform at any time in the future, at our sole discretion.</p>
+                <p class="mt-2">Should such changes be introduced, we will make reasonable efforts to communicate updated pricing or commission terms to users in advance. Continued use of the Platform following the introduction of any paid features, plans, or commission structures constitutes acceptance of those updated terms. Any features that remain free will continue to be clearly identified as such.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">8. Disclaimer</h2>
+                <p>JobInMinute acts solely as a platform connecting employers and candidates. We do not guarantee job placement, candidate quality, employer legitimacy, or employment outcomes of any kind. All information on the Platform is provided "as is" without warranties of any kind, express or implied.</p>
+                <p class="mt-2">We are not a party to any employment relationship, contract, or agreement formed between employers and candidates through the Platform, and we bear no responsibility or liability for the conduct of either party, disputes arising between them, or any losses, damages, or harm resulting from interactions facilitated through JobInMinute.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">9. Limitation of Liability</h2>
+                <p>To the fullest extent permitted by law, Kinetics Source Technologies Pvt. Ltd. and JobInMinute shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Platform.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">10. Modifications to Terms</h2>
+                <p>We reserve the right to update these Terms of Service at any time. Continued use of the Platform after changes constitutes acceptance of the revised terms.</p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">11. Contact Us</h2>
+                <p>For questions regarding these Terms, contact us at <a href="mailto:support@jobinminute.com" class="text-purple-600 font-semibold">support@jobinminute.com</a>.</p>
+            </section>
+
+        </div>
+    </main>
+
+    <div id="global-footer-container"></div>
+
+    <script>
+        fetch('header.html').then(res => res.text()).then(data => {
+            document.getElementById('global-header-container').innerHTML = data;
+            document.dispatchEvent(new Event("headerLoaded"));
+        });
+        fetch('footer.html').then(res => res.text()).then(data => {
+            document.getElementById('global-footer-container').innerHTML = data;
+        });
+    </script>
+
+    <script type="module" src="auth-ui.js"></script>
+
+</body>
+</html>
 
