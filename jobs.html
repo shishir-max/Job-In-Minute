@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse Jobs | JobInMinute</title>
+<meta name="description" content="Browse live job openings on JobInMinute. No login required to browse — sign in only when you're ready to apply.">
+
+<!--
+  HOW THIS WORKS
+  ================
+  1. This page is PUBLIC — no login wall. Anyone (including Google's crawler)
+     can see the list of active jobs. This is critical for SEO / Google for Jobs.
+  2. Job data lives in jobs-data.json (same folder). Add/remove jobs there —
+     this HTML file itself never needs to change.
+  3. Each job has a "postedDate" and this script auto-hides any job older than
+     7 days (matches your existing expiry rule) — so you don't have to manually
+     delete expired posts from the public page.
+  4. Clicking "View & Apply" sends the user to login.html — that's still the
+     correct gate for the ACTION of applying. Browsing stays open; applying stays gated.
+  5. For each visible job, this script also injects a JobPosting JSON-LD schema
+     block into the page <head>. That's what lets Google for Jobs index it.
+-->
+
+<style>
+  :root {
+    --brand: #1a5fb4;
+    --bg: #f6f8fb;
+    --card-bg: #ffffff;
+    --text: #1c2430;
+    --muted: #5b6572;
+    --border: #e3e8ef;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header.page-head {
+    background: var(--brand);
+    color: #fff;
+    padding: 32px 20px;
+    text-align: center;
+  }
+  header.page-head h1 { margin: 0 0 6px; font-size: 26px; }
+  header.page-head p { margin: 0; opacity: 0.9; font-size: 14px; }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .filter-bar input, .filter-bar select {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .job-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .job-card h2 {
+    margin: 0 0 4px;
+    font-size: 18px;
+  }
+  .job-card .meta {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .job-card .meta span:not(:last-child)::after {
+    content: "•";
+    margin: 0 8px;
+    color: var(--border);
+  }
+  .job-card p.desc {
+    font-size: 14px;
+    color: var(--text);
+    margin: 0 0 14px;
+    line-height: 1.5;
+  }
+  .job-card a.apply-btn {
+    display: inline-block;
+    background: var(--brand);
+    color: #fff;
+    text-decoration: none;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .job-card .days-left {
+    float: right;
+    font-size: 12px;
+    color: #b06a00;
+    background: #fff4e0;
+    padding: 3px 9px;
+    border-radius: 12px;
+  }
+
+  .empty-state {
+    text-align: center;
+    color: var(--muted);
+    padding: 60px 20px;
+  }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <h1>Browse Open Roles</h1>
+  <p>No login needed to look around — sign in only when you're ready to apply.</p>
+</header>
+
+<div class="container">
+  <div class="filter-bar">
+    <input type="text" id="searchBox" placeholder="Search job title or company...">
+    <select id="sectorFilter">
+      <option value="">All sectors</option>
+    </select>
+  </div>
+
+  <div id="jobList"></div>
+  <div id="emptyState" class="empty-state" style="display:none;">
+    No active job postings right now — check back soon.
+  </div>
+</div>
+
+<script>
+const EXPIRY_DAYS = 7; // keep in sync with your platform's actual expiry rule
+
+function daysAgo(dateStr) {
+  const posted = new Date(dateStr);
+  const now = new Date();
+  return Math.floor((now - posted) / (1000 * 60 * 60 * 24));
+}
+
+async function loadJobs() {
+  const jobListEl = document.getElementById('jobList');
+  const emptyEl = document.getElementById('emptyState');
+  const sectorFilter = document.getElementById('sectorFilter');
+
+  let jobs = [];
+  try {
+    const res = await fetch('jobs-data.json');
+    jobs = await res.json();
+  } catch (e) {
+    console.error('Could not load jobs-data.json', e);
+  }
+
+  // Keep only jobs within the expiry window
+  const activeJobs = jobs.filter(j => daysAgo(j.postedDate) < EXPIRY_DAYS);
+
+  if (activeJobs.length === 0) {
+    emptyEl.style.display = 'block';
+    return;
+  }
+
+  // Populate sector filter options
+  const sectors = [...new Set(activeJobs.map(j => j.sector).filter(Boolean))];
+  sectors.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    sectorFilter.appendChild(opt);
+  });
+
+  function render(list) {
+    jobList.innerHTML = '';
+    if (list.length === 0) {
+      emptyEl.style.display = 'block';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    list.forEach(job => {
+      const daysLeft = EXPIRY_DAYS - daysAgo(job.postedDate);
+      const card = document.createElement('div');
+      card.className = 'job-card';
+      card.innerHTML = `
+        <span class="days-left">${daysLeft} day${daysLeft === 1 ? '' : 's'} left</span>
+        <h2>${job.title}</h2>
+        <div class="meta">
+          <span>${job.company}</span>
+          <span>${job.location}</span>
+          <span>${job.sector || 'General'}</span>
+        </div>
+        <p class="desc">${job.shortDescription}</p>
+        <a class="apply-btn" href="login.html?job=${encodeURIComponent(job.id)}">View &amp; Apply →</a>
+      `;
+      jobList.appendChild(card);
+    });
+  }
+
+  render(activeJobs);
+  injectSchema(activeJobs);
+
+  // Search + filter behavior
+  const searchBox = document.getElementById('searchBox');
+  function applyFilters() {
+    const q = searchBox.value.toLowerCase();
+    const sector = sectorFilter.value;
+    const filtered = activeJobs.filter(j =>
+      (j.title.toLowerCase().includes(q) || j.company.toLowerCase().includes(q)) &&
+      (sector === '' || j.sector === sector)
+    );
+    render(filtered);
+  }
+  searchBox.addEventListener('input', applyFilters);
+  sectorFilter.addEventListener('change', applyFilters);
+}
+
+// Injects one JobPosting JSON-LD block per active job — this is what
+// makes listings eligible for Google for Jobs.
+function injectSchema(jobs) {
+  jobs.forEach(job => {
+    const posted = new Date(job.postedDate);
+    const validThrough = new Date(posted);
+    validThrough.setDate(validThrough.getDate() + EXPIRY_DAYS);
+
+    const schema = {
+      "@context": "https://schema.org/",
+      "@type": "JobPosting",
+      "title": job.title,
+      "description": job.fullDescription || job.shortDescription,
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "JobInMinute",
+        "value": job.id
+      },
+      "datePosted": posted.toISOString().split('T')[0],
+      "validThrough": validThrough.toISOString(),
+      "employmentType": job.employmentType || "FULL_TIME",
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": job.company,
+        "sameAs": job.companyWebsite || undefined
+      },
+      "jobLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": job.location,
+          "addressCountry": job.country || "IN"
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify(schema);
+    document.head.appendChild(script);
+  });
+}
+
+loadJobs();
+</script>
+
+</body>
+</html>
